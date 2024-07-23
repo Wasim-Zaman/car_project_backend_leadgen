@@ -1,5 +1,5 @@
 // const Banner = require("../models/Banner");
-const CustomError = require("../exceptions/customError");
+const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 
 exports.postBanner = async (req, res, next) => {

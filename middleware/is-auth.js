@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const CustomError = require("../exceptions/customError");
+const CustomError = require("../utils/customError");
 
 module.exports = (req, res, next) => {
   const authHeader = req.get("Authorization");

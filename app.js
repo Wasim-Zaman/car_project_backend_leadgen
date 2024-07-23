@@ -5,7 +5,7 @@ const swaggerUi = require("swagger-ui-express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-const CustomError = require("./exceptions/customError");
+const CustomError = require("./utils/customError");
 const swaggerSpec = require("./config/swagger");
 const generateResponse = require("./utils/response");
 // const adminRoutes = require("./routes/auth");
