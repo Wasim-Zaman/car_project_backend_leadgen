@@ -8,7 +8,7 @@ require("dotenv").config();
 const CustomError = require("./utils/customError");
 const swaggerSpec = require("./config/swagger");
 const generateResponse = require("./utils/response");
-// const adminRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/auth");
 const bannerRoutes = require("./routes/banner");
 
 const app = express();
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Add your routes...
-// app.use("/api/auth", adminRoutes);
+app.use("/api/auth", adminRoutes);
 app.use("/api/banner", bannerRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

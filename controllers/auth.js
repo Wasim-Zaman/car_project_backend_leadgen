@@ -1,5 +1,5 @@
-const Admin = require("../models/admin");
-const CustomError = require("../utils/CustomError");
+// const Admin = require("../models/admin");
+const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 
 exports.login = async (req, res, next) => {
@@ -11,20 +11,20 @@ exports.login = async (req, res, next) => {
       throw new CustomError("Email and password are required", 400);
     }
 
-    // Find the admin by email
-    const admin = await Admin.findByEmail(email);
-    if (!admin) {
-      throw new CustomError("Invalid email or password", 401);
-    }
+    // // Find the admin by email
+    // const admin = await Admin.findByEmail(email);
+    // if (!admin) {
+    //   throw new CustomError("Invalid email entered", 401);
+    // }
 
-    // Check if the password matches
-    const isPasswordValid = await Admin.comparePassword(
-      password,
-      admin.password
-    );
-    if (!isPasswordValid) {
-      throw new CustomError("Invalid email or password", 401);
-    }
+    // // Check if the password matches
+    // const isPasswordValid = await Admin.comparePassword(
+    //   password,
+    //   admin.password
+    // );
+    // if (!isPasswordValid) {
+    //   throw new CustomError("Invalid password entered", 401);
+    // }
 
     // Create a token (for simplicity, we're not doing this here)
     // const token = createToken(admin);
