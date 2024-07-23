@@ -26,6 +26,7 @@ var options = {
   swaggerDefinition: swaggerDefinition,
   apis: [
     path.join(__dirname, "../docs/swagger/auth.js"),
+    path.join(__dirname, "../docs/swagger/banner.js"),
     // add more paths...
   ],
 };

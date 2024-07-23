@@ -6,7 +6,7 @@ class Banner {
   static async findById(id) {
     try {
       return await prisma.banner.findUnique({
-        where: { id },
+        where: { id: Number(id) },
       });
     } catch (error) {
       console.error("Error finding banner by id:", error);
@@ -28,7 +28,7 @@ class Banner {
   static async updateById(id, data) {
     try {
       return await prisma.banner.update({
-        where: { id },
+        where: { id: Number(id) },
         data,
       });
     } catch (error) {
@@ -40,7 +40,7 @@ class Banner {
   static async deleteById(id) {
     try {
       return await prisma.banner.delete({
-        where: { id },
+        where: { id: Number(id) },
       });
     } catch (error) {
       console.error("Error deleting banner by id:", error);
