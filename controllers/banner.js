@@ -1,6 +1,28 @@
 // const Banner = require("../models/Banner");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
+const fileHelper = require("../utils/fileUtil");
+
+exports.getBanners = async (req, res, next) => {
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
+
+  try {
+    const banners = await Banner.get(page, limit);
+
+    if (!banners || banners.data.length <= 0) {
+      throw new CustomError("No banners found", 404);
+    }
+
+    res
+      .status(200)
+      .json(
+        generateResponse(200, true, "Banners retrieved successfully", banners)
+      );
+  } catch (error) {
+    next(error);
+  }
+};
 
 exports.postBanner = async (req, res, next) => {
   try {
@@ -23,62 +45,57 @@ exports.postBanner = async (req, res, next) => {
   }
 };
 
-// exports.getBannerById = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
+exports.deleteBanner = async (req, res, next) => {
+  try {
+    const { id } = req.params;
 
-//     const banner = await Banner.findById(parseInt(id, 10));
-//     if (!banner) {
-//       throw new CustomError("Banner not found", 404);
-//     }
+    // const banner = await Banner.findById(id);
+    // if (!banner) {
+    //   throw new CustomError("Banner not found", 404);
+    // }
 
-//     res.status(200).json({
-//       success: true,
-//       data: banner,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    // await Banner.deleteById(id);
 
-// exports.updateBannerById = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const { image, status } = req.body;
+    res
+      .status(200)
+      .json(generateResponse(200, true, "Banner deleted successfully"));
+  } catch (error) {
+    next(error);
+  }
+};
 
-//     const banner = await Banner.updateById(parseInt(id, 10), { image, status });
-//     res.status(200).json({
-//       success: true,
-//       message: "Banner updated successfully",
-//       data: banner,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+exports.patchBanner = async (req, res, next) => {
+  try {
+    const { id } = req.params;
 
-// exports.deleteBannerById = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
+    // const banner = await Banner.findById(id);
+    // if (!banner) {
+    //   throw new CustomError("Banner not found", 404);
+    // }
 
-//     await Banner.deleteById(parseInt(id, 10));
-//     res.status(200).json({
-//       success: true,
-//       message: "Banner deleted successfully",
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    let image = req.file ? req.file.path : null;
 
-// exports.getAllBanners = async (req, res, next) => {
-//   try {
-//     const banners = await Banner.findAll();
-//     res.status(200).json({
-//       success: true,
-//       data: banners,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    if (image) {
+      image = image.replace(/\\/g, "/");
+      await fileHelper.deleteFile(banner.image);
+    }
+
+    // const updatedBanner = await Banner.updateById(id, {
+    //   image: image || banner.image,
+    //   status: req.body.status || banner.status,
+    // });
+
+    res
+      .status(200)
+      .json(
+        generateResponse(
+          200,
+          true,
+          "Banner updated successfully",
+          updatedBanner
+        )
+      );
+  } catch (error) {
+    next(error);
+  }
+};

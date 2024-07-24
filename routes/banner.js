@@ -1,10 +1,21 @@
 const express = require("express");
 
 const { uploadSingle } = require("../config/multerConfig");
-const { postBanner } = require("../controllers/banner");
+const {
+  postBanner,
+  getBanners,
+  deleteBanner,
+  patchBanner,
+} = require("../controllers/banner");
 
 const router = express.Router();
 
-router.post("/v1/postBanner", uploadSingle, postBanner);
+router.get("/v1/banners", getBanners);
+
+router.post("/v1/banner", uploadSingle, postBanner);
+
+router.delete("/v1/banner/:id", deleteBanner);
+
+router.patch("/v1/banner/:id", uploadSingle, patchBanner);
 
 module.exports = router;
