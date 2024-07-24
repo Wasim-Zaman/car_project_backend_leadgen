@@ -4,16 +4,12 @@ const cityController = require("../controllers/city");
 
 const router = express.Router();
 
-// Route for getting cities with pagination
-router.get("/cities", cityController.getCities);
+router.get("/v1/cities", cityController.getCities);
 
-// Route for creating a new city
-router.post("/cities", cityController.postCity);
+router.post("/v1/cities", cityController.postCity);
 
-// Route for deleting a city by ID
-router.delete("/cities/:id", cityController.deleteCity);
+router.delete("/v1/cities/:id", cityController.deleteCity);
 
-// Route for updating a city by ID
-router.patch("/cities/:id", cityController.patchCity);
+router.patch("/v1/cities/:id", cityController.patchCity);
 
 module.exports = router;

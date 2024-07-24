@@ -54,6 +54,7 @@ exports.deleteBanner = async (req, res, next) => {
     //   throw new CustomError("Banner not found", 404);
     // }
 
+    // await fileHelper.deleteFile(banner.image);
     // await Banner.deleteById(id);
 
     res
