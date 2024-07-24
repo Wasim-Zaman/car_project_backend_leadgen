@@ -3,6 +3,7 @@ const path = require("path");
 const express = require("express");
 const swaggerUi = require("swagger-ui-express");
 const bodyParser = require("body-parser");
+const cors = require("cors"); // Import cors
 require("dotenv").config();
 
 const CustomError = require("./utils/customError");
@@ -15,6 +16,12 @@ const carRoutes = require("./routes/car");
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Enable CORS for all origins
+app.use(cors());
+
+// Serve static files from the 'images' directory
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -49,5 +56,5 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(port, function () {
-  console.log("Server is running");
+  console.log(`Server is running on port ${port}`);
 });
