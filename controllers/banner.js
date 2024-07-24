@@ -1,4 +1,4 @@
-// const Banner = require("../models/Banner");
+const Banner = require("../models/Banner");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 const fileHelper = require("../utils/fileUtil");
@@ -34,7 +34,7 @@ exports.postBanner = async (req, res, next) => {
 
     image = image.replace(/\\/g, "/");
 
-    // const banner = Banner.create({ image: image, status: 1 });
+    const banner = Banner.create({ image: image, status: 1 });
 
     res
       .status(201)
@@ -49,13 +49,13 @@ exports.deleteBanner = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    // const banner = await Banner.findById(id);
-    // if (!banner) {
-    //   throw new CustomError("Banner not found", 404);
-    // }
+    const banner = await Banner.findById(id);
+    if (!banner) {
+      throw new CustomError("Banner not found", 404);
+    }
 
-    // await fileHelper.deleteFile(banner.image);
-    // await Banner.deleteById(id);
+    await fileHelper.deleteFile(banner.image);
+    await Banner.deleteById(id);
 
     res
       .status(200)
@@ -69,10 +69,10 @@ exports.patchBanner = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    // const banner = await Banner.findById(id);
-    // if (!banner) {
-    //   throw new CustomError("Banner not found", 404);
-    // }
+    const banner = await Banner.findById(id);
+    if (!banner) {
+      throw new CustomError("Banner not found", 404);
+    }
 
     let image = req.file ? req.file.path : null;
 
@@ -81,10 +81,10 @@ exports.patchBanner = async (req, res, next) => {
       await fileHelper.deleteFile(banner.image);
     }
 
-    // const updatedBanner = await Banner.updateById(id, {
-    //   image: image || banner.image,
-    //   status: req.body.status || banner.status,
-    // });
+    const updatedBanner = await Banner.updateById(id, {
+      image: image || banner.image,
+      status: req.body.status || banner.status,
+    });
 
     res
       .status(200)

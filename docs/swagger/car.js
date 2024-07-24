@@ -1,16 +1,98 @@
 /**
  * @swagger
- * tags:
- *   name: Banners
- *   description: Banner management
+ * /api/car/v1/cars:
+ *   get:
+ *     summary: Retrieve cars
+ *     tags: [Cars]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: The page number to retrieve.
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: The number of items to retrieve per page.
+ *     responses:
+ *       200:
+ *         description: Cars retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Cars retrieved successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     currentPage:
+ *                       type: integer
+ *                       example: 1
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 5
+ *                     totalItems:
+ *                       type: integer
+ *                       example: 50
+ *                     cars:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                             example: 1
+ *                           title:
+ *                             type: string
+ *                             example: "Sedan"
+ *                           image:
+ *                             type: string
+ *                             example: "https://example.com/car1.jpg"
+ *                           status:
+ *                             type: integer
+ *                             example: 1
+ *                           createdAt:
+ *                             type: string
+ *                             format: date-time
+ *                             example: "2023-07-24T12:00:00Z"
+ *                           updatedAt:
+ *                             type: string
+ *                             format: date-time
+ *                             example: "2023-07-25T12:00:00Z"
+ *       404:
+ *         description: No cars found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 404
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: No cars found
  */
 
 /**
  * @swagger
- * /api/banner/v1/banner:
+ * /api/car/v1/car:
  *   post:
- *     summary: Create a new banner
- *     tags: [Banners]
+ *     summary: Create a new car
+ *     tags: [Cars]
  *     consumes:
  *       - multipart/form-data
  *     requestBody:
@@ -20,13 +102,19 @@
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the car
  *               image:
  *                 type: string
  *                 format: binary
- *                 description: The banner image to upload
+ *                 description: The car image to upload
+ *               status:
+ *                 type: integer
+ *                 description: The status of the car
  *     responses:
  *       201:
- *         description: Banner created successfully
+ *         description: Car created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -37,10 +125,30 @@
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Banner created successfully
+ *                   example: Car created successfully
  *                 data:
  *                   type: object
- *                   nullable: true
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     title:
+ *                       type: string
+ *                       example: "Sedan"
+ *                     image:
+ *                       type: string
+ *                       example: "https://example.com/car1.jpg"
+ *                     status:
+ *                       type: integer
+ *                       example: 1
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-24T12:00:00Z"
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-25T12:00:00Z"
  *       400:
  *         description: Image is required
  *         content:
@@ -58,106 +166,20 @@
 
 /**
  * @swagger
- * /api/banner/v1/banners:
- *   get:
- *     summary: Retrieve banners
- *     tags: [Banners]
- *     parameters:
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *         description: The page number to retrieve.
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *         description: The number of items to retrieve per page.
- *     responses:
- *       200:
- *         description: Banners retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: integer
- *                   example: 200
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Banners retrieved successfully
- *                 data:
- *                   type: object
- *                   properties:
- *                     currentPage:
- *                       type: integer
- *                       example: 1
- *                     totalPages:
- *                       type: integer
- *                       example: 5
- *                     totalItems:
- *                       type: integer
- *                       example: 50
- *                     banners:
- *                       type: array
- *                       items:
- *                         type: object
- *                         properties:
- *                           id:
- *                             type: integer
- *                             example: 1
- *                           image:
- *                             type: string
- *                             example: "https://example.com/banner1.jpg"
- *                           status:
- *                             type: integer
- *                             example: 1
- *                           createdAt:
- *                             type: string
- *                             format: date-time
- *                             example: "2023-07-24T12:00:00Z"
- *                           updatedAt:
- *                             type: string
- *                             format: date-time
- *                             example: "2023-07-25T12:00:00Z"
- *       404:
- *         description: No banners found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: integer
- *                   example: 404
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: No banners found
- */
-
-/**
- * @swagger
- * /api/banner/v1/banner/{id}:
+ * /api/car/v1/car/{id}:
  *   delete:
- *     summary: Delete a banner
- *     tags: [Banners]
+ *     summary: Delete a car
+ *     tags: [Cars]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: integer
  *         required: true
- *         description: The ID of the banner to delete
+ *         description: The ID of the car to delete
  *     responses:
  *       200:
- *         description: Banner deleted successfully
+ *         description: Car deleted successfully
  *         content:
  *           application/json:
  *             schema:
@@ -168,9 +190,9 @@
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Banner deleted successfully
+ *                   example: Car deleted successfully
  *       404:
- *         description: Banner not found
+ *         description: Car not found
  *         content:
  *           application/json:
  *             schema:
@@ -181,22 +203,22 @@
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: Banner not found
+ *                   example: Car not found
  */
 
 /**
  * @swagger
- * /api/banner/v1/banner/{id}:
+ * /api/car/v1/car/{id}:
  *   patch:
- *     summary: Update a banner
- *     tags: [Banners]
+ *     summary: Update a car
+ *     tags: [Cars]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: integer
  *         required: true
- *         description: The ID of the banner to update
+ *         description: The ID of the car to update
  *     requestBody:
  *       required: true
  *       content:
@@ -204,16 +226,19 @@
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
+ *                 description: The title of the car
  *               image:
  *                 type: string
  *                 format: binary
- *                 description: The new banner image to upload
+ *                 description: The new car image to upload
  *               status:
  *                 type: integer
- *                 description: The status of the banner
+ *                 description: The status of the car
  *     responses:
  *       200:
- *         description: Banner updated successfully
+ *         description: Car updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -224,16 +249,19 @@
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Banner updated successfully
+ *                   example: Car updated successfully
  *                 data:
  *                   type: object
  *                   properties:
  *                     id:
  *                       type: integer
  *                       example: 1
+ *                     title:
+ *                       type: string
+ *                       example: "Sedan"
  *                     image:
  *                       type: string
- *                       example: "https://example.com/banner1.jpg"
+ *                       example: "https://example.com/car1.jpg"
  *                     status:
  *                       type: integer
  *                       example: 1
@@ -246,7 +274,7 @@
  *                       format: date-time
  *                       example: "2023-07-25T12:00:00Z"
  *       404:
- *         description: Banner not found
+ *         description: Car not found
  *         content:
  *           application/json:
  *             schema:
@@ -257,5 +285,5 @@
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: Banner not found
+ *                   example: Car not found
  */
