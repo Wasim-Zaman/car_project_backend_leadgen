@@ -12,6 +12,7 @@ const generateResponse = require("./utils/response");
 const adminRoutes = require("./routes/auth");
 const bannerRoutes = require("./routes/banner");
 const cityRoutes = require("./routes/city");
+const brandRoutes = require("./routes/brand");
 const carRoutes = require("./routes/car");
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/auth", adminRoutes);
 app.use("/api/banner", bannerRoutes);
 app.use("/api/city", cityRoutes);
+app.use("/api/brand", brandRoutes);
 app.use("/api/car", carRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

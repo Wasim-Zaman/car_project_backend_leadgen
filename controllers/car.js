@@ -36,14 +36,13 @@ exports.postCar = async (req, res, next) => {
       title: req.body.title,
       image: image,
       status: req.body.status ? parseInt(req.body.status, 10) : 1,
-      brandId: req.body.brandId, // Include brandId
+      brandId: Number(req.body.brandId),
     });
 
     res
       .status(201)
       .json(generateResponse(201, true, "Car created successfully", car));
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

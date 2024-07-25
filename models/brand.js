@@ -2,62 +2,60 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-class Car {
+class Brand {
   static async findById(id) {
     try {
-      return await prisma.car.findUnique({
+      return await prisma.brand.findUnique({
         where: { id: Number(id) },
-        include: { brand: true }, // Include related Brand data
+        include: { cars: true }, // Include related Car data
       });
     } catch (error) {
-      console.error("Error finding car by id:", error);
+      console.error("Error finding brand by id:", error);
       throw error;
     }
   }
 
   static async create(data) {
     try {
-      return await prisma.car.create({
+      return await prisma.brand.create({
         data,
-        include: { brand: true },
       });
     } catch (error) {
-      console.error("Error creating car:", error);
+      console.error("Error creating brand:", error);
       throw error;
     }
   }
 
   static async updateById(id, data) {
     try {
-      return await prisma.car.update({
+      return await prisma.brand.update({
         where: { id: Number(id) },
         data,
-        include: { brand: true }, // Include related Brand data
       });
     } catch (error) {
-      console.error("Error updating car by id:", error);
+      console.error("Error updating brand by id:", error);
       throw error;
     }
   }
 
   static async deleteById(id) {
     try {
-      return await prisma.car.delete({
+      return await prisma.brand.delete({
         where: { id: Number(id) },
       });
     } catch (error) {
-      console.error("Error deleting car by id:", error);
+      console.error("Error deleting brand by id:", error);
       throw error;
     }
   }
 
   static async getAll() {
     try {
-      return await prisma.car.findMany({
-        include: { brand: true }, // Include related Brand data
+      return await prisma.brand.findMany({
+        include: { cars: true }, // Include related Car data
       });
     } catch (error) {
-      console.error("Error finding all cars:", error);
+      console.error("Error finding all brands:", error);
       throw error;
     }
   }
@@ -66,33 +64,33 @@ class Car {
     try {
       const skip = (page - 1) * limit;
 
-      // Fetch the paginated cars
-      const cars = await prisma.car.findMany({
+      // Fetch the paginated brands
+      const brands = await prisma.brand.findMany({
         skip,
         take: limit,
-        include: { brand: true }, // Include related Brand data
+        include: { cars: true }, // Include related Car data
       });
 
-      // Fetch the total number of cars
-      const totalCars = await prisma.car.count();
+      // Fetch the total number of brands
+      const totalBrands = await prisma.brand.count();
 
       // Calculate total pages
-      const totalPages = Math.ceil(totalCars / limit);
+      const totalPages = Math.ceil(totalBrands / limit);
 
       return {
-        data: cars,
+        data: brands,
         pagination: {
           currentPage: page,
           totalPages,
-          totalItems: totalCars,
+          totalItems: totalBrands,
           itemsPerPage: limit,
         },
       };
     } catch (error) {
-      console.error("Error getting cars with pagination:", error);
+      console.error("Error getting brands with pagination:", error);
       throw error;
     }
   }
 }
 
-module.exports = Car;
+module.exports = Brand;
