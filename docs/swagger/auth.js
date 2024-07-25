@@ -7,7 +7,7 @@
 
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/v1/login:
  *   post:
  *     summary: Login an admin
  *     tags: [Auth]
