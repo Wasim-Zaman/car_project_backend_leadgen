@@ -6,7 +6,7 @@ const generateResponse = require("../utils/response");
 
 exports.createAdmin = async (req, res, next) => {
   console.log("admin is creating....");
-  const EMAIL = process.env.EMAIL;
+  const EMAIL = "admin@example.com";
   try {
     const admin = Admin.findByEmail(EMAIL);
     if (!admin) {
