@@ -34,7 +34,7 @@ exports.login = async (req, res, next) => {
     // Find the admin by email
     const admin = await Admin.findByEmail(email);
     if (!admin) {
-      throw new CustomError("Invalid email entered", 401);
+      throw new CustomError("No admin found with entered email", 401);
     }
 
     // Check if the password matches
