@@ -1,6 +1,26 @@
+require("dotenv").config();
+
 const Admin = require("../models/admin");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
+
+exports.createAdmin = async (req, res, next) => {
+  const EMAIL = process.env.EMAIL;
+  try {
+    const admin = Admin.findByEmail(EMAIL);
+    if (!admin) {
+      const password = Admin.createPassword("admin");
+      await Admin.createAdmin({
+        email: EMAIL,
+        password: password,
+      });
+      res.status(201).json(generateResponse(201, true, ""));
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
 
 exports.login = async (req, res, next) => {
   try {

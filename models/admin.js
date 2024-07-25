@@ -35,6 +35,10 @@ class Admin {
   static async comparePassword(inputPassword, hashedPassword) {
     return await bcrypt.compare(inputPassword, hashedPassword);
   }
+
+  static async createPassword(password) {
+    return await bcrypt.hash(password, 12);
+  }
 }
 
 module.exports = Admin;
