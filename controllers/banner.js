@@ -1,4 +1,4 @@
-const Banner = require("../models/Banner");
+const Banner = require("../models/banner");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 const fileHelper = require("../utils/fileUtil");
