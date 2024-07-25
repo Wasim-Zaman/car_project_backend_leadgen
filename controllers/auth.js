@@ -5,6 +5,7 @@ const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 
 exports.createAdmin = async (req, res, next) => {
+  console.log("admin is creating....");
   const EMAIL = process.env.EMAIL;
   try {
     const admin = Admin.findByEmail(EMAIL);
