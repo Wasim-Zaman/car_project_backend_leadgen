@@ -7,6 +7,7 @@ class Car {
     try {
       return await prisma.car.findUnique({
         where: { id: Number(id) },
+        include: { brand: true }, // Include related Brand data
       });
     } catch (error) {
       console.error("Error finding car by id:", error);
@@ -18,6 +19,7 @@ class Car {
     try {
       return await prisma.car.create({
         data,
+        include: { brand: true }, // Include related Brand data
       });
     } catch (error) {
       console.error("Error creating car:", error);
@@ -30,6 +32,7 @@ class Car {
       return await prisma.car.update({
         where: { id: Number(id) },
         data,
+        include: { brand: true }, // Include related Brand data
       });
     } catch (error) {
       console.error("Error updating car by id:", error);
@@ -50,7 +53,9 @@ class Car {
 
   static async getAll() {
     try {
-      return await prisma.car.findMany();
+      return await prisma.car.findMany({
+        include: { brand: true }, // Include related Brand data
+      });
     } catch (error) {
       console.error("Error finding all cars:", error);
       throw error;
@@ -65,6 +70,7 @@ class Car {
       const cars = await prisma.car.findMany({
         skip,
         take: limit,
+        include: { brand: true }, // Include related Brand data
       });
 
       // Fetch the total number of cars

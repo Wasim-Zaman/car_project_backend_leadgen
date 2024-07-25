@@ -36,6 +36,7 @@ exports.postCar = async (req, res, next) => {
       title: req.body.title,
       image: image,
       status: req.body.status ? parseInt(req.body.status, 10) : 1,
+      brandId: req.body.brandId, // Include brandId
     });
 
     res
@@ -87,6 +88,7 @@ exports.patchCar = async (req, res, next) => {
       title: req.body.title || car.title,
       image: image || car.image,
       status: req.body.status ? parseInt(req.body.status, 10) : car.status,
+      brandId: req.body.brandId || car.brandId, // Include brandId
     });
 
     res

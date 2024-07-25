@@ -61,6 +61,9 @@
  *                           status:
  *                             type: integer
  *                             example: 1
+ *                           brandId:
+ *                             type: integer
+ *                             example: 1
  *                           createdAt:
  *                             type: string
  *                             format: date-time
@@ -69,6 +72,29 @@
  *                             type: string
  *                             format: date-time
  *                             example: "2023-07-25T12:00:00Z"
+ *                           brand:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: integer
+ *                                 example: 1
+ *                               title:
+ *                                 type: string
+ *                                 example: "Brand A"
+ *                               image:
+ *                                 type: string
+ *                                 example: "https://example.com/brand1.jpg"
+ *                               status:
+ *                                 type: integer
+ *                                 example: 1
+ *                               createdAt:
+ *                                 type: string
+ *                                 format: date-time
+ *                                 example: "2023-07-24T12:00:00Z"
+ *                               updatedAt:
+ *                                 type: string
+ *                                 format: date-time
+ *                                 example: "2023-07-25T12:00:00Z"
  *       404:
  *         description: No cars found
  *         content:
@@ -112,6 +138,9 @@
  *               status:
  *                 type: integer
  *                 description: The status of the car
+ *               brandId:
+ *                 type: integer
+ *                 description: The ID of the brand
  *     responses:
  *       201:
  *         description: Car created successfully
@@ -141,6 +170,9 @@
  *                     status:
  *                       type: integer
  *                       example: 1
+ *                     brandId:
+ *                       type: integer
+ *                       example: 1
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -149,6 +181,29 @@
  *                       type: string
  *                       format: date-time
  *                       example: "2023-07-25T12:00:00Z"
+ *                     brand:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: integer
+ *                           example: 1
+ *                         title:
+ *                           type: string
+ *                           example: "Brand A"
+ *                         image:
+ *                           type: string
+ *                           example: "https://example.com/brand1.jpg"
+ *                         status:
+ *                           type: integer
+ *                           example: 1
+ *                         createdAt:
+ *                           type: string
+ *                           format: date-time
+ *                           example: "2023-07-24T12:00:00Z"
+ *                         updatedAt:
+ *                           type: string
+ *                           format: date-time
+ *                           example: "2023-07-25T12:00:00Z"
  *       400:
  *         description: Image is required
  *         content:
@@ -236,6 +291,9 @@
  *               status:
  *                 type: integer
  *                 description: The status of the car
+ *               brandId:
+ *                 type: integer
+ *                 description: The ID of the brand
  *     responses:
  *       200:
  *         description: Car updated successfully
@@ -265,6 +323,9 @@
  *                     status:
  *                       type: integer
  *                       example: 1
+ *                     brandId:
+ *                       type: integer
+ *                       example: 1
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -273,6 +334,29 @@
  *                       type: string
  *                       format: date-time
  *                       example: "2023-07-25T12:00:00Z"
+ *                     brand:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: integer
+ *                           example: 1
+ *                         title:
+ *                           type: string
+ *                           example: "Brand A"
+ *                         image:
+ *                           type: string
+ *                           example: "https://example.com/brand1.jpg"
+ *                         status:
+ *                           type: integer
+ *                           example: 1
+ *                         createdAt:
+ *                           type: string
+ *                           format: date-time
+ *                           example: "2023-07-24T12:00:00Z"
+ *                         updatedAt:
+ *                           type: string
+ *                           format: date-time
+ *                           example: "2023-07-25T12:00:00Z"
  *       404:
  *         description: Car not found
  *         content:
