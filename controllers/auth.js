@@ -14,6 +14,7 @@ exports.createAdmin = async (req, res, next) => {
         email: EMAIL,
         password: password,
       });
+      console.log("Admin created with email: ", EMAIL);
       res.status(201).json(generateResponse(201, true, ""));
     }
     next();
