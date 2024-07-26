@@ -1,4 +1,5 @@
 const Car = require("../models/car");
+const Brand = require("../models/brand");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 const fileHelper = require("../utils/fileUtil");
@@ -24,6 +25,13 @@ exports.getCars = async (req, res, next) => {
 
 exports.postCar = async (req, res, next) => {
   try {
+    const { title, brandId } = req.body;
+
+    const brand = await Brand.findById(brandId);
+    if (!brand) {
+      throw new CustomError("Brand not found", 404);
+    }
+
     let image = req.file ? req.file.path : null;
 
     if (!image) {
@@ -31,10 +39,10 @@ exports.postCar = async (req, res, next) => {
     }
 
     const car = await Car.create({
-      title: req.body.title,
+      title: title,
       image: image,
       status: req.body.status ? parseInt(req.body.status, 10) : 1,
-      brandId: Number(req.body.brandId),
+      brandId: Number(brandId),
     });
 
     res
