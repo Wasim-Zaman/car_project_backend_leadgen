@@ -1,4 +1,5 @@
 const Gallery = require("../models/gallery");
+const Car = require("../models/car");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 const fileHelper = require("../utils/fileUtil");
@@ -31,6 +32,13 @@ exports.getGalleries = async (req, res, next) => {
 
 exports.postGallery = async (req, res, next) => {
   try {
+    const { carId } = req.body;
+
+    const car = await Car.findById(carId);
+    if (!car) {
+      throw new CustomError("Car not found", 404);
+    }
+
     let image = req.file ? req.file.path : null;
 
     if (!image) {
@@ -39,7 +47,7 @@ exports.postGallery = async (req, res, next) => {
 
     const gallery = await Gallery.create({
       image: image,
-      carId: Number(req.body.carId),
+      carId: Number(carId),
     });
 
     res
