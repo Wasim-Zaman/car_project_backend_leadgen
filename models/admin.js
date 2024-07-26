@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 class Admin {
   static async findByEmail(email) {
     try {
-      const admin = await prisma.admin.findUnique({
+      const admin = await prisma.admin.findFirst({
         where: { email: email },
       });
       return admin;
