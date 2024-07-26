@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const galleryController = require("../controllers/galleryController");
+const galleryController = require("../controllers/gallery");
 const { uploadSingle } = require("../config/multerConfig");
 
 // Define routes
