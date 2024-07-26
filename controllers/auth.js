@@ -16,11 +16,10 @@ exports.createAdmin = async (req, res, next) => {
         email: EMAIL,
         password: password,
       });
-      res.status(201).json(generateResponse(201, true, ""));
     }
     next();
   } catch (error) {
-    next(error);
+    next();
   }
 };
 
