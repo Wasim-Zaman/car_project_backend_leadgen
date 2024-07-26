@@ -5,17 +5,17 @@ const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 
 exports.createAdmin = async (req, res, next) => {
-  console.log("admin is creating....");
-  const EMAIL = "admin@example.com";
+  const EMAIL = process.env.ADMIN_EMAIL;
+  const PASSWORD = process.env.ADMIN_PASSWORD;
+
   try {
-    const admin = Admin.findByEmail(EMAIL);
+    const admin = await Admin.findByEmail(EMAIL);
     if (!admin) {
-      const password = Admin.createPassword("admin");
+      const password = await Admin.createPassword(PASSWORD);
       await Admin.createAdmin({
         email: EMAIL,
         password: password,
       });
-      console.log("Admin created with email: ", EMAIL);
       res.status(201).json(generateResponse(201, true, ""));
     }
     next();
@@ -28,18 +28,15 @@ exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    // Check if email and password are provided
     if (!email || !password) {
       throw new CustomError("Email and password are required", 400);
     }
 
-    // Find the admin by email
     const admin = await Admin.findByEmail(email);
     if (!admin) {
       throw new CustomError("No admin found with entered email", 401);
     }
 
-    // Check if the password matches
     const isPasswordValid = await Admin.comparePassword(
       password,
       admin.password

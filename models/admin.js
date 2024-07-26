@@ -9,7 +9,7 @@ class Admin {
   static async findByEmail(email) {
     try {
       const admin = await prisma.admin.findUnique({
-        where: { email },
+        where: { email: email },
       });
       return admin;
     } catch (error) {
