@@ -31,8 +31,6 @@ exports.postBrand = async (req, res, next) => {
       throw new CustomError("Image is required", 400);
     }
 
-    image = image.replace(/\\/g, "/");
-
     const brand = await Brand.create({
       title: req.body.title,
       image: image,
@@ -79,7 +77,6 @@ exports.patchBrand = async (req, res, next) => {
     let image = req.file ? req.file.path : null;
 
     if (image) {
-      image = image.replace(/\\/g, "/");
       await fileHelper.deleteFile(brand.image);
     }
 

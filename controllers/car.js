@@ -30,8 +30,6 @@ exports.postCar = async (req, res, next) => {
       throw new CustomError("Image is required", 400);
     }
 
-    image = image.replace(/\\/g, "/");
-
     const car = await Car.create({
       title: req.body.title,
       image: image,
@@ -79,7 +77,6 @@ exports.patchCar = async (req, res, next) => {
     let image = req.file ? req.file.path : null;
 
     if (image) {
-      image = image.replace(/\\/g, "/");
       await fileHelper.deleteFile(car.image);
     }
 
@@ -87,7 +84,7 @@ exports.patchCar = async (req, res, next) => {
       title: req.body.title || car.title,
       image: image || car.image,
       status: req.body.status ? parseInt(req.body.status, 10) : car.status,
-      brandId: req.body.brandId || car.brandId, // Include brandId
+      brandId: req.body.brandId || car.brandId,
     });
 
     res

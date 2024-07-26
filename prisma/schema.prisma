@@ -57,3 +57,12 @@ model Car {
   brandId   Int      // Foreign key field
   brand     Brand    @relation(fields: [brandId], references: [id])
 }
+
+model Gallery {
+  id        Int      @id @default(autoincrement())
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  carId   Int      // Foreign key field
+  car     Car    @relation(fields: [brandId], references: [id])
+}

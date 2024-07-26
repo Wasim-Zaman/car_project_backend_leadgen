@@ -9,7 +9,9 @@ const storage = multer.diskStorage({
     cb(null, "images");
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}${path.extname(file.originalname)}`);
+    // replace \\ with /
+    const sanitizedFilename = file.originalname.replace(/\\/g, "/");
+    cb(null, `${Date.now()}${path.extname(sanitizedFilename)}`);
   },
 });
 

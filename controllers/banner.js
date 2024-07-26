@@ -32,13 +32,11 @@ exports.postBanner = async (req, res, next) => {
       throw new CustomError("Image is required", 400);
     }
 
-    image = image.replace(/\\/g, "/");
-
     const banner = Banner.create({ image: image, status: 1 });
 
     res
       .status(201)
-      .json(generateResponse(201, true, "Banner created successfully", image));
+      .json(generateResponse(201, true, "Banner created successfully", banner));
   } catch (error) {
     console.log(error);
     next(error);
@@ -77,7 +75,6 @@ exports.patchBanner = async (req, res, next) => {
     let image = req.file ? req.file.path : null;
 
     if (image) {
-      image = image.replace(/\\/g, "/");
       await fileHelper.deleteFile(banner.image);
     }
 
