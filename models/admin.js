@@ -13,7 +13,7 @@ class Admin {
       });
       return admin;
     } catch (error) {
-      throw CustomError("An error occurred while fetching admin", 500);
+      throw new CustomError("An error occurred while fetching admin", 500);
     }
   }
 
@@ -28,7 +28,7 @@ class Admin {
       });
       return admin;
     } catch (error) {
-      throw CustomError("An error occurred while creating admin", 500);
+      throw new CustomError("An error occurred while creating admin", 500);
     }
   }
 
