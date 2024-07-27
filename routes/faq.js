@@ -12,6 +12,6 @@ router.post("/v1/faq", faqController.createFAQ);
 
 router.delete("/v1/faq/:id", faqController.deleteFAQ);
 
-router.patch("/v1/faq/:id", faqController.updateFAQ);
+router.patch("/v1/faq/:id", faqController.patchFAQ);
 
 module.exports = router;

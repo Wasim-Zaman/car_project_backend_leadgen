@@ -65,7 +65,7 @@ exports.createFAQ = async (req, res, next) => {
 };
 
 // Update an existing FAQ
-exports.updateFAQ = async (req, res, next) => {
+exports.patchFAQ = async (req, res, next) => {
   const id = req.params.id;
   const { question, answer } = req.body;
 

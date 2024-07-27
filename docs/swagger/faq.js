@@ -106,16 +106,29 @@
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
  *         required: true
- *         description: The ID of the FAQ to update.
+ *         schema:
+ *           type: string
+ *         description: The ID of the FAQ to update
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/FAQ'
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *                 description: The question of the FAQ
+ *                 example: "What is the return policy?"
+ *               answer:
+ *                 type: string
+ *                 description: The answer to the FAQ
+ *                 example: "You can return items within 30 days of purchase."
+ *               status:
+ *                 type: integer
+ *                 description: The status of the FAQ (1 for active, 0 for inactive)
+ *                 example: 1
  *     responses:
  *       200:
  *         description: FAQ updated successfully
@@ -128,6 +141,18 @@
  *                   type: string
  *                 data:
  *                   $ref: '#/components/schemas/FAQ'
+ *       404:
+ *         description: FAQ not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                   example: "FAQ not found"
  */
 
 /**

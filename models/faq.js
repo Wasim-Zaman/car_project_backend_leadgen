@@ -23,6 +23,37 @@ class FAQ {
     }
   }
 
+  static async get(page = 1, limit = 10) {
+    try {
+      const skip = (page - 1) * limit;
+
+      // Fetch the paginated cities
+      const FAQs = await prisma.FAQ.findMany({
+        skip,
+        take: limit,
+      });
+
+      // Fetch the total number of cities
+      const totalFAQs = await prisma.FAQ.count();
+
+      // Calculate total pages
+      const totalPages = Math.ceil(totalFAQs / limit);
+
+      return {
+        data: FAQs,
+        pagination: {
+          currentPage: page,
+          totalPages,
+          totalItems: totalFAQs,
+          itemsPerPage: limit,
+        },
+      };
+    } catch (error) {
+      console.error("Error getting cities with pagination:", error);
+      throw error;
+    }
+  }
+
   static async create(data) {
     try {
       return await prisma.FAQ.create({
