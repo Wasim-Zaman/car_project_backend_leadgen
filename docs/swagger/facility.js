@@ -1,51 +1,100 @@
 /**
  * @swagger
- * tags:
- *   name: Facilities
- *   description: API for managing facilities
- */
-
-/**
- * @swagger
- * /v1/facilities:
+ * /api/facility/v1/facilities:
  *   get:
- *     summary: Retrieve a list of facilities
+ *     summary: Retrieve facilities
  *     tags: [Facilities]
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
- *         description: Page number
+ *         description: The page number to retrieve.
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
- *         description: Number of items per page
+ *         description: The number of items to retrieve per page.
  *     responses:
  *       200:
- *         description: A list of facilities
+ *         description: Facilities retrieved successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Facilities retrieved successfully
  *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Facility'
+ *                   type: object
+ *                   properties:
+ *                     currentPage:
+ *                       type: integer
+ *                       example: 1
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 5
+ *                     totalItems:
+ *                       type: integer
+ *                       example: 50
+ *                     facilities:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                             example: 1
+ *                           name:
+ *                             type: string
+ *                             example: "Facility A"
+ *                           image:
+ *                             type: string
+ *                             example: "https://example.com/facility1.jpg"
+ *                           status:
+ *                             type: integer
+ *                             example: 1
+ *                           createdAt:
+ *                             type: string
+ *                             format: date-time
+ *                             example: "2023-07-24T12:00:00Z"
+ *                           updatedAt:
+ *                             type: string
+ *                             format: date-time
+ *                             example: "2023-07-25T12:00:00Z"
  *       404:
  *         description: No facilities found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 404
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: No facilities found
  */
 
 /**
  * @swagger
- * /v1/facility:
+ * /api/facility/v1/facility:
  *   post:
  *     summary: Create a new facility
  *     tags: [Facilities]
+ *     consumes:
+ *       - multipart/form-data
  *     requestBody:
  *       required: true
  *       content:
@@ -55,11 +104,14 @@
  *             properties:
  *               name:
  *                 type: string
+ *                 description: The name of the facility
  *               image:
  *                 type: string
  *                 format: binary
+ *                 description: The facility image to upload
  *               status:
  *                 type: integer
+ *                 description: The status of the facility
  *     responses:
  *       201:
  *         description: Facility created successfully
@@ -68,27 +120,65 @@
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Facility created successfully
  *                 data:
- *                   $ref: '#/components/schemas/Facility'
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: "Facility A"
+ *                     image:
+ *                       type: string
+ *                       example: "https://example.com/facility1.jpg"
+ *                     status:
+ *                       type: integer
+ *                       example: 1
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-24T12:00:00Z"
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-25T12:00:00Z"
  *       400:
- *         description: Image is required
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Name and Image are required
  */
 
 /**
  * @swagger
- * /v1/facility/{id}:
+ * /api/facility/v1/facility/{id}:
  *   patch:
- *     summary: Update an existing facility
+ *     summary: Update a facility
  *     tags: [Facilities]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
- *           type: string
+ *           type: integer
  *         required: true
- *         description: The facility ID
+ *         description: The ID of the facility to update
+ *     consumes:
+ *       - multipart/form-data
  *     requestBody:
  *       required: true
  *       content:
@@ -98,11 +188,14 @@
  *             properties:
  *               name:
  *                 type: string
+ *                 description: The name of the facility
  *               image:
  *                 type: string
  *                 format: binary
+ *                 description: The facility image to upload (optional)
  *               status:
  *                 type: integer
+ *                 description: The status of the facility
  *     responses:
  *       200:
  *         description: Facility updated successfully
@@ -111,17 +204,53 @@
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Facility updated successfully
  *                 data:
- *                   $ref: '#/components/schemas/Facility'
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: "Facility A"
+ *                     image:
+ *                       type: string
+ *                       example: "https://example.com/facility1.jpg"
+ *                     status:
+ *                       type: integer
+ *                       example: 1
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-24T12:00:00Z"
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-25T12:00:00Z"
  *       404:
  *         description: Facility not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Facility not found
  */
 
 /**
  * @swagger
- * /v1/facility/{id}:
+ * /api/facility/v1/facility/{id}:
  *   delete:
  *     summary: Delete a facility
  *     tags: [Facilities]
@@ -129,9 +258,9 @@
  *       - in: path
  *         name: id
  *         schema:
- *           type: string
+ *           type: integer
  *         required: true
- *         description: The facility ID
+ *         description: The ID of the facility to delete
  *     responses:
  *       200:
  *         description: Facility deleted successfully
@@ -140,40 +269,23 @@
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/Facility'
+ *                   example: Facility deleted successfully
  *       404:
  *         description: Facility not found
- */
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     Facility:
- *       type: object
- *       required:
- *         - name
- *         - image
- *         - status
- *       properties:
- *         id:
- *           type: integer
- *           description: The auto-generated ID of the facility
- *         name:
- *           type: string
- *           description: The name of the facility
- *         image:
- *           type: string
- *           description: The image URL of the facility
- *         status:
- *           type: integer
- *           description: The status of the facility
- *       example:
- *         id: 1
- *         name: Facility Name
- *         image: /path/to/image.jpg
- *         status: 1
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Facility not found
  */
