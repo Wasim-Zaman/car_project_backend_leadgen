@@ -1,6 +1,7 @@
 const Brand = require("../models/brand");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
+const fileHelper = require("../utils/fileUtil");
 
 exports.getBrands = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
@@ -54,6 +55,8 @@ exports.deleteBrand = async (req, res, next) => {
     if (!brand) {
       throw new CustomError("Brand not found", 404);
     }
+
+    await fileHelper.deleteFile(brand.image);
 
     await Brand.deleteById(id);
 
