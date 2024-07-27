@@ -95,7 +95,7 @@ model Coupon {
   code                 String   // The coupon code
   title                String   // The title of the coupon
   subtitle             String?  // The subtitle of the coupon, optional
-  status               String   // The status of the coupon
+  status               Int   // The status of the coupon
   minOrderAmount       Float?   // The minimum order amount for the coupon to be applicable, optional
   value                Float    // The value/discount of the coupon
   description          String?  // The description of the coupon, optional

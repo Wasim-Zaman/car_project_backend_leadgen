@@ -139,7 +139,7 @@
  *                 type: string
  *                 description: The subtitle of the coupon
  *               status:
- *                 type: string
+ *                 type: number
  *                 description: The status of the coupon
  *               minOrderAmount:
  *                 type: number
@@ -303,7 +303,7 @@
  *                 type: string
  *                 description: The subtitle of the coupon
  *               status:
- *                 type: string
+ *                 type: number
  *                 description: The status of the coupon
  *               minOrderAmount:
  *                 type: number
