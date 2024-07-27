@@ -36,9 +36,11 @@ exports.login = async (req, res, next) => {
       throw new CustomError("No admin found with entered email", 401);
     }
 
+    console.log(admin.password);
+
     const isPasswordValid = await Admin.comparePassword(
-      password,
-      admin.password
+      password.toString(),
+      admin.password.toString()
     );
     if (!isPasswordValid) {
       throw new CustomError("Invalid password entered", 401);
