@@ -26,14 +26,17 @@ exports.getCities = async (req, res, next) => {
 
 // Create a new city
 exports.postCity = async (req, res, next) => {
-  const { name, status } = req.body;
+  const { name } = req.body;
 
   if (!name) {
     throw new CustomError("City name is required", 400);
   }
 
   try {
-    const city = await City.create({ name, status });
+    const city = await City.create({
+      name: name,
+      status: req.body.status ? parseInt(req.body.status, 10) : 1,
+    });
 
     res
       .status(201)

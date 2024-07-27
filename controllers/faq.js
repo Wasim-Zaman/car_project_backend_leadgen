@@ -43,10 +43,14 @@ exports.getFAQById = async (req, res, next) => {
 
 // Create a new FAQ
 exports.createFAQ = async (req, res, next) => {
-  const data = req.body;
+  const { question, answer } = req.body;
 
   try {
-    const newFAQ = await FAQ.create(data);
+    const newFAQ = await FAQ.create({
+      question: question,
+      answer: answer,
+      status: req.body.status ? parseInt(req.body.status, 10) : 1,
+    });
 
     res
       .status(201)
