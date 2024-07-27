@@ -39,8 +39,8 @@ exports.login = async (req, res, next) => {
     console.log(admin.password);
 
     const isPasswordValid = await Admin.comparePassword(
-      password.toString(),
-      admin.password.toString()
+      password,
+      admin.password
     );
     if (!isPasswordValid) {
       throw new CustomError("Invalid password entered", 401);

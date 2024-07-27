@@ -70,3 +70,12 @@ model Gallery {
   car       Car      @relation(fields: [carId], references: [id], name: "CarGalleries")
 }
 
+model FAQ {
+  id        Int      @id @default(autoincrement())
+  question     String?
+  answer     String?
+  status    Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
