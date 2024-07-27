@@ -17,6 +17,7 @@ const carRoutes = require("./routes/car");
 const galleryRoutes = require("./routes/gallery");
 const faqRoutes = require("./routes/faq");
 const facilityRoutes = require("./routes/facility");
+const couponRoutes = require("./routes/coupon");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -35,6 +36,7 @@ app.use("/api/car", carRoutes);
 app.use("/api/gallery", galleryRoutes);
 app.use("/api/faq", faqRoutes);
 app.use("/api/facility", facilityRoutes);
+app.use("/api/coupon", couponRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res, next) => {
