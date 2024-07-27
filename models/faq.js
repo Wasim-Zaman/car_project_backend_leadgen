@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 class FAQ {
   static async findById(id) {
     try {
-      return await prisma.fAQ.findUnique({
+      return await prisma.FAQ.findUnique({
         where: { id: Number(id) },
       });
     } catch (error) {
@@ -16,7 +16,7 @@ class FAQ {
 
   static async findAll() {
     try {
-      return await prisma.fAQ.findMany();
+      return await prisma.FAQ.findMany();
     } catch (error) {
       console.error("Error finding all FAQs:", error);
       throw error;
@@ -25,7 +25,7 @@ class FAQ {
 
   static async create(data) {
     try {
-      return await prisma.fAQ.create({
+      return await prisma.FAQ.create({
         data,
       });
     } catch (error) {
@@ -36,7 +36,7 @@ class FAQ {
 
   static async update(id, data) {
     try {
-      return await prisma.fAQ.update({
+      return await prisma.FAQ.update({
         where: { id: Number(id) },
         data,
       });
@@ -48,7 +48,7 @@ class FAQ {
 
   static async delete(id) {
     try {
-      return await prisma.fAQ.delete({
+      return await prisma.FAQ.delete({
         where: { id: Number(id) },
       });
     } catch (error) {

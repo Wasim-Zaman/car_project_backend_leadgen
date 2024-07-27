@@ -46,6 +46,10 @@ exports.createFAQ = async (req, res, next) => {
   const { question, answer } = req.body;
 
   try {
+    if (!question || !answer) {
+      throw new CustomError("Question and answer are required", 400);
+    }
+
     const newFAQ = await FAQ.create({
       question: question,
       answer: answer,
@@ -63,10 +67,21 @@ exports.createFAQ = async (req, res, next) => {
 // Update an existing FAQ
 exports.updateFAQ = async (req, res, next) => {
   const id = req.params.id;
-  const data = req.body;
+  const { question, answer } = req.body;
 
   try {
-    const updatedFAQ = await FAQ.update(id, data);
+    const existingFAQ = await FAQ.findById(id);
+    if (!existingFAQ) {
+      throw new CustomError("FAQ not found", 404);
+    }
+
+    const updatedFAQ = await FAQ.update(id, {
+      question: question || existingFAQ.question,
+      answer: answer || existingFAQ.answer,
+      status: req.body.status
+        ? parseInt(req.body.status, 10)
+        : existingFAQ.status,
+    });
 
     res
       .status(200)

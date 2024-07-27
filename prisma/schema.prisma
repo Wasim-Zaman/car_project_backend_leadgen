@@ -72,9 +72,9 @@ model Gallery {
 
 model FAQ {
   id        Int      @id @default(autoincrement())
-  question     String?
-  answer     String?
-  status    Int?
+  question  String
+  answer    String
+  status    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

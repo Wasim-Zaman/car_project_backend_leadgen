@@ -69,7 +69,20 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/FAQ'
+ *             type: object
+ *             properties:
+ *               question:
+ *                 type: string
+ *                 description: The question of the FAQ
+ *                 example: "What is the return policy?"
+ *               answer:
+ *                 type: string
+ *                 description: The answer to the FAQ
+ *                 example: "You can return items within 30 days of purchase."
+ *               status:
+ *                 type: integer
+ *                 description: The status of the FAQ (1 for active, 0 for inactive)
+ *                 example: 1
  *     responses:
  *       201:
  *         description: FAQ created successfully
