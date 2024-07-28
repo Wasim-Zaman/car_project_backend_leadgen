@@ -1,8 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 
-const CustomError = require("../utils/customError");
-
 const prisma = new PrismaClient();
 
 class Admin {
@@ -19,13 +17,14 @@ class Admin {
 
   static async createAdmin(data) {
     try {
-      const hashedPassword = await bcrypt.hash(data.password, 12);
+      console.log(`Creating admin with data: ${JSON.stringify(data)}`);
       const admin = await prisma.admin.create({
         data: {
           ...data,
-          password: hashedPassword,
+          password: data.password, // Use already hashed password
         },
       });
+      console.log(`Admin created with data: ${JSON.stringify(admin)}`);
       return admin;
     } catch (error) {
       throw error;
@@ -33,11 +32,17 @@ class Admin {
   }
 
   static async comparePassword(inputPassword, hashedPassword) {
-    return await bcrypt.compare(inputPassword, hashedPassword);
+    const isMatch = await bcrypt.compare(inputPassword, hashedPassword);
+    console.log(
+      `Comparing passwords: ${inputPassword} vs ${hashedPassword} -> ${isMatch}`
+    );
+    return isMatch;
   }
 
   static async createPassword(password) {
-    return await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, 12);
+    console.log(`Created hashed password: ${hashedPassword}`);
+    return hashedPassword;
   }
 }
 

@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const Admin = require("../models/admin");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
@@ -9,17 +7,22 @@ exports.createAdmin = async (req, res, next) => {
   const PASSWORD = process.env.ADMIN_PASSWORD;
 
   try {
+    console.log(`Attempting to create admin with email: ${EMAIL}`);
     const admin = await Admin.findByEmail(EMAIL);
     if (!admin) {
-      const password = await Admin.createPassword(PASSWORD);
+      const hashedPassword = await Admin.createPassword(PASSWORD);
       await Admin.createAdmin({
         email: EMAIL,
-        password: password,
+        password: hashedPassword,
       });
+      console.log(`Admin created with email: ${EMAIL}`);
+    } else {
+      console.log(`Admin already exists with email: ${EMAIL}`);
     }
     next();
   } catch (error) {
-    next();
+    console.log(`Error in createAdmin: ${error.message}`);
+    next(error);
   }
 };
 
@@ -36,7 +39,8 @@ exports.login = async (req, res, next) => {
       throw new CustomError("No admin found with entered email", 401);
     }
 
-    console.log(admin.password);
+    console.log(`Input password: ${password}`);
+    console.log(`Stored password: ${admin.password}`);
 
     const isPasswordValid = await Admin.comparePassword(
       password,
@@ -59,6 +63,7 @@ exports.login = async (req, res, next) => {
       })
     );
   } catch (error) {
+    console.log(`Error in login: ${error.message}`);
     next(error);
   }
 };
