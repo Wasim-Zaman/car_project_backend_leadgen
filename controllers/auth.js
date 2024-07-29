@@ -1,6 +1,7 @@
 const Admin = require("../models/admin");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
+const jwtUtil = require("../utils/jwtUtil");
 
 exports.createAdmin = async (req, res, next) => {
   const EMAIL = process.env.ADMIN_EMAIL;
@@ -10,7 +11,7 @@ exports.createAdmin = async (req, res, next) => {
     console.log(`Attempting to create admin with email: ${EMAIL}`);
     const admin = await Admin.findByEmail(EMAIL);
     if (!admin) {
-      const hashedPassword = await Admin.createPassword(PASSWORD);
+      const hashedPassword = await jwtUtil.createPassword(PASSWORD);
       await Admin.createAdmin({
         email: EMAIL,
         password: hashedPassword,
@@ -39,10 +40,7 @@ exports.login = async (req, res, next) => {
       throw new CustomError("No admin found with entered email", 401);
     }
 
-    console.log(`Input password: ${password}`);
-    console.log(`Stored password: ${admin.password}`);
-
-    const isPasswordValid = await Admin.comparePassword(
+    const isPasswordValid = await jwtUtil.comparePassword(
       password,
       admin.password
     );
@@ -51,7 +49,7 @@ exports.login = async (req, res, next) => {
     }
 
     // Create a token (for simplicity, we're not doing this here)
-    // const token = createToken(admin);
+    const token = jwtUtil.createToken(admin);
 
     res.status(200).json(
       generateResponse(200, true, "Login successful", {
@@ -59,7 +57,7 @@ exports.login = async (req, res, next) => {
           id: admin.id,
           email: admin.email,
         },
-        // token,
+        token,
       })
     );
   } catch (error) {

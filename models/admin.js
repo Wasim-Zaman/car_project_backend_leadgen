@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const bcrypt = require("bcryptjs");
 
 const prisma = new PrismaClient();
 
@@ -29,20 +28,6 @@ class Admin {
     } catch (error) {
       throw error;
     }
-  }
-
-  static async comparePassword(inputPassword, hashedPassword) {
-    const isMatch = await bcrypt.compare(inputPassword, hashedPassword);
-    console.log(
-      `Comparing passwords: ${inputPassword} vs ${hashedPassword} -> ${isMatch}`
-    );
-    return isMatch;
-  }
-
-  static async createPassword(password) {
-    const hashedPassword = await bcrypt.hash(password, 12);
-    console.log(`Created hashed password: ${hashedPassword}`);
-    return hashedPassword;
   }
 }
 
