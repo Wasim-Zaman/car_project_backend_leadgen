@@ -1,17 +1,17 @@
 const express = require("express");
 
 const { uploadSingle } = require("../config/multerConfig");
+const controller = require("../controllers/coupon");
+const isAdmin = require("../middleware/is-admin-auth");
 
 const router = express.Router();
 
-const couponController = require("../controllers/coupon");
+router.get("/v1/coupons", isAdmin, controller.getCoupons);
 
-router.get("/v1/coupons", couponController.getCoupons);
+router.post("/v1/coupon", isAdmin, uploadSingle, controller.postCoupon);
 
-router.post("/v1/coupon", uploadSingle, couponController.postCoupon);
+router.patch("/v1/coupon/:id", isAdmin, uploadSingle, controller.patchCoupon);
 
-router.patch("/v1/coupon/:id", uploadSingle, couponController.patchCoupon);
-
-router.delete("/v1/coupon/:id", couponController.deleteCoupon);
+router.delete("/v1/coupon/:id", isAdmin, controller.deleteCoupon);
 
 module.exports = router;

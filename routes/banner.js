@@ -7,15 +7,16 @@ const {
   deleteBanner,
   patchBanner,
 } = require("../controllers/banner");
+const isAdmin = require("../middleware/is-admin-auth");
 
 const router = express.Router();
 
-router.get("/v1/banners", getBanners);
+router.get("/v1/banners", isAdmin, getBanners);
 
-router.post("/v1/banner", uploadSingle, postBanner);
+router.post("/v1/banner", isAdmin, uploadSingle, postBanner);
 
-router.delete("/v1/banner/:id", deleteBanner);
+router.delete("/v1/banner/:id", isAdmin, deleteBanner);
 
-router.patch("/v1/banner/:id", uploadSingle, patchBanner);
+router.patch("/v1/banner/:id", isAdmin, uploadSingle, patchBanner);
 
 module.exports = router;

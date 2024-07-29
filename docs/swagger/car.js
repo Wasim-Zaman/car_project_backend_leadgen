@@ -1,5 +1,25 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * security:
+ *   - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Cars
+ *   description: Car management
+ */
+
+/**
+ * @swagger
  * /api/car/v1/cars:
  *   get:
  *     summary: Retrieve cars
@@ -111,6 +131,8 @@
  *                 message:
  *                   type: string
  *                   example: No cars found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -217,6 +239,8 @@
  *                 message:
  *                   type: string
  *                   example: Image is required
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -259,6 +283,8 @@
  *                 message:
  *                   type: string
  *                   example: Car not found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -370,4 +396,6 @@
  *                 message:
  *                   type: string
  *                   example: Car not found
+ *     security:
+ *       - bearerAuth: []
  */

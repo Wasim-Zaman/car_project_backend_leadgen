@@ -1,5 +1,25 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * security:
+ *   - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Galleries
+ *   description: Gallery management
+ */
+
+/**
+ * @swagger
  * /api/gallery/v1/gallery:
  *   get:
  *     summary: Retrieve all galleries
@@ -61,6 +81,8 @@
  *                 message:
  *                   type: string
  *                   example: No galleries found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -130,6 +152,8 @@
  *                 message:
  *                   type: string
  *                   example: Image file is required
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -206,6 +230,8 @@
  *                 message:
  *                   type: string
  *                   example: Gallery not found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -248,4 +274,6 @@
  *                 message:
  *                   type: string
  *                   example: Gallery not found
+ *     security:
+ *       - bearerAuth: []
  */

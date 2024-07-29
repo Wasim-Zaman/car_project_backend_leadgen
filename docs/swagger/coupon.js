@@ -1,5 +1,25 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * security:
+ *   - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Coupons
+ *   description: Coupon management
+ */
+
+/**
+ * @swagger
  * /api/coupon/v1/coupons:
  *   get:
  *     summary: Retrieve coupons
@@ -104,6 +124,8 @@
  *                 message:
  *                   type: string
  *                   example: No coupons found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -219,6 +241,8 @@
  *                 message:
  *                   type: string
  *                   example: Image is required
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -261,6 +285,8 @@
  *                 message:
  *                   type: string
  *                   example: Coupon not found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -383,4 +409,6 @@
  *                 message:
  *                   type: string
  *                   example: Coupon not found
+ *     security:
+ *       - bearerAuth: []
  */

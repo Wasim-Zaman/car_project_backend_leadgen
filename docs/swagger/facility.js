@@ -1,5 +1,25 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * security:
+ *   - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Facilities
+ *   description: Facility management
+ */
+
+/**
+ * @swagger
  * /api/facility/v1/facilities:
  *   get:
  *     summary: Retrieve facilities
@@ -85,6 +105,8 @@
  *                 message:
  *                   type: string
  *                   example: No facilities found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -162,6 +184,8 @@
  *                 message:
  *                   type: string
  *                   example: Name and Image are required
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -246,6 +270,8 @@
  *                 message:
  *                   type: string
  *                   example: Facility not found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -288,4 +314,6 @@
  *                 message:
  *                   type: string
  *                   example: Facility not found
+ *     security:
+ *       - bearerAuth: []
  */

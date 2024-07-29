@@ -1,5 +1,25 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * security:
+ *   - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Brands
+ *   description: Brand management
+ */
+
+/**
+ * @swagger
  * /api/brand/v1/brands:
  *   get:
  *     summary: Retrieve brands
@@ -110,6 +130,8 @@
  *                 message:
  *                   type: string
  *                   example: No brands found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -187,6 +209,8 @@
  *                 message:
  *                   type: string
  *                   example: Image is required
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -229,6 +253,8 @@
  *                 message:
  *                   type: string
  *                   example: Brand not found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -313,4 +339,6 @@
  *                 message:
  *                   type: string
  *                   example: Brand not found
+ *     security:
+ *       - bearerAuth: []
  */

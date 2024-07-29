@@ -1,5 +1,25 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * security:
+ *   - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Cities
+ *   description: City management
+ */
+
+/**
+ * @swagger
  * /api/city/v1/cities:
  *   get:
  *     summary: Retrieve cities
@@ -82,6 +102,8 @@
  *                 message:
  *                   type: string
  *                   example: No cities found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -150,6 +172,8 @@
  *                 message:
  *                   type: string
  *                   example: City name is required
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -192,6 +216,8 @@
  *                 message:
  *                   type: string
  *                   example: City not found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -267,4 +293,6 @@
  *                 message:
  *                   type: string
  *                   example: City not found
+ *     security:
+ *       - bearerAuth: []
  */

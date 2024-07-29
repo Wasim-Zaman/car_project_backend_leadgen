@@ -1,5 +1,18 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * security:
+ *   - bearerAuth: []
+ */
+
+/**
+ * @swagger
  * tags:
  *   name: Banners
  *   description: Banner management
@@ -54,6 +67,8 @@
  *                 message:
  *                   type: string
  *                   example: Image is required
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -140,6 +155,8 @@
  *                 message:
  *                   type: string
  *                   example: No banners found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -182,6 +199,8 @@
  *                 message:
  *                   type: string
  *                   example: Banner not found
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -258,4 +277,6 @@
  *                 message:
  *                   type: string
  *                   example: Banner not found
+ *     security:
+ *       - bearerAuth: []
  */

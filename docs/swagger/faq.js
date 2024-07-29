@@ -1,5 +1,25 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
+ * security:
+ *   - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: FAQs
+ *   description: FAQ management
+ */
+
+/**
+ * @swagger
  * /api/faq/v1/faqs:
  *   get:
  *     summary: Retrieve a list of FAQs
@@ -29,6 +49,8 @@
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/FAQ'
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -56,6 +78,8 @@
  *                   type: string
  *                 data:
  *                   $ref: '#/components/schemas/FAQ'
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -95,6 +119,8 @@
  *                   type: string
  *                 data:
  *                   $ref: '#/components/schemas/FAQ'
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -153,6 +179,8 @@
  *                 message:
  *                   type: string
  *                   example: "FAQ not found"
+ *     security:
+ *       - bearerAuth: []
  */
 
 /**
@@ -178,4 +206,6 @@
  *               properties:
  *                 status:
  *                   type: string
+ *     security:
+ *       - bearerAuth: []
  */
