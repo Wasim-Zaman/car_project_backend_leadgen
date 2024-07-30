@@ -51,9 +51,7 @@ class Brand {
 
   static async getAll() {
     try {
-      return await prisma.brand.findMany({
-        include: { cars: true }, // Include related Car data
-      });
+      return await prisma.brand.findMany();
     } catch (error) {
       console.error("Error finding all brands:", error);
       throw error;
@@ -68,7 +66,6 @@ class Brand {
       const brands = await prisma.brand.findMany({
         skip,
         take: limit,
-        include: { cars: true }, // Include related Car data
       });
 
       // Fetch the total number of brands

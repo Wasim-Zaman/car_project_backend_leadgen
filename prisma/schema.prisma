@@ -35,6 +35,8 @@ model City {
   status    Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  cars      Car[]    // This will create a relation to the Car model
 }
 
 model Brand {
@@ -55,16 +57,9 @@ model CarType {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
+  cars      Car[]    // This will create a relation to the Car model
 }
 
-model Gallery {
-  id        Int      @id @default(autoincrement())
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  carId     Int      // Foreign key field
-  car       Car      @relation(fields: [carId], references: [id], name: "CarGalleries")
-}
 
 model FAQ {
   id        Int      @id @default(autoincrement())
@@ -77,11 +72,14 @@ model FAQ {
 
 model Facility {
   id        Int      @id @default(autoincrement())
-  name  String
-  image    String
+  name      String
+  image     String?
   status    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Minimal opposite field required by Prisma
+  cars Car[] @relation("CarFacilities")
 }
 
 model Coupon {
@@ -100,3 +98,44 @@ model Coupon {
   updatedAt            DateTime @updatedAt
 }
 
+model Car {
+  id                     Int     @id @default(autoincrement())
+  name                   String
+  number                 String
+  image                  String
+  status                 Int
+  rating                 Float?
+  totalSeat              Int?
+  hasAC                  Boolean
+  driverName             String?
+  driverMobile           String?
+  gearSystem             String?
+  rentPriceWithoutDriver Float?
+  rentPriceWithDriver    Float?
+  engineHP               Float?
+  priceType              String?
+  fuelType               String?
+  description            String?
+  pickupAddress          String?
+  latitude               Float?
+  longitude              Float?
+  totalDrivenKM          Float?
+  minimumHoursRequired   Int?
+  carOwner               String?
+
+  carTypeId Int
+  brandId   Int
+  cityId    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  carType    CarType    @relation(fields: [carTypeId], references: [id])
+  brand      Brand      @relation(fields: [brandId], references: [id])
+  city       City       @relation(fields: [cityId], references: [id])
+  facilities Facility[] @relation("CarFacilities")
+
+  @@index([carTypeId], name: "carTypeId")
+  @@index([brandId], name: "brandId")
+  @@index([cityId], name: "cityId")
+}

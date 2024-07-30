@@ -43,7 +43,14 @@ exports.postFacility = async (req, res, next) => {
 
     res
       .status(201)
-      .json(generateResponse("Facility created successfully", newFacility));
+      .json(
+        generateResponse(
+          201,
+          true,
+          "Facility created successfully",
+          newFacility
+        )
+      );
   } catch (error) {
     next(error);
   }

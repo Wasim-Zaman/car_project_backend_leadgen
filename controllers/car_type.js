@@ -3,7 +3,7 @@ const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 const fileHelper = require("../utils/fileUtil");
 
-exports.getCars = async (req, res, next) => {
+exports.getCarTypes = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
 
@@ -11,18 +11,20 @@ exports.getCars = async (req, res, next) => {
     const cars = await CarType.get(page, limit);
 
     if (!cars || cars.data.length <= 0) {
-      throw new CustomError("No cars found", 404);
+      throw new CustomError("No car types found", 404);
     }
 
     res
       .status(200)
-      .json(generateResponse(200, true, "Cars retrieved successfully", cars));
+      .json(
+        generateResponse(200, true, "Car Types retrieved successfully", cars)
+      );
   } catch (error) {
     next(error);
   }
 };
 
-exports.postCar = async (req, res, next) => {
+exports.postCarType = async (req, res, next) => {
   try {
     const { title } = req.body;
 
@@ -40,19 +42,21 @@ exports.postCar = async (req, res, next) => {
 
     res
       .status(201)
-      .json(generateResponse(201, true, "Car created successfully", carType));
+      .json(
+        generateResponse(201, true, "Car Type created successfully", carType)
+      );
   } catch (error) {
     next(error);
   }
 };
 
-exports.deleteCar = async (req, res, next) => {
+exports.deleteCarType = async (req, res, next) => {
   try {
     const { id } = req.params;
 
     const carType = await CarType.findById(id);
     if (!carType) {
-      throw new CustomError("Car not found", 404);
+      throw new CustomError("Car Type not found", 404);
     }
 
     await fileHelper.deleteFile(carType.image);
@@ -60,19 +64,19 @@ exports.deleteCar = async (req, res, next) => {
 
     res
       .status(200)
-      .json(generateResponse(200, true, "Car deleted successfully"));
+      .json(generateResponse(200, true, "Car Type deleted successfully"));
   } catch (error) {
     next(error);
   }
 };
 
-exports.patchCar = async (req, res, next) => {
+exports.patchCarType = async (req, res, next) => {
   try {
     const { id } = req.params;
 
     const carType = await CarType.findById(id);
     if (!carType) {
-      throw new CustomError("Car not found", 404);
+      throw new CustomError("Car Type not found", 404);
     }
 
     let image = req.file ? req.file.path : null;
@@ -90,7 +94,7 @@ exports.patchCar = async (req, res, next) => {
     res
       .status(200)
       .json(
-        generateResponse(200, true, "Car updated successfully", updatedCar)
+        generateResponse(200, true, "Car Type updated successfully", updatedCar)
       );
   } catch (error) {
     next(error);

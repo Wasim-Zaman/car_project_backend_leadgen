@@ -6,12 +6,17 @@ const isAdmin = require("../middleware/is-admin-auth");
 
 const router = express.Router();
 
-router.get("/v1/cars", isAdmin, carController.getCars);
+router.get("/v1/carTypes", isAdmin, carController.getCarTypes);
 
-router.post("/v1/car", isAdmin, uploadSingle, carController.postCar);
+router.post("/v1/carType", isAdmin, uploadSingle, carController.postCarType);
 
-router.delete("/v1/car/:id", isAdmin, carController.deleteCar);
+router.delete("/v1/carType/:id", isAdmin, carController.deleteCarType);
 
-router.patch("/v1/car/:id", isAdmin, uploadSingle, carController.patchCar);
+router.patch(
+  "/v1/carType/:id",
+  isAdmin,
+  uploadSingle,
+  carController.patchCarType
+);
 
 module.exports = router;

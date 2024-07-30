@@ -18,9 +18,18 @@ module.exports = (req, res, next) => {
   try {
     decodedToken = jwt.verify(token, process.env.JWT_SECRET);
   } catch (err) {
-    err.statusCode = 500;
-    err.message = null;
-    throw err;
+    if (err.name === "TokenExpiredError") {
+      const error = new CustomError(
+        "Your session has expired. Please log in again."
+      );
+      error.statusCode = 401;
+      next(error);
+    } else {
+      err.statusCode = 500;
+      err.message = null;
+      next(err);
+    }
+    return;
   }
 
   if (!decodedToken) {
@@ -30,11 +39,14 @@ module.exports = (req, res, next) => {
   }
 
   if (decodedToken.email !== process.env.ADMIN_EMAIL) {
-    throw new CustomError(
+    const error = new CustomError(
       "You are not authorized to access this resource.",
       403
     );
+    next(error);
+    return;
   }
+
   req.email = decodedToken.email;
 
   next();
