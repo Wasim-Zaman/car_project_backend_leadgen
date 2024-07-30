@@ -1,5 +1,5 @@
 const Gallery = require("../models/gallery");
-const Car = require("../models/car");
+const Car = require("../models/car_type");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 const fileHelper = require("../utils/fileUtil");

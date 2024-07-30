@@ -47,18 +47,14 @@ model Brand {
   cars      Car[]    // This will create a relation to the Car model
 }
 
-model Car {
+model CarType {
   id        Int       @id @default(autoincrement())
   title     String?
   image     String?
   status    Int?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  brandId   Int       // Foreign key field
-  brand     Brand     @relation(fields: [brandId], references: [id])
-  
-  // Add this field to define the one-to-many relation
-  galleries Gallery[] @relation("CarGalleries")
+
 }
 
 model Gallery {

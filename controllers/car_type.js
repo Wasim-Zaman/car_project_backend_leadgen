@@ -1,0 +1,98 @@
+const CarType = require("../models/car_type");
+const CustomError = require("../utils/customError");
+const generateResponse = require("../utils/response");
+const fileHelper = require("../utils/fileUtil");
+
+exports.getCars = async (req, res, next) => {
+  const page = req.query.page ? parseInt(req.query.page, 10) : 1;
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
+
+  try {
+    const cars = await CarType.get(page, limit);
+
+    if (!cars || cars.data.length <= 0) {
+      throw new CustomError("No cars found", 404);
+    }
+
+    res
+      .status(200)
+      .json(generateResponse(200, true, "Cars retrieved successfully", cars));
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.postCar = async (req, res, next) => {
+  try {
+    const { title } = req.body;
+
+    let image = req.file ? req.file.path : null;
+
+    if (!image) {
+      throw new CustomError("Image is required", 400);
+    }
+
+    const carType = await CarType.create({
+      title: title,
+      image: image,
+      status: req.body.status ? parseInt(req.body.status, 10) : 1,
+    });
+
+    res
+      .status(201)
+      .json(generateResponse(201, true, "Car created successfully", carType));
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteCar = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const carType = await CarType.findById(id);
+    if (!carType) {
+      throw new CustomError("Car not found", 404);
+    }
+
+    await fileHelper.deleteFile(carType.image);
+    await CarType.deleteById(id);
+
+    res
+      .status(200)
+      .json(generateResponse(200, true, "Car deleted successfully"));
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.patchCar = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const carType = await CarType.findById(id);
+    if (!carType) {
+      throw new CustomError("Car not found", 404);
+    }
+
+    let image = req.file ? req.file.path : null;
+
+    if (image) {
+      await fileHelper.deleteFile(carType.image);
+    }
+
+    const updatedCar = await CarType.updateById(id, {
+      title: req.body.title || carType.title,
+      image: image || carType.image,
+      status: req.body.status ? parseInt(req.body.status, 10) : carType.status,
+    });
+
+    res
+      .status(200)
+      .json(
+        generateResponse(200, true, "Car updated successfully", updatedCar)
+      );
+  } catch (error) {
+    next(error);
+  }
+};
