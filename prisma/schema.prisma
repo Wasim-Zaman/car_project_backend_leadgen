@@ -139,3 +139,12 @@ model Car {
   @@index([brandId], name: "brandId")
   @@index([cityId], name: "cityId")
 }
+
+model Gallery {
+  id        Int      @id @default(autoincrement())
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  carId     Int      // Foreign key field
+  car       Car      @relation(fields: [carId], references: [id], name: "CarGalleries")
+}
