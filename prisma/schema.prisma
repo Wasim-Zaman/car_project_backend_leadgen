@@ -151,6 +151,15 @@ model Gallery {
   @@map("gallery")  // Optional: Use if the actual table name differs
 }
 
+model Page {
+  id          Int      @id @default(autoincrement())
+  title       String
+  status      Int?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 
 
 
