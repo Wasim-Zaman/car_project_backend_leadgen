@@ -1,5 +1,5 @@
 const Gallery = require("../models/gallery");
-const Car = require("../models/car_type");
+const Car = require("../models/car");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 const fileHelper = require("../utils/fileUtil");
@@ -69,8 +69,10 @@ exports.deleteGallery = async (req, res, next) => {
       throw new CustomError("Gallery not found", 404);
     }
 
-    // Uncomment if you need to delete the image file
-    await fileHelper.deleteFile(gallery.image);
+    // If there's an image associated, delete it
+    if (gallery.image) {
+      await fileHelper.deleteFile(gallery.image);
+    }
 
     await Gallery.deleteById(id);
 

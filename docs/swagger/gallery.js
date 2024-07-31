@@ -68,6 +68,18 @@
  *                         type: string
  *                         format: date-time
  *                         example: "2023-07-25T12:00:00Z"
+ *                       car:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                             example: 1
+ *                           name:
+ *                             type: string
+ *                             example: "Tesla Model S"
+ *                           number:
+ *                             type: string
+ *                             example: "AB123CD"
  *       404:
  *         description: No galleries found
  *         content:
@@ -217,6 +229,19 @@
  *                       type: string
  *                       format: date-time
  *                       example: "2023-07-25T12:00:00Z"
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Invalid input
  *       404:
  *         description: Gallery not found
  *         content:

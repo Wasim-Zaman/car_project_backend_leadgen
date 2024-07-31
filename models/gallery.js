@@ -5,10 +5,19 @@ const prisma = new PrismaClient();
 class Gallery {
   static async findById(id) {
     try {
-      return await prisma.gallery.findUnique({
+      const gallery = await prisma.gallery.findUnique({
         where: { id: Number(id) },
-        include: { car: true }, // Include related Car data
       });
+
+      if (!gallery) {
+        throw new Error("Gallery not found");
+      }
+
+      const car = await prisma.car.findUnique({
+        where: { id: gallery.carId },
+      });
+
+      return { ...gallery, car };
     } catch (error) {
       console.error("Error finding gallery by id:", error);
       throw error;
@@ -17,10 +26,15 @@ class Gallery {
 
   static async create(data) {
     try {
-      return await prisma.gallery.create({
+      const gallery = await prisma.gallery.create({
         data,
-        include: { car: true }, // Include related Car data
       });
+
+      const car = await prisma.car.findUnique({
+        where: { id: gallery.carId },
+      });
+
+      return { ...gallery, car };
     } catch (error) {
       console.error("Error creating gallery:", error);
       throw error;
@@ -29,11 +43,16 @@ class Gallery {
 
   static async updateById(id, data) {
     try {
-      return await prisma.gallery.update({
+      const gallery = await prisma.gallery.update({
         where: { id: Number(id) },
         data,
-        include: { car: true }, // Include related Car data
       });
+
+      const car = await prisma.car.findUnique({
+        where: { id: gallery.carId },
+      });
+
+      return { ...gallery, car };
     } catch (error) {
       console.error("Error updating gallery by id:", error);
       throw error;
@@ -55,12 +74,21 @@ class Gallery {
     try {
       const skip = (page - 1) * limit;
 
-      // Fetch the paginated galleries
+      // Fetch the paginated galleries without related car data
       const galleries = await prisma.gallery.findMany({
         skip,
         take: limit,
-        include: { car: true }, // Include related Car data
       });
+
+      // Fetch related car data
+      const galleriesWithCar = await Promise.all(
+        galleries.map(async (gallery) => {
+          const car = await prisma.car.findUnique({
+            where: { id: gallery.carId },
+          });
+          return { ...gallery, car };
+        })
+      );
 
       // Fetch the total number of galleries
       const totalGalleries = await prisma.gallery.count();
@@ -69,7 +97,7 @@ class Gallery {
       const totalPages = Math.ceil(totalGalleries / limit);
 
       return {
-        data: galleries,
+        data: galleriesWithCar,
         pagination: {
           currentPage: page,
           totalPages,
