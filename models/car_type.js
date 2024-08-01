@@ -58,33 +58,44 @@ class CarType {
     }
   }
 
-  static async get(page = 1, limit = 10) {
+  static async get(page = 1, limit = 10, query = "") {
     try {
       const skip = (page - 1) * limit;
 
-      // Fetch the paginated cars
-      const cars = await prisma.car.findMany({
+      // Define where condition if query is provided
+      const where = query
+        ? {
+            OR: [{ title: { contains: query, mode: "insensitive" } }],
+          }
+        : {};
+
+      // Fetch the paginated car types with or without a search query
+      const carTypes = await prisma.carType.findMany({
         skip,
         take: limit,
+        where,
       });
 
-      // Fetch the total number of cars
-      const totalCars = await prisma.car.count();
+      // Fetch the total number of car types
+      const totalCarTypes = await prisma.carType.count({ where });
 
       // Calculate total pages
-      const totalPages = Math.ceil(totalCars / limit);
+      const totalPages = Math.ceil(totalCarTypes / limit);
 
       return {
-        data: cars,
+        data: carTypes,
         pagination: {
           currentPage: page,
           totalPages,
-          totalItems: totalCars,
+          totalItems: totalCarTypes,
           itemsPerPage: limit,
         },
       };
     } catch (error) {
-      console.error("Error getting cars with pagination:", error);
+      console.error(
+        "Error getting car types with pagination and search:",
+        error
+      );
       throw error;
     }
   }

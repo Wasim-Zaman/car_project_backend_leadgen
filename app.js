@@ -20,6 +20,7 @@ const faqRoutes = require("./routes/faq");
 const facilityRoutes = require("./routes/facility");
 const couponRoutes = require("./routes/coupon");
 const pageRoutes = require("./routes/page");
+const bookingRoutes = require("./routes/booking");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -41,6 +42,7 @@ app.use("/api/faq", faqRoutes);
 app.use("/api/facility", facilityRoutes);
 app.use("/api/coupon", couponRoutes);
 app.use("/api/page", pageRoutes);
+app.use("/api/booking", bookingRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res, next) => {

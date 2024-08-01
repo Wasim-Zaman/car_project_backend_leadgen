@@ -57,18 +57,31 @@ class Coupon {
     }
   }
 
-  static async get(page = 1, limit = 10) {
+  static async get(page = 1, limit = 10, query = "") {
     try {
       const skip = (page - 1) * limit;
 
-      // Fetch the paginated coupons
+      // Define where condition if query is provided
+      const where = query
+        ? {
+            OR: [
+              { code: { contains: query, mode: "insensitive" } },
+              { title: { contains: query, mode: "insensitive" } },
+              { subtitle: { contains: query, mode: "insensitive" } },
+              { description: { contains: query, mode: "insensitive" } },
+            ],
+          }
+        : {};
+
+      // Fetch the paginated coupons with or without a search query
       const coupons = await prisma.coupon.findMany({
         skip,
         take: limit,
+        where,
       });
 
       // Fetch the total number of coupons
-      const totalCoupons = await prisma.coupon.count();
+      const totalCoupons = await prisma.coupon.count({ where });
 
       // Calculate total pages
       const totalPages = Math.ceil(totalCoupons / limit);
@@ -83,7 +96,7 @@ class Coupon {
         },
       };
     } catch (error) {
-      console.error("Error getting coupons with pagination:", error);
+      console.error("Error getting coupons with pagination and search:", error);
       throw error;
     }
   }

@@ -6,9 +6,10 @@ const fileHelper = require("../utils/fileUtil");
 exports.getCoupons = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
+  const query = req.query.query || "";
 
   try {
-    const coupons = await Coupon.get(page, limit);
+    const coupons = await Coupon.get(page, limit.query);
 
     if (!coupons || coupons.data.length <= 0) {
       throw new CustomError("No coupons found", 404);

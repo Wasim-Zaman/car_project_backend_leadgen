@@ -23,18 +23,29 @@ class FAQ {
     }
   }
 
-  static async get(page = 1, limit = 10) {
+  static async get(page = 1, limit = 10, query = "") {
     try {
       const skip = (page - 1) * limit;
 
-      // Fetch the paginated cities
+      // Define where condition if query is provided
+      const where = query
+        ? {
+            OR: [
+              { question: { contains: query, mode: "insensitive" } },
+              { answer: { contains: query, mode: "insensitive" } },
+            ],
+          }
+        : {};
+
+      // Fetch the paginated FAQs with or without a search query
       const FAQs = await prisma.FAQ.findMany({
         skip,
         take: limit,
+        where,
       });
 
-      // Fetch the total number of cities
-      const totalFAQs = await prisma.FAQ.count();
+      // Fetch the total number of FAQs
+      const totalFAQs = await prisma.fAQ.count({ where });
 
       // Calculate total pages
       const totalPages = Math.ceil(totalFAQs / limit);
@@ -49,7 +60,7 @@ class FAQ {
         },
       };
     } catch (error) {
-      console.error("Error getting cities with pagination:", error);
+      console.error("Error getting FAQs with pagination and search:", error);
       throw error;
     }
   }

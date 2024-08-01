@@ -58,18 +58,26 @@ class Brand {
     }
   }
 
-  static async get(page = 1, limit = 10) {
+  static async get(page = 1, limit = 10, query = "") {
     try {
       const skip = (page - 1) * limit;
 
-      // Fetch the paginated brands
+      // Define where condition if query is provided
+      const where = query
+        ? {
+            OR: [{ title: { contains: query, mode: "insensitive" } }],
+          }
+        : {};
+
+      // Fetch the paginated brands with or without a search query
       const brands = await prisma.brand.findMany({
         skip,
         take: limit,
+        where,
       });
 
       // Fetch the total number of brands
-      const totalBrands = await prisma.brand.count();
+      const totalBrands = await prisma.brand.count({ where });
 
       // Calculate total pages
       const totalPages = Math.ceil(totalBrands / limit);
@@ -84,7 +92,7 @@ class Brand {
         },
       };
     } catch (error) {
-      console.error("Error getting brands with pagination:", error);
+      console.error("Error getting brands with pagination and search:", error);
       throw error;
     }
   }

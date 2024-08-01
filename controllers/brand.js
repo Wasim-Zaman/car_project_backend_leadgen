@@ -6,9 +6,10 @@ const fileHelper = require("../utils/fileUtil");
 exports.getBrands = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
+  const query = req.query.query || "";
 
   try {
-    const brands = await Brand.get(page, limit);
+    const brands = await Brand.get(page, limit, query);
 
     if (!brands || brands.data.length <= 0) {
       throw new CustomError("No brands found", 404);

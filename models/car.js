@@ -92,13 +92,27 @@ class Car {
     }
   }
 
-  static async get(page = 1, limit = 10) {
+  static async get(page = 1, limit = 10, query = "") {
     try {
       const skip = (page - 1) * limit;
 
+      // Define where condition if query is provided
+      const where = query
+        ? {
+            OR: [
+              { name: { contains: query, mode: "insensitive" } },
+              { description: { contains: query, mode: "insensitive" } },
+              { driverName: { contains: query, mode: "insensitive" } },
+              { fuelType: { contains: query, mode: "insensitive" } },
+            ],
+          }
+        : {};
+
+      // Fetch the paginated cars with or without a search query
       const cars = await prisma.car.findMany({
         skip,
         take: limit,
+        where,
         include: {
           brand: true,
           carType: true,
@@ -107,7 +121,10 @@ class Car {
         },
       });
 
-      const totalCars = await prisma.car.count();
+      // Fetch the total number of cars
+      const totalCars = await prisma.car.count({ where });
+
+      // Calculate total pages
       const totalPages = Math.ceil(totalCars / limit);
 
       return {
@@ -120,7 +137,7 @@ class Car {
         },
       };
     } catch (error) {
-      console.error("Error getting cars with pagination:", error);
+      console.error("Error getting cars with pagination and search:", error);
       throw error;
     }
   }

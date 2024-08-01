@@ -7,9 +7,10 @@ const fileHelper = require("../utils/fileUtil");
 exports.getGalleries = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
+  const query = req.query.query || "";
 
   try {
-    const galleries = await Gallery.get(page, limit);
+    const galleries = await Gallery.get(page, limit, query);
 
     if (!galleries || galleries.data.length <= 0) {
       throw new CustomError("No galleries found", 404);

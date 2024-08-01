@@ -22,7 +22,7 @@
  * @swagger
  * /api/faq/v1/faqs:
  *   get:
- *     summary: Retrieve a list of FAQs
+ *     summary: Retrieve a list of FAQs with optional search and pagination
  *     tags: [FAQs]
  *     parameters:
  *       - in: query
@@ -35,6 +35,11 @@
  *         schema:
  *           type: integer
  *         description: The number of items to retrieve per page.
+ *       - in: query
+ *         name: query
+ *         schema:
+ *           type: string
+ *         description: The search query to filter FAQs by question or answer.
  *     responses:
  *       200:
  *         description: FAQs retrieved successfully
@@ -44,11 +49,70 @@
  *               type: object
  *               properties:
  *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
  *                   type: string
+ *                   example: FAQs retrieved successfully
  *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/FAQ'
+ *                   type: object
+ *                   properties:
+ *                     currentPage:
+ *                       type: integer
+ *                       example: 1
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 5
+ *                     totalItems:
+ *                       type: integer
+ *                       example: 50
+ *                     itemsPerPage:
+ *                       type: integer
+ *                       example: 10
+ *                     faqs:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: integer
+ *                             example: 1
+ *                           question:
+ *                             type: string
+ *                             example: "What is your return policy?"
+ *                           answer:
+ *                             type: string
+ *                             example: "You can return any item within 30 days of purchase."
+ *                           status:
+ *                             type: integer
+ *                             example: 1
+ *                           createdAt:
+ *                             type: string
+ *                             format: date-time
+ *                             example: "2023-07-24T12:00:00Z"
+ *                           updatedAt:
+ *                             type: string
+ *                             format: date-time
+ *                             example: "2023-07-25T12:00:00Z"
+ *       404:
+ *         description: No FAQs found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: integer
+ *                   example: 404
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: No FAQs found
  *     security:
  *       - bearerAuth: []
  */

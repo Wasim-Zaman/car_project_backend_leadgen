@@ -6,9 +6,10 @@ const generateResponse = require("../utils/response");
 exports.getFAQs = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
+  const query = req.query.query || "";
 
   try {
-    const faqs = await FAQ.get(page, limit);
+    const faqs = await FAQ.get(page, limit, query);
 
     if (!faqs || faqs.data.length <= 0) {
       throw new CustomError("No FAQs found", 404);

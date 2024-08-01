@@ -22,7 +22,7 @@
  * @swagger
  * /api/brand/v1/brands:
  *   get:
- *     summary: Retrieve brands
+ *     summary: Retrieve brands with optional search and pagination
  *     tags: [Brands]
  *     parameters:
  *       - in: query
@@ -35,6 +35,11 @@
  *         schema:
  *           type: integer
  *         description: The number of items to retrieve per page.
+ *       - in: query
+ *         name: query
+ *         schema:
+ *           type: string
+ *         description: The search query to filter brands by title or image.
  *     responses:
  *       200:
  *         description: Brands retrieved successfully
@@ -64,6 +69,9 @@
  *                     totalItems:
  *                       type: integer
  *                       example: 50
+ *                     itemsPerPage:
+ *                       type: integer
+ *                       example: 10
  *                     brands:
  *                       type: array
  *                       items:
@@ -89,31 +97,6 @@
  *                             type: string
  *                             format: date-time
  *                             example: "2023-07-25T12:00:00Z"
- *                           cars:
- *                             type: array
- *                             items:
- *                               type: object
- *                               properties:
- *                                 id:
- *                                   type: integer
- *                                   example: 1
- *                                 title:
- *                                   type: string
- *                                   example: "Sedan"
- *                                 image:
- *                                   type: string
- *                                   example: "https://example.com/car1.jpg"
- *                                 status:
- *                                   type: integer
- *                                   example: 1
- *                                 createdAt:
- *                                   type: string
- *                                   format: date-time
- *                                   example: "2023-07-24T12:00:00Z"
- *                                 updatedAt:
- *                                   type: string
- *                                   format: date-time
- *                                   example: "2023-07-25T12:00:00Z"
  *       404:
  *         description: No brands found
  *         content:

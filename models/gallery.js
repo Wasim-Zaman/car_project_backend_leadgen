@@ -70,34 +70,78 @@ class Gallery {
     }
   }
 
-  static async get(page = 1, limit = 10) {
+  //   static async get(page = 1, limit = 10) {
+  //     try {
+  //       const skip = (page - 1) * limit;
+
+  //       // Fetch the paginated galleries without related car data
+  //       const galleries = await prisma.gallery.findMany({
+  //         skip,
+  //         take: limit,
+  //       });
+
+  //       // Fetch related car data
+  //       const galleriesWithCar = await Promise.all(
+  //         galleries.map(async (gallery) => {
+  //           const car = await prisma.car.findUnique({
+  //             where: { id: gallery.carId },
+  //           });
+  //           return { ...gallery, car };
+  //         })
+  //       );
+
+  //       // Fetch the total number of galleries
+  //       const totalGalleries = await prisma.gallery.count();
+
+  //       // Calculate total pages
+  //       const totalPages = Math.ceil(totalGalleries / limit);
+
+  //       return {
+  //         data: galleriesWithCar,
+  //         pagination: {
+  //           currentPage: page,
+  //           totalPages,
+  //           totalItems: totalGalleries,
+  //           itemsPerPage: limit,
+  //         },
+  //       };
+  //     } catch (error) {
+  //       console.error("Error getting galleries with pagination:", error);
+  //       throw error;
+  //     }
+  //   }
+  static async get(page = 1, limit = 10, query = "") {
     try {
       const skip = (page - 1) * limit;
 
-      // Fetch the paginated galleries without related car data
+      // Define where condition if query is provided
+      const where = query
+        ? {
+            OR: [
+              { image: { contains: query, mode: "insensitive" } },
+              { car: { name: { contains: query, mode: "insensitive" } } }, // Assuming we might want to search by car name as well
+            ],
+          }
+        : {};
+
+      // Fetch the paginated galleries with related car data
       const galleries = await prisma.gallery.findMany({
         skip,
         take: limit,
+        where,
+        include: {
+          car: true, // Include related car data
+        },
       });
 
-      // Fetch related car data
-      const galleriesWithCar = await Promise.all(
-        galleries.map(async (gallery) => {
-          const car = await prisma.car.findUnique({
-            where: { id: gallery.carId },
-          });
-          return { ...gallery, car };
-        })
-      );
-
       // Fetch the total number of galleries
-      const totalGalleries = await prisma.gallery.count();
+      const totalGalleries = await prisma.gallery.count({ where });
 
       // Calculate total pages
       const totalPages = Math.ceil(totalGalleries / limit);
 
       return {
-        data: galleriesWithCar,
+        data: galleries,
         pagination: {
           currentPage: page,
           totalPages,
@@ -106,7 +150,10 @@ class Gallery {
         },
       };
     } catch (error) {
-      console.error("Error getting galleries with pagination:", error);
+      console.error(
+        "Error getting galleries with pagination and search:",
+        error
+      );
       throw error;
     }
   }

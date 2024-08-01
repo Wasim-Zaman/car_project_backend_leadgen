@@ -56,20 +56,28 @@ class Facility {
     }
   }
 
-  static async get(page = 1, limit = 10) {
+  static async get(page = 1, limit = 10, query = "") {
     try {
       const skip = (page - 1) * limit;
 
-      // Fetch the paginated brands
+      // Define where condition if query is provided
+      const where = query
+        ? {
+            OR: [{ name: { contains: query, mode: "insensitive" } }],
+          }
+        : {};
+
+      // Fetch the paginated facilities with the specified limit and offset
       const facilities = await prisma.facility.findMany({
         skip,
         take: limit,
+        where,
       });
 
-      // Fetch the total number of brands
-      const totalFacilities = await prisma.facility.count();
+      // Fetch the total number of facilities that match the query
+      const totalFacilities = await prisma.facility.count({ where });
 
-      // Calculate total pages
+      // Calculate total pages based on the number of facilities and the page limit
       const totalPages = Math.ceil(totalFacilities / limit);
 
       return {
@@ -82,7 +90,10 @@ class Facility {
         },
       };
     } catch (error) {
-      console.error("Error getting brands with pagination:", error);
+      console.error(
+        "Error getting facilities with pagination and search:",
+        error
+      );
       throw error;
     }
   }

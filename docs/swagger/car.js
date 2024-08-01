@@ -22,7 +22,7 @@
  * @swagger
  * /api/car/v1/cars:
  *   get:
- *     summary: Retrieve cars
+ *     summary: Retrieve cars with optional search and pagination
  *     tags: [Cars]
  *     parameters:
  *       - in: query
@@ -35,6 +35,11 @@
  *         schema:
  *           type: integer
  *         description: The number of items to retrieve per page.
+ *       - in: query
+ *         name: query
+ *         schema:
+ *           type: string
+ *         description: The search query to filter cars by name, driver name, fuel type, or description.
  *     responses:
  *       200:
  *         description: Cars retrieved successfully
@@ -64,6 +69,9 @@
  *                     totalItems:
  *                       type: integer
  *                       example: 50
+ *                     itemsPerPage:
+ *                       type: integer
+ *                       example: 10
  *                     cars:
  *                       type: array
  *                       items:

@@ -22,7 +22,7 @@
  * @swagger
  * /api/coupon/v1/coupons:
  *   get:
- *     summary: Retrieve coupons
+ *     summary: Retrieve coupons with optional search and pagination
  *     tags: [Coupons]
  *     parameters:
  *       - in: query
@@ -35,6 +35,11 @@
  *         schema:
  *           type: integer
  *         description: The number of items to retrieve per page.
+ *       - in: query
+ *         name: query
+ *         schema:
+ *           type: string
+ *         description: The search query to filter coupons by title, code, or description.
  *     responses:
  *       200:
  *         description: Coupons retrieved successfully
@@ -64,6 +69,9 @@
  *                     totalItems:
  *                       type: integer
  *                       example: 50
+ *                     itemsPerPage:
+ *                       type: integer
+ *                       example: 10
  *                     coupons:
  *                       type: array
  *                       items:

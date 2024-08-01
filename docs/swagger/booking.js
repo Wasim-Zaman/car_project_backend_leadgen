@@ -1,29 +1,16 @@
 /**
  * @swagger
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *
- * security:
- *   - bearerAuth: []
- */
-
-/**
- * @swagger
  * tags:
- *   name: Facilities
- *   description: Facility management
+ *   name: Bookings
+ *   description: Booking management
  */
 
 /**
  * @swagger
- * /api/facility/v1/facilities:
+ * /api/booking/v1/bookings:
  *   get:
- *     summary: Retrieve facilities with optional search and pagination
- *     tags: [Facilities]
+ *     summary: Retrieve bookings
+ *     tags: [Bookings]
  *     parameters:
  *       - in: query
  *         name: page
@@ -39,10 +26,15 @@
  *         name: query
  *         schema:
  *           type: string
- *         description: The search query to filter facilities by name or image.
+ *         description: Search query for filtering bookings by specific attributes.
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *         description: Filter bookings by status.
  *     responses:
  *       200:
- *         description: Facilities retrieved successfully
+ *         description: Bookings retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -56,7 +48,7 @@
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Facilities retrieved successfully
+ *                   example: "Bookings retrieved successfully"
  *                 data:
  *                   type: object
  *                   properties:
@@ -69,10 +61,7 @@
  *                     totalItems:
  *                       type: integer
  *                       example: 50
- *                     itemsPerPage:
- *                       type: integer
- *                       example: 10
- *                     facilities:
+ *                     bookings:
  *                       type: array
  *                       items:
  *                         type: object
@@ -80,25 +69,21 @@
  *                           id:
  *                             type: integer
  *                             example: 1
- *                           name:
- *                             type: string
- *                             example: "Facility A"
- *                           image:
- *                             type: string
- *                             example: "https://example.com/facility1.jpg"
- *                           status:
+ *                           carId:
  *                             type: integer
- *                             example: 1
- *                           createdAt:
+ *                             example: 101
+ *                           customerId:
+ *                             type: integer
+ *                             example: 501
+ *                           pickupDate:
  *                             type: string
  *                             format: date-time
- *                             example: "2023-07-24T12:00:00Z"
- *                           updatedAt:
+ *                             example: "2023-07-24T10:00:00Z"
+ *                           status:
  *                             type: string
- *                             format: date-time
- *                             example: "2023-07-25T12:00:00Z"
+ *                             example: "Confirmed"
  *       404:
- *         description: No facilities found
+ *         description: No bookings found
  *         content:
  *           application/json:
  *             schema:
@@ -112,39 +97,44 @@
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: No facilities found
+ *                   example: "No bookings found"
  *     security:
  *       - bearerAuth: []
  */
 
 /**
  * @swagger
- * /api/facility/v1/facility:
+ * /api/booking/v1/booking:
  *   post:
- *     summary: Create a new facility
- *     tags: [Facilities]
- *     consumes:
- *       - multipart/form-data
+ *     summary: Create a new booking
+ *     tags: [Bookings]
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - carId
+ *               - customerId
+ *               - pickupDate
  *             properties:
- *               name:
- *                 type: string
- *                 description: The name of the facility
- *               image:
- *                 type: string
- *                 format: binary
- *                 description: The facility image to upload
- *               status:
+ *               carId:
  *                 type: integer
- *                 description: The status of the facility
+ *                 description: The ID of the car booked
+ *               customerId:
+ *                 type: integer
+ *                 description: The ID of the customer making the booking
+ *               pickupDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: The date and time of pickup
+ *               status:
+ *                 type: string
+ *                 description: The status of the booking (e.g., "Confirmed" or "Cancelled")
  *     responses:
  *       201:
- *         description: Facility created successfully
+ *         description: Booking created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -155,32 +145,28 @@
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Facility created successfully
+ *                   example: "Booking created successfully"
  *                 data:
  *                   type: object
  *                   properties:
  *                     id:
  *                       type: integer
  *                       example: 1
- *                     name:
- *                       type: string
- *                       example: "Facility A"
- *                     image:
- *                       type: string
- *                       example: "https://example.com/facility1.jpg"
- *                     status:
+ *                     carId:
  *                       type: integer
- *                       example: 1
- *                     createdAt:
+ *                       example: 101
+ *                     customerId:
+ *                       type: integer
+ *                       example: 501
+ *                     pickupDate:
  *                       type: string
  *                       format: date-time
- *                       example: "2023-07-24T12:00:00Z"
- *                     updatedAt:
+ *                       example: "2023-07-24T10:00:00Z"
+ *                     status:
  *                       type: string
- *                       format: date-time
- *                       example: "2023-07-25T12:00:00Z"
+ *                       example: "Confirmed"
  *       400:
- *         description: Bad request
+ *         description: Required fields are missing
  *         content:
  *           application/json:
  *             schema:
@@ -191,46 +177,81 @@
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: Name and Image are required
+ *                   example: "Required fields are missing"
  *     security:
  *       - bearerAuth: []
  */
 
 /**
  * @swagger
- * /api/facility/v1/facility/{id}:
- *   patch:
- *     summary: Update a facility
- *     tags: [Facilities]
+ * /api/booking/v1/booking/{id}:
+ *   delete:
+ *     summary: Delete a booking
+ *     tags: [Bookings]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: integer
  *         required: true
- *         description: The ID of the facility to update
- *     consumes:
- *       - multipart/form-data
+ *         description: The ID of the booking to delete
+ *     responses:
+ *       200:
+ *         description: Booking deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Booking deleted successfully"
+ *       404:
+ *         description: Booking not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: "Booking not found"
+ *     security:
+ *       - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * /api/booking/v1/booking/{id}:
+ *   patch:
+ *     summary: Update a booking
+ *     tags: [Bookings]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the booking to update
  *     requestBody:
  *       required: true
  *       content:
- *         multipart/form-data:
+ *         application/json:
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
- *                 description: The name of the facility
- *               image:
- *                 type: string
- *                 format: binary
- *                 description: The facility image to upload (optional)
  *               status:
- *                 type: integer
- *                 description: The status of the facility
+ *                 type: string
+ *                 description: The new status of the booking
  *     responses:
  *       200:
- *         description: Facility updated successfully
+ *         description: Booking updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -241,32 +262,18 @@
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Facility updated successfully
+ *                   example: "Booking updated successfully"
  *                 data:
  *                   type: object
  *                   properties:
  *                     id:
  *                       type: integer
  *                       example: 1
- *                     name:
- *                       type: string
- *                       example: "Facility A"
- *                     image:
- *                       type: string
- *                       example: "https://example.com/facility1.jpg"
  *                     status:
- *                       type: integer
- *                       example: 1
- *                     createdAt:
  *                       type: string
- *                       format: date-time
- *                       example: "2023-07-24T12:00:00Z"
- *                     updatedAt:
- *                       type: string
- *                       format: date-time
- *                       example: "2023-07-25T12:00:00Z"
+ *                       example: "Confirmed"
  *       404:
- *         description: Facility not found
+ *         description: Booking not found
  *         content:
  *           application/json:
  *             schema:
@@ -277,51 +284,7 @@
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: Facility not found
- *     security:
- *       - bearerAuth: []
- */
-
-/**
- * @swagger
- * /api/facility/v1/facility/{id}:
- *   delete:
- *     summary: Delete a facility
- *     tags: [Facilities]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: The ID of the facility to delete
- *     responses:
- *       200:
- *         description: Facility deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Facility deleted successfully
- *       404:
- *         description: Facility not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Facility not found
+ *                   example: "Booking not found"
  *     security:
  *       - bearerAuth: []
  */

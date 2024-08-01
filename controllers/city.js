@@ -6,9 +6,10 @@ const generateResponse = require("../utils/response");
 exports.getCities = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
+  const query = req.query.query || "";
 
   try {
-    const cities = await City.get(page, limit);
+    const cities = await City.get(page, limit, query);
 
     if (!cities || cities.data.length <= 0) {
       throw new CustomError("No cities found", 404);

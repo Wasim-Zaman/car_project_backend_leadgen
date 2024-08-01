@@ -20,9 +20,9 @@
 
 /**
  * @swagger
- * /api/gallery/v1/gallery:
+ * /api/gallery/v1/galleries:
  *   get:
- *     summary: Retrieve all galleries
+ *     summary: Retrieve all galleries with optional search and pagination
  *     tags: [Galleries]
  *     parameters:
  *       - in: query
@@ -35,6 +35,11 @@
  *         schema:
  *           type: integer
  *         description: The number of items per page
+ *       - in: query
+ *         name: query
+ *         schema:
+ *           type: string
+ *         description: The search query to filter galleries by image or related car name.
  *     responses:
  *       200:
  *         description: Galleries retrieved successfully
@@ -50,36 +55,51 @@
  *                   type: string
  *                   example: Galleries retrieved successfully
  *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         example: 1
- *                       image:
- *                         type: string
- *                         example: "https://example.com/gallery1.jpg"
- *                       createdAt:
- *                         type: string
- *                         format: date-time
- *                         example: "2023-07-24T12:00:00Z"
- *                       updatedAt:
- *                         type: string
- *                         format: date-time
- *                         example: "2023-07-25T12:00:00Z"
- *                       car:
+ *                   type: object
+ *                   properties:
+ *                     currentPage:
+ *                       type: integer
+ *                       example: 1
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 5
+ *                     totalItems:
+ *                       type: integer
+ *                       example: 50
+ *                     itemsPerPage:
+ *                       type: integer
+ *                       example: 10
+ *                     galleries:
+ *                       type: array
+ *                       items:
  *                         type: object
  *                         properties:
  *                           id:
  *                             type: integer
  *                             example: 1
- *                           name:
+ *                           image:
  *                             type: string
- *                             example: "Tesla Model S"
- *                           number:
+ *                             example: "https://example.com/gallery1.jpg"
+ *                           createdAt:
  *                             type: string
- *                             example: "AB123CD"
+ *                             format: date-time
+ *                             example: "2023-07-24T12:00:00Z"
+ *                           updatedAt:
+ *                             type: string
+ *                             format: date-time
+ *                             example: "2023-07-25T12:00:00Z"
+ *                           car:
+ *                             type: object
+ *                             properties:
+ *                               id:
+ *                                 type: integer
+ *                                 example: 1
+ *                               name:
+ *                                 type: string
+ *                                 example: "Tesla Model S"
+ *                               number:
+ *                                 type: string
+ *                                 example: "AB123CD"
  *       404:
  *         description: No galleries found
  *         content:

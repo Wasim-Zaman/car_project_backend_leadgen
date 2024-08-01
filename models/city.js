@@ -57,18 +57,29 @@ class City {
     }
   }
 
-  static async get(page = 1, limit = 10) {
+  static async get(page = 1, limit = 10, query = "") {
     try {
       const skip = (page - 1) * limit;
 
-      // Fetch the paginated cities
+      // Define where condition if query is provided
+      const where = query
+        ? {
+            OR: [
+              { name: { contains: query, mode: "insensitive" } },
+              // Add other searchable fields here if needed
+            ],
+          }
+        : {};
+
+      // Fetch the paginated cities with or without a search query
       const cities = await prisma.city.findMany({
         skip,
         take: limit,
+        where,
       });
 
       // Fetch the total number of cities
-      const totalCities = await prisma.city.count();
+      const totalCities = await prisma.city.count({ where });
 
       // Calculate total pages
       const totalPages = Math.ceil(totalCities / limit);
@@ -83,7 +94,7 @@ class City {
         },
       };
     } catch (error) {
-      console.error("Error getting cities with pagination:", error);
+      console.error("Error getting cities with pagination and search:", error);
       throw error;
     }
   }

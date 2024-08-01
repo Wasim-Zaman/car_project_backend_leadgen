@@ -6,9 +6,10 @@ const fileHelper = require("../utils/fileUtil");
 exports.getCars = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
+  const query = req.query.query || "";
 
   try {
-    const cars = await Car.get(page, limit);
+    const cars = await Car.get(page, limit, query);
 
     if (!cars || cars.data.length <= 0) {
       throw new CustomError("No cars found", 404);

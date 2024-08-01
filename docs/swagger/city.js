@@ -22,7 +22,7 @@
  * @swagger
  * /api/city/v1/cities:
  *   get:
- *     summary: Retrieve cities
+ *     summary: Retrieve cities with optional search and pagination
  *     tags: [Cities]
  *     parameters:
  *       - in: query
@@ -35,6 +35,11 @@
  *         schema:
  *           type: integer
  *         description: The number of items to retrieve per page.
+ *       - in: query
+ *         name: query
+ *         schema:
+ *           type: string
+ *         description: The search query to filter cities by name.
  *     responses:
  *       200:
  *         description: Cities retrieved successfully
@@ -64,6 +69,9 @@
  *                     totalItems:
  *                       type: integer
  *                       example: 50
+ *                     itemsPerPage:
+ *                       type: integer
+ *                       example: 10
  *                     cities:
  *                       type: array
  *                       items:

@@ -22,7 +22,7 @@
  * @swagger
  * /api/carType/v1/carTypes:
  *   get:
- *     summary: Retrieve car types
+ *     summary: Retrieve car types with optional search and pagination
  *     tags: [CarTypes]
  *     parameters:
  *       - in: query
@@ -35,6 +35,11 @@
  *         schema:
  *           type: integer
  *         description: The number of items to retrieve per page.
+ *       - in: query
+ *         name: query
+ *         schema:
+ *           type: string
+ *         description: The search query to filter car types by title or image.
  *     responses:
  *       200:
  *         description: Car types retrieved successfully
@@ -64,6 +69,9 @@
  *                     totalItems:
  *                       type: integer
  *                       example: 50
+ *                     itemsPerPage:
+ *                       type: integer
+ *                       example: 10
  *                     carTypes:
  *                       type: array
  *                       items:

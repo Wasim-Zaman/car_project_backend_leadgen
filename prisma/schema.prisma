@@ -135,6 +135,9 @@ model Car {
   city       City       @relation(fields: [cityId], references: [id])
   facilities Facility[] @relation("CarFacilities")
 
+  bookings   Booking[]  @relation("CarToBooking")
+
+
   @@index([carTypeId], name: "carTypeId")
   @@index([brandId], name: "brandId")
   @@index([cityId], name: "cityId")
@@ -160,6 +163,30 @@ model Page {
   updatedAt   DateTime @updatedAt
 }
 
+model Booking {
+  id             Int      @id @default(autoincrement())
+  carId          Int
+  customerId     Int
+  pickupDate     DateTime
+  pickupTime     String
+  dropDate       DateTime
+  dropTime       String
+  pickupOTP      String
+  status         Int   
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
+  // Explicit relation name matching the minimal reciprocal relation in Car
+  car            Car      @relation(fields: [carId], references: [id], name: "CarToBooking")
+  customer       Customer @relation(fields: [customerId], references: [id])
 
+  @@index([carId], name: "carId")
+  @@index([customerId], name: "customerId")
+}
 
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  mobile    String
+  bookings  Booking[]
+}
