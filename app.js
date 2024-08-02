@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config();
 
+// * ADMIN SECTION
 const CustomError = require("./utils/customError");
 const swaggerSpec = require("./config/swagger");
 const generateResponse = require("./utils/response");
