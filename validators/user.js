@@ -27,7 +27,7 @@ const registerUserValidator = [
       }
     }),
   body("lat").notEmpty().isFloat().withMessage("Lat is required"),
-  body("long").notEmpty().isFloat().withMessage("Lat is required"),
+  body("long").notEmpty().isFloat().withMessage("Long is required"),
   body("password")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long"),
@@ -44,7 +44,9 @@ const verifyOTPValidator = [
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return next(new CustomError(errors.array()[0].msg, 400));
+    // log the error
+    console.error(errors.array());
+    return next(new CustomError(errors.array()[0].msg, 422));
   }
   next();
 };

@@ -21,27 +21,38 @@
  *               - name
  *               - email
  *               - mobile
- *               - address
  *               - password
  *             properties:
  *               name:
  *                 type: string
  *                 description: The user's name
+ *                 example: John Doe
  *               email:
  *                 type: string
  *                 description: The user's email
+ *                 example: johndoe@example.com
  *               mobile:
  *                 type: string
  *                 description: The user's mobile number
- *               address:
- *                 type: string
- *                 description: The user's address
+ *                 example: "+1234567890"
+ *               lat:
+ *                 type: number
+ *                 format: float
+ *                 description: Latitude of the user's location (optional)
+ *                 example: 37.7749
+ *               long:
+ *                 type: number
+ *                 format: float
+ *                 description: Longitude of the user's location (optional)
+ *                 example: -122.4194
  *               password:
  *                 type: string
  *                 description: The user's password
+ *                 example: P@ssw0rd
  *               referralCode:
  *                 type: string
  *                 description: The referral code (optional)
+ *                 example: REF123
  *     responses:
  *       200:
  *         description: OTP sent to user's mobile number
@@ -86,36 +97,48 @@
  *             required:
  *               - mobile
  *               - otp
+ *               - name
+ *               - email
+ *               - password
  *             properties:
  *               mobile:
  *                 type: string
  *                 description: The user's mobile number
+ *                 example: "+1234567890"
  *               otp:
  *                 type: string
  *                 description: The OTP sent to the user's mobile number
+ *                 example: "123456"
  *               name:
  *                 type: string
  *                 description: The user's name
+ *                 example: "John Doe"
  *               email:
  *                 type: string
  *                 description: The user's email address
+ *                 example: "johndoe@example.com"
  *               address:
  *                 type: string
  *                 description: The user's address
+ *                 example: "1234 Elm Street"
  *               password:
  *                 type: string
  *                 description: The user's password
+ *                 example: "P@ssw0rd"
  *               referralCode:
  *                 type: string
  *                 description: The referral code (optional)
+ *                 example: "REF123"
  *               lat:
  *                 type: number
  *                 format: float
  *                 description: Latitude of the user's location (optional)
+ *                 example: 37.7749
  *               long:
  *                 type: number
  *                 format: float
  *                 description: Longitude of the user's location (optional)
+ *                 example: -122.4194
  *     responses:
  *       200:
  *         description: User registered successfully
@@ -138,13 +161,13 @@
  *                       properties:
  *                         id:
  *                           type: string
- *                           example: cld9i7m2p0001lm35wajkg9rj
+ *                           example: "cld9i7m2p0001lm35wajkg9rj"
  *                         name:
  *                           type: string
- *                           example: John Doe
+ *                           example: "John Doe"
  *                         email:
  *                           type: string
- *                           example: johndoe@example.com
+ *                           example: "johndoe@example.com"
  *                         mobile:
  *                           type: string
  *                           example: "+1234567890"
@@ -160,5 +183,5 @@
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: Invalid or expired OTP
+ *                   example: "Invalid or expired OTP"
  */

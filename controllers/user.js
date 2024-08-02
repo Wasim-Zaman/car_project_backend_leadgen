@@ -9,7 +9,7 @@ const JWTHelper = require("../utils/jwtUtil");
 
 exports.registerUser = async (req, res, next) => {
   try {
-    const { name, email, mobile, address, password, referralCode } = req.body;
+    const { name, email, mobile, lat, long, password, referralCode } = req.body;
 
     // Generate OTP
     const otp = crypto.randomInt(100000, 999999).toString();
@@ -56,7 +56,7 @@ exports.verifyOTP = async (req, res, next) => {
       name,
       email,
       mobile,
-      hashedPassword,
+      password: hashedPassword,
       referralCode,
       lat,
       long,
