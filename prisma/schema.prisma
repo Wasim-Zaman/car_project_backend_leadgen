@@ -190,3 +190,28 @@ model Customer {
   mobile    String
   bookings  Booking[]
 }
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  mobile        String   @unique
+  status        Int  @default(1)
+  gender        String?
+  password      String
+  referralCode  String? 
+  image         String?
+  age           Int?
+  lat           Float?
+  long          Float?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model OTP {
+  id          String   @id @default(cuid())
+  otp         String
+  mobile      String   @unique
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
+}
