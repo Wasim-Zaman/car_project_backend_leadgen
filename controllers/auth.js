@@ -2,6 +2,7 @@ const Admin = require("../models/admin");
 const CustomError = require("../utils/customError");
 const generateResponse = require("../utils/response");
 const jwtUtil = require("../utils/jwtUtil");
+const Bcrypt = require("../utils/bcrypt");
 
 exports.createAdmin = async (req, res, next) => {
   const EMAIL = process.env.ADMIN_EMAIL;
@@ -11,7 +12,7 @@ exports.createAdmin = async (req, res, next) => {
     console.log(`Attempting to create admin with email: ${EMAIL}`);
     const admin = await Admin.findByEmail(EMAIL);
     if (!admin) {
-      const hashedPassword = await jwtUtil.createPassword(PASSWORD);
+      const hashedPassword = await Bcrypt.createPassword(PASSWORD);
       await Admin.createAdmin({
         email: EMAIL,
         password: hashedPassword,
@@ -40,7 +41,7 @@ exports.login = async (req, res, next) => {
       throw new CustomError("No admin found with entered email", 401);
     }
 
-    const isPasswordValid = await jwtUtil.comparePassword(
+    const isPasswordValid = await Bcrypt.comparePassword(
       password,
       admin.password
     );

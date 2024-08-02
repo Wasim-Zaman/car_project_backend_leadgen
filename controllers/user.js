@@ -5,7 +5,7 @@ const OTP = require("../models/otp");
 const { sendSMS } = require("../config/twilio");
 const generateResponse = require("../utils/response");
 const CustomError = require("../utils/customError");
-const JWTHelper = require("../utils/jwtUtil");
+const Bcrypt = require("../utils/bcrypt");
 
 exports.registerUser = async (req, res, next) => {
   try {
@@ -49,7 +49,7 @@ exports.verifyOTP = async (req, res, next) => {
       return next(new CustomError("Invalid or expired OTP", 400));
     }
 
-    const hashedPassword = await JWTHelper.createPassword(password);
+    const hashedPassword = await Bcrypt.createPassword(password);
 
     // OTP is valid, create user
     const user = await User.createUser({
