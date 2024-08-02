@@ -26,7 +26,8 @@ const registerUserValidator = [
         return Promise.reject("Mobile number already in use");
       }
     }),
-  body("address").notEmpty().withMessage("Address is required"),
+  body("lat").notEmpty().isFloat().withMessage("Lat is required"),
+  body("long").notEmpty().isFloat().withMessage("Lat is required"),
   body("password")
     .isLength({ min: 6 })
     .withMessage("Password must be at least 6 characters long"),

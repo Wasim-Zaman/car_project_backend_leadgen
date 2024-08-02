@@ -14,7 +14,7 @@ exports.registerUser = async (req, res, next) => {
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
 
     // Save OTP in database
-    await OTP.createOTP({
+    await OTP.createOrUpdateOTP({
       otp,
       mobile,
       expiresAt,

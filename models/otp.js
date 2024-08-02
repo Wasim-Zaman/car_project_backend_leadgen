@@ -3,11 +3,25 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 class OTP {
-  static async createOTP(data) {
+  static async createOrUpdateOTP(data) {
     try {
-      return await prisma.oTP.create({
-        data,
+      const existingOTP = await prisma.oTP.findUnique({
+        where: { mobile: data.mobile },
       });
+
+      if (existingOTP) {
+        return await prisma.oTP.update({
+          where: { mobile: data.mobile },
+          data: {
+            otp: data.otp,
+            expiresAt: data.expiresAt,
+          },
+        });
+      } else {
+        return await prisma.oTP.create({
+          data,
+        });
+      }
     } catch (error) {
       throw error;
     }
