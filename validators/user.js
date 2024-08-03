@@ -40,6 +40,15 @@ const verifyOTPValidator = [
   body("otp").isLength({ min: 4, max: 6 }).withMessage("Invalid OTP format"),
 ];
 
+// Middleware for validating user login data
+
+const loginUserValidator = [
+  body("mobile").isMobilePhone("any").withMessage("Invalid mobile number"),
+  body("password")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long"),
+];
+
 // Middleware to handle validation errors
 const validate = (req, res, next) => {
   const errors = validationResult(req);
@@ -54,5 +63,6 @@ const validate = (req, res, next) => {
 module.exports = {
   registerUserValidator,
   verifyOTPValidator,
+  loginUserValidator,
   validate,
 };
