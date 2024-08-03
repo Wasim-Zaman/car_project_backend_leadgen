@@ -6,6 +6,7 @@ const { sendSMS } = require("../config/twilio");
 const generateResponse = require("../utils/response");
 const CustomError = require("../utils/customError");
 const Bcrypt = require("../utils/bcrypt");
+const jwtUtil = require("../utils/jwtUtil");
 
 exports.registerUser = async (req, res, next) => {
   try {
@@ -66,6 +67,50 @@ exports.verifyOTP = async (req, res, next) => {
     await OTP.deleteByMobile(mobile);
 
     res.json({ message: "User registered successfully", user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.registerUserV2 = async (req, res, next) => {
+  try {
+    const { name, email, mobile, lat, long, password, referralCode } = req.body;
+    const hashedPassword = await Bcrypt.createPassword(password);
+
+    const user = await User.createUser({
+      name,
+      email,
+      mobile,
+      password: hashedPassword,
+      referralCode,
+      lat,
+      long,
+    });
+
+    res.json({ message: "User registered successfully", user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.login = async (req, res, next) => {
+  try {
+    const { mobile, password } = req.body;
+
+    const user = await User.login(mobile, password);
+    const token = jwtUtil.createToken(user);
+
+    res.status(200).json(
+      generateResponse(200, true, "Login successful", {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          mobile: user.mobile,
+        },
+        token,
+      })
+    );
   } catch (error) {
     next(error);
   }

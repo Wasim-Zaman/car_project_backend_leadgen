@@ -1,5 +1,9 @@
 const express = require("express");
-const { registerUser, verifyOTP } = require("../controllers/user");
+const {
+  registerUser,
+  verifyOTP,
+  registerUserV2: registerUserv2,
+} = require("../controllers/user");
 const {
   registerUserValidator,
   verifyOTPValidator,
@@ -9,6 +13,7 @@ const {
 const router = express.Router();
 
 router.post("/v1/register", registerUserValidator, validate, registerUser);
+
 router.post(
   "/v1/verify-otp",
   registerUserValidator,
@@ -16,5 +21,6 @@ router.post(
   validate,
   verifyOTP
 );
+router.post("/v2/register", registerUserValidator, validate, registerUserv2);
 
 module.exports = router;

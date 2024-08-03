@@ -185,3 +185,166 @@
  *                   type: string
  *                   example: "Invalid or expired OTP"
  */
+
+/**
+ * @swagger
+ * /api/user/v2/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - mobile
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The user's name
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 description: The user's email
+ *                 example: johndoe@example.com
+ *               mobile:
+ *                 type: string
+ *                 description: The user's mobile number
+ *                 example: "+1234567890"
+ *               lat:
+ *                 type: number
+ *                 format: float
+ *                 description: Latitude of the user's location (optional)
+ *                 example: 37.7749
+ *               long:
+ *                 type: number
+ *                 format: float
+ *                 description: Longitude of the user's location (optional)
+ *                 example: -122.4194
+ *               password:
+ *                 type: string
+ *                 description: The user's password
+ *                 example: P@ssw0rd
+ *               referralCode:
+ *                 type: string
+ *                 description: The referral code (optional)
+ *                 example: REF123
+ *     responses:
+ *       200:
+ *         description: User registered successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User registered successfully
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: cld9i7m2p0001lm35wajkg9rj
+ *                     name:
+ *                       type: string
+ *                       example: John Doe
+ *                     email:
+ *                       type: string
+ *                       example: johndoe@example.com
+ *                     mobile:
+ *                       type: string
+ *                       example: "+1234567890"
+ *       400:
+ *         description: Validation error or user already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: User already exists or validation error
+ */
+
+/**
+ * @swagger
+ * /api/user/v1/login:
+ *   post:
+ *     summary: User login
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - mobile
+ *               - password
+ *             properties:
+ *               mobile:
+ *                 type: string
+ *                 description: The user's mobile number
+ *                 example: "+1234567890"
+ *               password:
+ *                 type: string
+ *                 description: The user's password
+ *                 example: P@ssw0rd
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Login successful
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     user:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: string
+ *                           example: cld9i7m2p0001lm35wajkg9rj
+ *                         name:
+ *                           type: string
+ *                           example: John Doe
+ *                         email:
+ *                           type: string
+ *                           example: johndoe@example.com
+ *                         mobile:
+ *                           type: string
+ *                           example: "+1234567890"
+ *                     token:
+ *                       type: string
+ *                       example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       400:
+ *         description: Invalid credentials or missing fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Invalid credentials or missing fields
+ */

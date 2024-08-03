@@ -1,5 +1,8 @@
 const { PrismaClient } = require("@prisma/client");
 
+const Bcrypt = require("../utils/bcrypt");
+const CustomError = require("../utils/customError");
+
 const prisma = new PrismaClient();
 
 class User {
@@ -60,6 +63,36 @@ class User {
         where: { id },
         data,
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Authenticates a user using their mobile number and password.
+   * @param {string} mobile - The mobile number of the user.
+   * @param {string} password - The user's password.
+   * @returns {Promise<Object>} - The authenticated user or throws an error.
+   */
+  static async login(mobile, password) {
+    try {
+      // Find the user by mobile number
+      const user = await this.findByMobile(mobile);
+      if (!user) {
+        throw new CustomError("User not found");
+      }
+
+      // Check if the password is correct
+      const isPasswordValid = await Bcrypt.comparePassword(
+        password,
+        user.password
+      );
+      if (!isPasswordValid) {
+        throw new CustomError("Invalid credentials", 401);
+      }
+
+      // Return the user if authentication is successful
+      return user;
     } catch (error) {
       throw error;
     }
