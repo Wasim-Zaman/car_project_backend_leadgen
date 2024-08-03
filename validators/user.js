@@ -6,16 +6,16 @@ const CustomError = require("../utils/customError");
 // Middleware for validating user registration data
 const registerUserValidator = [
   body("name").notEmpty().withMessage("Name is required"),
-  body("email")
-    .isEmail()
-    .withMessage("Invalid email address")
-    .bail()
-    .custom(async (email) => {
-      const user = await User.findByEmail(email);
-      if (user) {
-        return Promise.reject("E-mail already in use");
-      }
-    }),
+  //   body("email")
+  //     .isEmail()
+  //     .withMessage("Invalid email address")
+  //     .bail()
+  //     .custom(async (email) => {
+  //       const user = await User.findByEmail(email);
+  //       if (user) {
+  //         return Promise.reject("E-mail already in use");
+  //       }
+  //     }),
   body("mobile")
     .isMobilePhone("any")
     .withMessage("Invalid mobile number")
