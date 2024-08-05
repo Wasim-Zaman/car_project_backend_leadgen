@@ -28,7 +28,7 @@ class User {
    */
   static async findByMobile(mobile) {
     try {
-      return await prisma.user.findUnique({
+      return await prisma.user.findFirst({
         where: { mobile: mobile.toString() },
       });
     } catch (error) {
