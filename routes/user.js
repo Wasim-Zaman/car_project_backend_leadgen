@@ -4,7 +4,9 @@ const {
   verifyOTP,
   registerUserV2,
   login,
+  resetPassword,
 } = require("../controllers/user");
+
 const {
   registerUserValidator,
   verifyOTPValidator,
@@ -26,5 +28,7 @@ router.post(
 router.post("/v2/register", registerUserValidator, validate, registerUserV2);
 
 router.post("/v1/login", loginUserValidator, login);
+
+router.put("/v1/reset-password", resetPassword);
 
 module.exports = router;

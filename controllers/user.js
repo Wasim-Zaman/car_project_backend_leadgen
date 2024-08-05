@@ -115,3 +115,29 @@ exports.login = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const { mobile, password } = req.body;
+
+    // Find the user by mobile
+    const user = await User.findByMobile(mobile);
+
+    if (!user) {
+      throw new CustomError("User not found", 404);
+    }
+
+    const hashedPassword = await Bcrypt.createPassword(password);
+    user.password = hashedPassword;
+
+    const updatedUser = await User.updateUser(user.id, user);
+
+    res
+      .status(200)
+      .json(
+        generateResponse(200, true, "Password reset successfully", updatedUser)
+      );
+  } catch (error) {
+    next(error);
+  }
+};

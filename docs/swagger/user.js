@@ -348,3 +348,84 @@
  *                   type: string
  *                   example: Invalid credentials or missing fields
  */
+
+/**
+ * @swagger
+ * /api/user/v1/reset-password:
+ *   put:
+ *     summary: Reset user password
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - mobile
+ *               - password
+ *             properties:
+ *               mobile:
+ *                 type: string
+ *                 description: The user's mobile number
+ *                 example: "+1234567890"
+ *               password:
+ *                 type: string
+ *                 description: The user's new password
+ *                 example: "NewP@ssw0rd"
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Password reset successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "cld9i7m2p0001lm35wajkg9rj"
+ *                     name:
+ *                       type: string
+ *                       example: "John Doe"
+ *                     email:
+ *                       type: string
+ *                       example: "johndoe@example.com"
+ *                     mobile:
+ *                       type: string
+ *                       example: "+1234567890"
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Invalid request
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ */
