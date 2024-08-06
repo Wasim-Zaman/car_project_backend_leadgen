@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.get("/v1/banners", isAdmin, getBanners);
 
-router.get("/v1/user/banners", isAdmin, getBanners);
+router.get("/v1/user/banners", isAuth, getBanners);
 
 router.post("/v1/banner", isAdmin, uploadSingle, postBanner);
 
