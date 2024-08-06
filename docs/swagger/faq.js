@@ -14,16 +14,16 @@
 /**
  * @swagger
  * tags:
- *   name: FAQs
- *   description: FAQ management
+ *   name: Facilities
+ *   description: Facility management
  */
 
 /**
  * @swagger
- * /api/faq/v1/faqs:
+ * /api/facility/v1/facilities:
  *   get:
- *     summary: Retrieve a list of FAQs with optional search and pagination
- *     tags: [FAQs]
+ *     summary: Retrieve facilities with optional search and pagination
+ *     tags: [Facilities]
  *     parameters:
  *       - in: query
  *         name: page
@@ -39,10 +39,10 @@
  *         name: query
  *         schema:
  *           type: string
- *         description: The search query to filter FAQs by question or answer.
+ *         description: The search query to filter facilities by name or image.
  *     responses:
  *       200:
- *         description: FAQs retrieved successfully
+ *         description: Facilities retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -56,7 +56,7 @@
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: FAQs retrieved successfully
+ *                   example: Facilities retrieved successfully
  *                 data:
  *                   type: object
  *                   properties:
@@ -72,7 +72,7 @@
  *                     itemsPerPage:
  *                       type: integer
  *                       example: 10
- *                     faqs:
+ *                     facilities:
  *                       type: array
  *                       items:
  *                         type: object
@@ -80,12 +80,12 @@
  *                           id:
  *                             type: integer
  *                             example: 1
- *                           question:
+ *                           name:
  *                             type: string
- *                             example: "What is your return policy?"
- *                           answer:
+ *                             example: "Facility A"
+ *                           image:
  *                             type: string
- *                             example: "You can return any item within 30 days of purchase."
+ *                             example: "https://example.com/facility1.jpg"
  *                           status:
  *                             type: integer
  *                             example: 1
@@ -98,7 +98,7 @@
  *                             format: date-time
  *                             example: "2023-07-25T12:00:00Z"
  *       404:
- *         description: No FAQs found
+ *         description: No facilities found
  *         content:
  *           application/json:
  *             schema:
@@ -112,164 +112,214 @@
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: No FAQs found
- *     security:
- *       - bearerAuth: []
+ *                   example: No facilities found
  */
 
 /**
  * @swagger
- * /api/faq/v1/faq/{id}:
- *   get:
- *     summary: Retrieve a single FAQ by ID
- *     tags: [FAQs]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: The ID of the FAQ to retrieve.
- *     responses:
- *       200:
- *         description: FAQ retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/FAQ'
- *     security:
- *       - bearerAuth: []
- */
-
-/**
- * @swagger
- * /api/faq/v1/faq:
+ * /api/facility/v1/facility:
  *   post:
- *     summary: Create a new FAQ
- *     tags: [FAQs]
+ *     summary: Create a new facility
+ *     tags: [Facilities]
+ *     consumes:
+ *       - multipart/form-data
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
- *               question:
+ *               name:
  *                 type: string
- *                 description: The question of the FAQ
- *                 example: "What is the return policy?"
- *               answer:
+ *                 description: The name of the facility
+ *               image:
  *                 type: string
- *                 description: The answer to the FAQ
- *                 example: "You can return items within 30 days of purchase."
+ *                 format: binary
+ *                 description: The facility image to upload
  *               status:
  *                 type: integer
- *                 description: The status of the FAQ (1 for active, 0 for inactive)
- *                 example: 1
+ *                 description: The status of the facility
  *     responses:
  *       201:
- *         description: FAQ created successfully
+ *         description: Facility created successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 status:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/FAQ'
- *     security:
- *       - bearerAuth: []
- */
-
-/**
- * @swagger
- * /api/faq/v1/faq/{id}:
- *   patch:
- *     summary: Update an existing FAQ
- *     tags: [FAQs]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the FAQ to update
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               question:
- *                 type: string
- *                 description: The question of the FAQ
- *                 example: "What is the return policy?"
- *               answer:
- *                 type: string
- *                 description: The answer to the FAQ
- *                 example: "You can return items within 30 days of purchase."
- *               status:
- *                 type: integer
- *                 description: The status of the FAQ (1 for active, 0 for inactive)
- *                 example: 1
- *     responses:
- *       200:
- *         description: FAQ updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                 data:
- *                   $ref: '#/components/schemas/FAQ'
- *       404:
- *         description: FAQ not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
+ *                 success:
+ *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
- *                   example: "FAQ not found"
+ *                   example: Facility created successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: "Facility A"
+ *                     image:
+ *                       type: string
+ *                       example: "https://example.com/facility1.jpg"
+ *                     status:
+ *                       type: integer
+ *                       example: 1
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-24T12:00:00Z"
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-25T12:00:00Z"
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Name and Image are required
  *     security:
  *       - bearerAuth: []
  */
 
 /**
  * @swagger
- * /api/faq/v1/faq/{id}:
- *   delete:
- *     summary: Delete an FAQ
- *     tags: [FAQs]
+ * /api/facility/v1/facility/{id}:
+ *   patch:
+ *     summary: Update a facility
+ *     tags: [Facilities]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: integer
  *         required: true
- *         description: The ID of the FAQ to delete.
+ *         description: The ID of the facility to update
+ *     consumes:
+ *       - multipart/form-data
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the facility
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: The facility image to upload (optional)
+ *               status:
+ *                 type: integer
+ *                 description: The status of the facility
  *     responses:
  *       200:
- *         description: FAQ deleted successfully
+ *         description: Facility updated successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 status:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
  *                   type: string
+ *                   example: Facility updated successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: "Facility A"
+ *                     image:
+ *                       type: string
+ *                       example: "https://example.com/facility1.jpg"
+ *                     status:
+ *                       type: integer
+ *                       example: 1
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-24T12:00:00Z"
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-07-25T12:00:00Z"
+ *       404:
+ *         description: Facility not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Facility not found
+ *     security:
+ *       - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * /api/facility/v1/facility/{id}:
+ *   delete:
+ *     summary: Delete a facility
+ *     tags: [Facilities]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the facility to delete
+ *     responses:
+ *       200:
+ *         description: Facility deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Facility deleted successfully
+ *       404:
+ *         description: Facility not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Facility not found
  *     security:
  *       - bearerAuth: []
  */

@@ -7,7 +7,7 @@ const isAdmin = require("../middleware/is-admin-auth");
 const router = express.Router();
 
 // Route to get all cars with pagination
-router.get("/v1/cars", isAdmin, controller.getCars);
+router.get("/v1/cars", controller.getCars);
 
 // Route to create a new car
 router.post("/v1/car", isAdmin, uploadSingle, controller.postCar);

@@ -113,8 +113,6 @@
  *                 message:
  *                   type: string
  *                   example: No car types found
- *     security:
- *       - bearerAuth: []
  */
 
 /**

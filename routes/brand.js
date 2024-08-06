@@ -7,7 +7,7 @@ const router = express.Router();
 const brandController = require("../controllers/brand");
 const isAdmin = require("../middleware/is-admin-auth");
 
-router.get("/v1/brands", isAdmin, brandController.getBrands);
+router.get("/v1/brands", brandController.getBrands);
 
 router.post("/v1/brand", isAdmin, uploadSingle, brandController.postBrand);
 

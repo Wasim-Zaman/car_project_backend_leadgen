@@ -5,7 +5,7 @@ const isAdmin = require("../middleware/is-admin-auth");
 
 const router = express.Router();
 
-router.get("/v1/pages", isAdmin, pageController.getPages);
+router.get("/v1/pages", pageController.getPages);
 
 router.post("/v1/page", isAdmin, pageController.postPage);
 

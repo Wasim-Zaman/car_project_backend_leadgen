@@ -8,13 +8,10 @@ const {
   patchBanner,
 } = require("../controllers/banner");
 const isAdmin = require("../middleware/is-admin-auth");
-const isAuth = require("../middleware/is-auth");
 
 const router = express.Router();
 
-router.get("/v1/banners", isAdmin, getBanners);
-
-router.get("/v1/user/banners", getBanners);
+router.get("/v1/banners", getBanners);
 
 router.post("/v1/banner", isAdmin, uploadSingle, postBanner);
 

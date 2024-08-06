@@ -113,8 +113,6 @@
  *                 message:
  *                   type: string
  *                   example: No brands found
- *     security:
- *       - bearerAuth: []
  */
 
 /**

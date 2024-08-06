@@ -6,7 +6,7 @@ const isAdmin = require("../middleware/is-admin-auth");
 const router = express.Router();
 
 // Define routes
-router.get("/v1/gallery", isAdmin, controller.getGalleries);
+router.get("/v1/gallery", controller.getGalleries);
 
 router.post("/v1/gallery", isAdmin, uploadSingle, controller.postGallery);
 

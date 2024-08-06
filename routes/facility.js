@@ -7,7 +7,7 @@ const router = express.Router();
 const controller = require("../controllers/facility");
 const isAdmin = require("../middleware/is-admin-auth");
 
-router.get("/v1/facilities", isAdmin, controller.getFacilities);
+router.get("/v1/facilities", controller.getFacilities);
 
 router.post("/v1/facility", isAdmin, uploadSingle, controller.postFacility);
 

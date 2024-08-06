@@ -110,10 +110,7 @@
  *                 message:
  *                   type: string
  *                   example: No pages found
- *     security:
- *       - bearerAuth: []
  */
-
 /**
  * @swagger
  * /api/page/v1/page:

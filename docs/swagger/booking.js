@@ -98,8 +98,6 @@
  *                 message:
  *                   type: string
  *                   example: "No bookings found"
- *     security:
- *       - bearerAuth: []
  */
 
 /**

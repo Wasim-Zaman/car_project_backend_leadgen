@@ -6,7 +6,7 @@ const isAdmin = require("../middleware/is-admin-auth");
 
 const router = express.Router();
 
-router.get("/v1/coupons", isAdmin, controller.getCoupons);
+router.get("/v1/coupons", controller.getCoupons);
 
 router.post("/v1/coupon", isAdmin, uploadSingle, controller.postCoupon);
 

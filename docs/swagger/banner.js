@@ -155,8 +155,6 @@
  *                 message:
  *                   type: string
  *                   example: No banners found
- *     security:
- *       - bearerAuth: []
  */
 
 /**

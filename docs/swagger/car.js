@@ -188,8 +188,6 @@
  *                 message:
  *                   type: string
  *                   example: No cars found
- *     security:
- *       - bearerAuth: []
  */
 
 /**

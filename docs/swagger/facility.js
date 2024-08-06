@@ -113,8 +113,6 @@
  *                 message:
  *                   type: string
  *                   example: No facilities found
- *     security:
- *       - bearerAuth: []
  */
 
 /**

@@ -6,7 +6,7 @@ const isAdmin = require("../middleware/is-admin-auth");
 
 const router = express.Router();
 
-router.get("/v1/carTypes", isAdmin, carController.getCarTypes);
+router.get("/v1/carTypes", carController.getCarTypes);
 
 router.post("/v1/carType", isAdmin, uploadSingle, carController.postCarType);
 

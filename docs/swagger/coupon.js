@@ -132,8 +132,6 @@
  *                 message:
  *                   type: string
  *                   example: No coupons found
- *     security:
- *       - bearerAuth: []
  */
 
 /**

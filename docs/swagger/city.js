@@ -110,8 +110,6 @@
  *                 message:
  *                   type: string
  *                   example: No cities found
- *     security:
- *       - bearerAuth: []
  */
 
 /**
