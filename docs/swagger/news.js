@@ -95,9 +95,6 @@
  *                           thumbnail:
  *                             type: string
  *                             example: "https://example.com/thumbnail.jpg"
- *                           views:
- *                             type: integer
- *                             example: 100
  *                           createdAt:
  *                             type: string
  *                             format: date-time
@@ -156,9 +153,6 @@
  *               status:
  *                 type: integer
  *                 description: The status of the news item
- *               views:
- *                 type: integer
- *                 description: The initial view count of the news item (default 0)
  *     responses:
  *       201:
  *         description: News item created successfully
@@ -194,9 +188,6 @@
  *                     thumbnail:
  *                       type: string
  *                       example: "https://example.com/thumbnail.jpg"
- *                     views:
- *                       type: integer
- *                       example: 100
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -217,7 +208,7 @@
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: Title and Description are required
+ *                   example: Title and description are required
  *     security:
  *       - bearerAuth: []
  */
@@ -261,9 +252,6 @@
  *               status:
  *                 type: integer
  *                 description: The status of the news item
- *               views:
- *                 type: integer
- *                 description: The view count of the news item (optional)
  *     responses:
  *       200:
  *         description: News item updated successfully
@@ -299,9 +287,6 @@
  *                     thumbnail:
  *                       type: string
  *                       example: "https://example.com/newthumbnail.jpg"
- *                     views:
- *                       type: integer
- *                       example: 150
  *                     createdAt:
  *                       type: string
  *                       format: date-time
@@ -354,6 +339,79 @@
  *                 message:
  *                   type: string
  *                   example: News item deleted successfully
+ *       404:
+ *         description: News item not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: News item not found
+ *     security:
+ *       - bearerAuth: []
+ */
+
+/**
+ * @swagger
+ * /api/news/v1/news/{id}/view:
+ *   post:
+ *     summary: View a news item and track the view
+ *     tags: [News]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the news item to view
+ *     responses:
+ *       200:
+ *         description: News viewed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: News viewed successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "cld9i7m2p0001lm35wajkg9rj"
+ *                     title:
+ *                       type: string
+ *                       example: "Breaking News"
+ *                     description:
+ *                       type: string
+ *                       example: "This is a detailed description of the news item."
+ *                     media:
+ *                       type: string
+ *                       example: "https://example.com/media.jpg"
+ *                     status:
+ *                       type: integer
+ *                       example: 1
+ *                     thumbnail:
+ *                       type: string
+ *                       example: "https://example.com/thumbnail.jpg"
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-08-20T12:00:00Z"
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2023-08-21T12:00:00Z"
  *       404:
  *         description: News item not found
  *         content:
