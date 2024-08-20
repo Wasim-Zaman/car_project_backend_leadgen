@@ -429,3 +429,138 @@
  *                   type: string
  *                   example: User not found
  */
+
+/**
+ * @swagger
+ * /api/user/v1/profile/{id}:
+ *   put:
+ *     summary: Update user profile
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The user's name
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 description: The user's email
+ *                 example: johndoe@example.com
+ *               mobile:
+ *                 type: string
+ *                 description: The user's mobile number
+ *                 example: "+1234567890"
+ *               gender:
+ *                 type: string
+ *                 description: The user's gender
+ *                 example: Male
+ *               lat:
+ *                 type: number
+ *                 format: float
+ *                 description: Latitude of the user's location (optional)
+ *                 example: 37.7749
+ *               long:
+ *                 type: number
+ *                 format: float
+ *                 description: Longitude of the user's location (optional)
+ *                 example: -122.4194
+ *               referralCode:
+ *                 type: string
+ *                 description: The referral code (optional)
+ *                 example: REF123
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: The user's profile image
+ *               age:
+ *                 type: integer
+ *                 description: The user's age
+ *                 example: 30
+ *     responses:
+ *       200:
+ *         description: User profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: User profile updated successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: cld9i7m2p0001lm35wajkg9rj
+ *                     name:
+ *                       type: string
+ *                       example: John Doe
+ *                     email:
+ *                       type: string
+ *                       example: johndoe@example.com
+ *                     mobile:
+ *                       type: string
+ *                       example: "+1234567890"
+ *                     gender:
+ *                       type: string
+ *                       example: Male
+ *                     lat:
+ *                       type: number
+ *                       format: float
+ *                       example: 37.7749
+ *                     long:
+ *                       type: number
+ *                       format: float
+ *                       example: -122.4194
+ *                     referralCode:
+ *                       type: string
+ *                       example: REF123
+ *                     image:
+ *                       type: string
+ *                       example: "/uploads/profile/johndoe.jpg"
+ *                     age:
+ *                       type: integer
+ *                       example: 30
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: Invalid request
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ */

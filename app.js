@@ -9,7 +9,7 @@ require("dotenv").config();
 // * ADMIN SECTION
 const CustomError = require("./utils/customError");
 const swaggerSpec = require("./config/swagger");
-const generateResponse = require("./utils/response");
+const response = require("./utils/response");
 const adminRoutes = require("./routes/auth");
 const bannerRoutes = require("./routes/banner");
 const cityRoutes = require("./routes/city");
@@ -70,7 +70,7 @@ app.use((error, req, res, next) => {
     data = error.data || null;
   }
 
-  res.status(status).json(generateResponse(status, success, message, data));
+  res.status(status).json(response(status, success, message, data));
 });
 
 app.listen(port, function () {

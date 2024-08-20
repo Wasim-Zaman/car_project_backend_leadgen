@@ -3,10 +3,11 @@ const crypto = require("crypto");
 const User = require("../models/user");
 const OTP = require("../models/otp");
 const { sendSMS } = require("../config/twilio");
-const generateResponse = require("../utils/response");
+const response = require("../utils/response");
 const CustomError = require("../utils/customError");
 const Bcrypt = require("../utils/bcrypt");
 const jwtUtil = require("../utils/jwtUtil");
+const fileHelper = require("../utils/fileUtil");
 
 exports.registerUser = async (req, res, next) => {
   try {
@@ -26,9 +27,7 @@ exports.registerUser = async (req, res, next) => {
     // Send OTP to user's mobile
     await sendSMS(mobile, `Your OTP is: ${otp}`);
 
-    res
-      .status(200)
-      .json(generateResponse(200, true, "OTP sent to user's mobile"));
+    res.status(200).json(response(200, true, "OTP sent to user's mobile"));
   } catch (error) {
     next(error);
   }
@@ -89,7 +88,7 @@ exports.registerUserV2 = async (req, res, next) => {
 
     res
       .status(201)
-      .json(generateResponse(201, true, "User registered successfully", user));
+      .json(response(201, true, "User registered successfully", user));
   } catch (error) {
     next(error);
   }
@@ -103,7 +102,7 @@ exports.login = async (req, res, next) => {
     const token = jwtUtil.createToken(user);
 
     res.status(200).json(
-      generateResponse(200, true, "Login successful", {
+      response(200, true, "Login successful", {
         user: {
           id: user.id,
           name: user.name,
@@ -136,8 +135,41 @@ exports.resetPassword = async (req, res, next) => {
 
     res
       .status(200)
+      .json(response(200, true, "Password reset successfully", updatedUser));
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (!user) {
+      throw new CustomError("User not found", 404);
+    }
+
+    let image = req.file ? req.file.path : user.image;
+    if (req.file && req.file.path !== user.image) {
+      await fileHelper.deleteFile(user.image);
+    }
+
+    const updatedUser = await User.updateUser(id, {
+      name: req.body.name || user.name,
+      email: req.body.email || user.email,
+      mobile: req.body.mobile || user.mobile,
+      gender: req.body.gender || user.gender,
+      lat: req.body.lat || user.lat,
+      long: req.body.long || user.long,
+      referralCode: req.body.referral || user.referral,
+      image: image,
+      age: Number(req.body.age || user.age),
+    });
+
+    res
+      .status(200)
       .json(
-        generateResponse(200, true, "Password reset successfully", updatedUser)
+        response(200, true, "User profile updated successfully", updatedUser)
       );
   } catch (error) {
     next(error);
