@@ -22,6 +22,7 @@ const facilityRoutes = require('./routes/facility');
 const couponRoutes = require('./routes/coupon');
 const pageRoutes = require('./routes/page');
 const bookingRoutes = require('./routes/booking');
+const zoneRoutes = require('./routes/zone');
 
 // * USER SECTION
 const userRoutes = require('./routes/user');
@@ -50,6 +51,7 @@ app.use('/api/page', pageRoutes);
 app.use('/api/booking', bookingRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/api/zone', zoneRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res, next) => {

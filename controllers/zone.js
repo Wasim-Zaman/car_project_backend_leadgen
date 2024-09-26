@@ -86,3 +86,19 @@ exports.getZones = async (req, res, next) => {
     next(error);
   }
 };
+
+// Get all Zones
+exports.getAllZones = async (req, res, next) => {
+  try {
+    const zones = await Zone.getAll();
+
+    if (!zones.data.length) {
+      throw new CustomError('No Zones found', 404);
+    }
+
+    res.status(200).json(response(200, true, 'Zones retrieved successfully', zones));
+  } catch (error) {
+    console.log(`Error in getZones: ${error.message}`);
+    next(error);
+  }
+};

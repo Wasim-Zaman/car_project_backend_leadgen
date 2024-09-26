@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /api/zone/v1/createZone:
+ * /api/zone/v1/zone:
  *   post:
  *     summary: Create a new Zone
  *     tags: [Zone]
@@ -46,7 +46,7 @@
 
 /**
  * @swagger
- * /api/zone/v1/getZone/{id}:
+ * /api/zone/v1/zone/{id}:
  *   get:
  *     summary: Get a Zone by ID
  *     tags: [Zone]
@@ -84,7 +84,7 @@
 
 /**
  * @swagger
- * /api/zone/v1/updateZone/{id}:
+ * /api/zone/v1/zone/{id}:
  *   patch:
  *     summary: Update a Zone by ID
  *     tags: [Zone]
@@ -133,7 +133,7 @@
 
 /**
  * @swagger
- * /api/zone/v1/deleteZone/{id}:
+ * /api/zone/v1/zone/{id}:
  *   delete:
  *     summary: Delete a Zone by ID
  *     tags: [Zone]
@@ -162,7 +162,7 @@
 
 /**
  * @swagger
- * /api/zone/v1/getAllZones:
+ * /api/zone/v1/zones:
  *   get:
  *     summary: Get all Zones with pagination
  *     tags: [Zone]
@@ -207,4 +207,50 @@
  *                       name:
  *                         type: string
  *                         example: "North Zone"
+ */
+
+/**
+ * @swagger
+ * /api/zone/v1/zones/all:
+ *   get:
+ *     summary: Get all Zones
+ *     tags: [Zone]
+ *     responses:
+ *       200:
+ *         description: Zones retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Zones retrieved successfully
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         example: "12345"
+ *                       name:
+ *                         type: string
+ *                         example: "North Zone"
+ *       404:
+ *         description: No Zones found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: No Zones found
  */
