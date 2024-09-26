@@ -214,7 +214,7 @@
  *                 example: johndoe@example.com
  *               mobile:
  *                 type: string
- *                 description: The user's mobile number
+ *                 description: The user's mobile number in international format
  *                 example: "+1234567890"
  *               lat:
  *                 type: number
@@ -228,14 +228,14 @@
  *                 example: -122.4194
  *               password:
  *                 type: string
- *                 description: The user's password
+ *                 description: The user's password (minimum 8 characters)
  *                 example: P@ssw0rd
  *               referralCode:
  *                 type: string
  *                 description: The referral code (optional)
  *                 example: REF123
  *     responses:
- *       200:
+ *       201:
  *         description: User registered successfully
  *         content:
  *           application/json:
@@ -260,6 +260,15 @@
  *                     mobile:
  *                       type: string
  *                       example: "+1234567890"
+ *                     lat:
+ *                       type: number
+ *                       example: 37.7749
+ *                     long:
+ *                       type: number
+ *                       example: -122.4194
+ *                     address:
+ *                       type: string
+ *                       example: "123 Main St, City, Country"
  *       400:
  *         description: Validation error or user already exists
  *         content:
@@ -273,6 +282,9 @@
  *                 message:
  *                   type: string
  *                   example: User already exists or validation error
+ *                 error:
+ *                   type: string
+ *                   example: "Mobile number must be in international format starting with + followed by the country code and digits."
  */
 
 /**
