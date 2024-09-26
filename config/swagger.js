@@ -1,26 +1,26 @@
-const path = require("path");
-const swaggerJSDoc = require("swagger-jsdoc");
-require("dotenv").config();
+const path = require('path');
+const swaggerJSDoc = require('swagger-jsdoc');
+require('dotenv').config();
 
 const swaggerDefinition = {
-  openapi: "3.0.0",
+  openapi: '3.0.0',
   info: {
-    title: "Car Project",
-    version: "1.0.0",
-    description: "APIs Documentation",
+    title: 'Tax',
+    version: '1.0.0',
+    description: 'APIs Documentation',
     contact: {
-      name: "Wasim Zaman",
-      email: "wasimxaman13@gmail.com",
+      name: process.env.NAME,
+      email: process.env.EMAIL,
     },
   },
   servers: [
     {
-      url: "https://backend.leadgenadvertisements.com",
-      description: "Development server",
+      url: process.env.DOMAIN,
+      description: 'Production server',
     },
     {
-      url: `http://localhost:${process.env.PORT}`,
-      description: "Development server",
+      url: process.env.LOCAL_HOST,
+      description: 'Development server',
     },
     // add more hosts...
   ],
@@ -29,20 +29,20 @@ const swaggerDefinition = {
 var options = {
   swaggerDefinition: swaggerDefinition,
   apis: [
-    path.join(__dirname, "../docs/swagger/auth.js"),
-    path.join(__dirname, "../docs/swagger/banner.js"),
-    path.join(__dirname, "../docs/swagger/brand.js"),
-    path.join(__dirname, "../docs/swagger/car_type.js"),
-    path.join(__dirname, "../docs/swagger/city.js"),
-    path.join(__dirname, "../docs/swagger/car.js"),
-    path.join(__dirname, "../docs/swagger/gallery.js"),
-    path.join(__dirname, "../docs/swagger/faq.js"),
-    path.join(__dirname, "../docs/swagger/facility.js"),
-    path.join(__dirname, "../docs/swagger/coupon.js"),
-    path.join(__dirname, "../docs/swagger/page.js"),
-    path.join(__dirname, "../docs/swagger/booking.js"),
-    path.join(__dirname, "../docs/swagger/user.js"),
-    path.join(__dirname, "../docs/swagger/news.js"),
+    path.join(__dirname, '../docs/swagger/auth.js'),
+    path.join(__dirname, '../docs/swagger/banner.js'),
+    path.join(__dirname, '../docs/swagger/brand.js'),
+    path.join(__dirname, '../docs/swagger/car_type.js'),
+    path.join(__dirname, '../docs/swagger/city.js'),
+    path.join(__dirname, '../docs/swagger/car.js'),
+    path.join(__dirname, '../docs/swagger/gallery.js'),
+    path.join(__dirname, '../docs/swagger/faq.js'),
+    path.join(__dirname, '../docs/swagger/facility.js'),
+    path.join(__dirname, '../docs/swagger/coupon.js'),
+    path.join(__dirname, '../docs/swagger/page.js'),
+    path.join(__dirname, '../docs/swagger/booking.js'),
+    path.join(__dirname, '../docs/swagger/user.js'),
+    path.join(__dirname, '../docs/swagger/news.js'),
     // add more paths...
   ],
 };
