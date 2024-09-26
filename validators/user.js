@@ -1,11 +1,11 @@
-const { body, validationResult } = require("express-validator");
+const { body, validationResult } = require('express-validator');
 
-const User = require("../models/user");
-const CustomError = require("../utils/customError");
+const User = require('../models/user');
+const CustomError = require('../utils/error');
 
 // Middleware for validating user registration data
 const registerUserValidator = [
-  body("name").notEmpty().withMessage("Name is required"),
+  body('name').notEmpty().withMessage('Name is required'),
   //   body("email")
   //     .isEmail()
   //     .withMessage("Invalid email address")
@@ -16,37 +16,33 @@ const registerUserValidator = [
   //         return Promise.reject("E-mail already in use");
   //       }
   //     }),
-  body("mobile")
-    .isMobilePhone("any")
-    .withMessage("Invalid mobile number")
+  body('mobile')
+    .isMobilePhone('any')
+    .withMessage('Invalid mobile number')
     .bail()
     .custom(async (mobile) => {
       const user = await User.findByMobile(mobile);
       if (user) {
-        return Promise.reject("Mobile number already in use");
+        return Promise.reject('Mobile number already in use');
       }
     }),
   //   body("lat").notEmpty().isFloat().withMessage("Lat is required"),
   //   body("long").notEmpty().isFloat().withMessage("Long is required"),
-  body("password")
-    .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters long"),
-  body("referralCode").optional(),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  body('referralCode').optional(),
 ];
 
 // Middleware for validating OTP data
 const verifyOTPValidator = [
-  body("mobile").isMobilePhone("any").withMessage("Invalid mobile number"),
-  body("otp").isLength({ min: 4, max: 6 }).withMessage("Invalid OTP format"),
+  body('mobile').isMobilePhone('any').withMessage('Invalid mobile number'),
+  body('otp').isLength({ min: 4, max: 6 }).withMessage('Invalid OTP format'),
 ];
 
 // Middleware for validating user login data
 
 const loginUserValidator = [
-  body("mobile").isMobilePhone("any").withMessage("Invalid mobile number"),
-  body("password")
-    .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters long"),
+  body('mobile').isMobilePhone('any').withMessage('Invalid mobile number'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
 ];
 
 // Middleware to handle validation errors

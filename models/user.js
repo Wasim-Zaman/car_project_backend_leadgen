@@ -1,7 +1,7 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
 
-const Bcrypt = require("../utils/bcrypt");
-const CustomError = require("../utils/customError");
+const Bcrypt = require('../utils/bcrypt');
+const CustomError = require('../utils/error');
 
 const prisma = new PrismaClient();
 
@@ -79,16 +79,13 @@ class User {
       // Find the user by mobile number
       const user = await this.findByMobile(mobile);
       if (!user) {
-        throw new CustomError("User not found");
+        throw new CustomError('User not found');
       }
 
       // Check if the password is correct
-      const isPasswordValid = await Bcrypt.comparePassword(
-        password,
-        user.password
-      );
+      const isPasswordValid = await Bcrypt.comparePassword(password, user.password);
       if (!isPasswordValid) {
-        throw new CustomError("Invalid credentials", 401);
+        throw new CustomError('Invalid credentials', 401);
       }
 
       // Return the user if authentication is successful

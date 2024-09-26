@@ -1,25 +1,23 @@
-const News = require("../models/news");
-const NewsView = require("../models/newsView");
-const CustomError = require("../utils/customError");
-const response = require("../utils/response");
-const fileHelper = require("../utils/fileUtil");
+const News = require('../models/news');
+const NewsView = require('../models/newsView');
+const CustomError = require('../utils/error');
+const response = require('../utils/response');
+const fileHelper = require('../utils/fileUtil');
 
 // Get paginated list of News
 exports.getNews = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
-  const query = req.query.query || "";
+  const query = req.query.query || '';
 
   try {
     const newsItems = await News.get(page, limit, query);
 
     if (!newsItems || newsItems.data.length <= 0) {
-      throw new CustomError("No news found", 404);
+      throw new CustomError('No news found', 404);
     }
 
-    res
-      .status(200)
-      .json(response(200, true, "News retrieved successfully", newsItems));
+    res.status(200).json(response(200, true, 'News retrieved successfully', newsItems));
   } catch (error) {
     next(error);
   }
@@ -33,12 +31,10 @@ exports.getNewsById = async (req, res, next) => {
     const newsItem = await News.findById(id);
 
     if (!newsItem) {
-      throw new CustomError("News not found", 404);
+      throw new CustomError('News not found', 404);
     }
 
-    res
-      .status(200)
-      .json(response(200, true, "News retrieved successfully", newsItem));
+    res.status(200).json(response(200, true, 'News retrieved successfully', newsItem));
   } catch (error) {
     next(error);
   }
@@ -50,7 +46,7 @@ exports.createNews = async (req, res, next) => {
 
   try {
     if (!title || !description) {
-      throw new CustomError("Title and description are required", 400);
+      throw new CustomError('Title and description are required', 400);
     }
 
     let media = req.file ? req.file.path : null;
@@ -63,9 +59,7 @@ exports.createNews = async (req, res, next) => {
       status: req.body.status ? parseInt(req.body.status, 10) : 1,
     });
 
-    res
-      .status(201)
-      .json(response(201, true, "News created successfully", newNews));
+    res.status(201).json(response(201, true, 'News created successfully', newNews));
   } catch (error) {
     next(error);
   }
@@ -79,7 +73,7 @@ exports.patchNews = async (req, res, next) => {
   try {
     const existingNews = await News.findById(id);
     if (!existingNews) {
-      throw new CustomError("News not found", 404);
+      throw new CustomError('News not found', 404);
     }
 
     const media = req.file ? req.file.path : existingNews.media;
@@ -92,14 +86,10 @@ exports.patchNews = async (req, res, next) => {
       description: description || existingNews.description,
       media: media,
       thumbnail: thumbnail || existingNews.thumbnail,
-      status: req.body.status
-        ? parseInt(req.body.status, 10)
-        : existingNews.status,
+      status: req.body.status ? parseInt(req.body.status, 10) : existingNews.status,
     });
 
-    res
-      .status(200)
-      .json(response(200, true, "News updated successfully", updatedNews));
+    res.status(200).json(response(200, true, 'News updated successfully', updatedNews));
   } catch (error) {
     next(error);
   }
@@ -112,7 +102,7 @@ exports.deleteNews = async (req, res, next) => {
   try {
     await News.delete(id);
 
-    res.status(200).json(response(200, true, "News deleted successfully"));
+    res.status(200).json(response(200, true, 'News deleted successfully'));
   } catch (error) {
     next(error);
   }
@@ -127,7 +117,7 @@ exports.viewNews = async (req, res, next) => {
     const newsItem = await News.findById(newsId);
 
     if (!newsItem) {
-      throw new CustomError("News not found", 404);
+      throw new CustomError('News not found', 404);
     }
 
     // Check if the user has already viewed this news item
@@ -143,9 +133,7 @@ exports.viewNews = async (req, res, next) => {
       });
     }
 
-    res
-      .status(200)
-      .json(response(200, true, "News viewed successfully", newsItem));
+    res.status(200).json(response(200, true, 'News viewed successfully', newsItem));
   } catch (error) {
     next(error);
   }

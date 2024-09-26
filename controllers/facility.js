@@ -1,23 +1,21 @@
-const Facility = require("../models/facility");
-const CustomError = require("../utils/customError");
-const generateResponse = require("../utils/response");
-const fileHelper = require("../utils/fileUtil");
+const Facility = require('../models/facility');
+const CustomError = require('../utils/error');
+const generateResponse = require('../utils/response');
+const fileHelper = require('../utils/fileUtil');
 
 exports.getFacilities = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
-  const query = req.query.query || "";
+  const query = req.query.query || '';
 
   try {
     const facilities = await Facility.get(page, limit, query);
 
     if (!facilities || facilities.data.length <= 0) {
-      throw new CustomError("No facilities found", 404);
+      throw new CustomError('No facilities found', 404);
     }
 
-    res
-      .status(200)
-      .json(generateResponse("Facilities retrieved successfully", facilities));
+    res.status(200).json(generateResponse('Facilities retrieved successfully', facilities));
   } catch (error) {
     next(error);
   }
@@ -29,11 +27,11 @@ exports.postFacility = async (req, res, next) => {
     let image = req.file ? req.file.path : null;
 
     if (!name) {
-      throw new CustomError("Name is required", 400);
+      throw new CustomError('Name is required', 400);
     }
 
     if (!image) {
-      throw new CustomError("Image is required", 400);
+      throw new CustomError('Image is required', 400);
     }
 
     const newFacility = await Facility.create({
@@ -42,16 +40,7 @@ exports.postFacility = async (req, res, next) => {
       status: req.body.status ? parseInt(req.body.status, 10) : 1,
     });
 
-    res
-      .status(201)
-      .json(
-        generateResponse(
-          201,
-          true,
-          "Facility created successfully",
-          newFacility
-        )
-      );
+    res.status(201).json(generateResponse(201, true, 'Facility created successfully', newFacility));
   } catch (error) {
     next(error);
   }
@@ -64,7 +53,7 @@ exports.patchFacility = async (req, res, next) => {
   try {
     const facility = await Facility.findById(id);
     if (!facility) {
-      throw new CustomError("Facility not found", 404);
+      throw new CustomError('Facility not found', 404);
     }
     let image = req.file ? req.file.path : null;
 
@@ -78,12 +67,10 @@ exports.patchFacility = async (req, res, next) => {
     });
 
     if (!updatedFacility) {
-      throw new CustomError("Facility not found", 404);
+      throw new CustomError('Facility not found', 404);
     }
 
-    res
-      .status(200)
-      .json(generateResponse("Facility updated successfully", updatedFacility));
+    res.status(200).json(generateResponse('Facility updated successfully', updatedFacility));
   } catch (error) {
     next(error);
   }
@@ -95,7 +82,7 @@ exports.deleteFacility = async (req, res, next) => {
   try {
     const facility = await Facility.findById(id);
     if (!facility) {
-      throw new CustomError("Facility not found", 404);
+      throw new CustomError('Facility not found', 404);
     }
 
     await fileHelper.deleteFile(facility.image);
@@ -103,12 +90,10 @@ exports.deleteFacility = async (req, res, next) => {
     const deletedFacility = await Facility.deleteById(id);
 
     if (!deletedFacility) {
-      throw new CustomError("Facility not found", 404);
+      throw new CustomError('Facility not found', 404);
     }
 
-    res
-      .status(200)
-      .json(generateResponse("Facility deleted successfully", deletedFacility));
+    res.status(200).json(generateResponse('Facility deleted successfully', deletedFacility));
   } catch (error) {
     next(error);
   }

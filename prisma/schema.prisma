@@ -21,6 +21,11 @@ model Admin {
   updatedAt DateTime @updatedAt
 }
 
+model Zone {
+  id   String    @id @default(uuid())
+  name String
+}
+
 model Banner {
   id        Int      @id @default(autoincrement())
   image     String?

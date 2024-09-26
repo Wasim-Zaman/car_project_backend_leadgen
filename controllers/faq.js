@@ -1,23 +1,21 @@
-const FAQ = require("../models/faq");
-const CustomError = require("../utils/customError");
-const generateResponse = require("../utils/response");
+const FAQ = require('../models/faq');
+const CustomError = require('../utils/error');
+const generateResponse = require('../utils/response');
 
 // Get paginated list of FAQs
 exports.getFAQs = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 10;
-  const query = req.query.query || "";
+  const query = req.query.query || '';
 
   try {
     const faqs = await FAQ.get(page, limit, query);
 
     if (!faqs || faqs.data.length <= 0) {
-      throw new CustomError("No FAQs found", 404);
+      throw new CustomError('No FAQs found', 404);
     }
 
-    res
-      .status(200)
-      .json(generateResponse(200, true, "FAQs retrieved successfully", faqs));
+    res.status(200).json(generateResponse(200, true, 'FAQs retrieved successfully', faqs));
   } catch (error) {
     next(error);
   }
@@ -31,12 +29,10 @@ exports.getFAQById = async (req, res, next) => {
     const faq = await FAQ.findById(id);
 
     if (!faq) {
-      throw new CustomError("FAQ not found", 404);
+      throw new CustomError('FAQ not found', 404);
     }
 
-    res
-      .status(200)
-      .json(generateResponse(200, true, "FAQ retrieved successfully", faq));
+    res.status(200).json(generateResponse(200, true, 'FAQ retrieved successfully', faq));
   } catch (error) {
     next(error);
   }
@@ -48,7 +44,7 @@ exports.createFAQ = async (req, res, next) => {
 
   try {
     if (!question || !answer) {
-      throw new CustomError("Question and answer are required", 400);
+      throw new CustomError('Question and answer are required', 400);
     }
 
     const newFAQ = await FAQ.create({
@@ -57,9 +53,7 @@ exports.createFAQ = async (req, res, next) => {
       status: req.body.status ? parseInt(req.body.status, 10) : 1,
     });
 
-    res
-      .status(201)
-      .json(generateResponse(201, true, "FAQ created successfully", newFAQ));
+    res.status(201).json(generateResponse(201, true, 'FAQ created successfully', newFAQ));
   } catch (error) {
     next(error);
   }
@@ -73,22 +67,16 @@ exports.patchFAQ = async (req, res, next) => {
   try {
     const existingFAQ = await FAQ.findById(id);
     if (!existingFAQ) {
-      throw new CustomError("FAQ not found", 404);
+      throw new CustomError('FAQ not found', 404);
     }
 
     const updatedFAQ = await FAQ.update(id, {
       question: question || existingFAQ.question,
       answer: answer || existingFAQ.answer,
-      status: req.body.status
-        ? parseInt(req.body.status, 10)
-        : existingFAQ.status,
+      status: req.body.status ? parseInt(req.body.status, 10) : existingFAQ.status,
     });
 
-    res
-      .status(200)
-      .json(
-        generateResponse(200, true, "FAQ updated successfully", updatedFAQ)
-      );
+    res.status(200).json(generateResponse(200, true, 'FAQ updated successfully', updatedFAQ));
   } catch (error) {
     next(error);
   }
@@ -101,9 +89,7 @@ exports.deleteFAQ = async (req, res, next) => {
   try {
     await FAQ.delete(id);
 
-    res
-      .status(200)
-      .json(generateResponse(200, true, "FAQ deleted successfully"));
+    res.status(200).json(generateResponse(200, true, 'FAQ deleted successfully'));
   } catch (error) {
     next(error);
   }
