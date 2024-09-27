@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /v1/api/positions:
+ * /api/position/v1/positions:
  *   post:
  *     summary: Create a new Position
  *     tags: [Position]
@@ -62,7 +62,7 @@
 
 /**
  * @swagger
- * /v1/api/positions/{id}:
+ * /api/position/v1/positions/{id}:
  *   get:
  *     summary: Get a Position by ID
  *     tags: [Position]
@@ -106,7 +106,7 @@
 
 /**
  * @swagger
- * /v1/api/positions:
+ * /api/position/v1/positions:
  *   get:
  *     summary: Get all Positions with pagination
  *     tags: [Position]
@@ -156,7 +156,7 @@
 
 /**
  * @swagger
- * /v1/api/positions/{id}:
+ * /api/position/v1/positions/{id}:
  *   put:
  *     summary: Update a Position by ID
  *     tags: [Position]
@@ -221,7 +221,7 @@
 
 /**
  * @swagger
- * /v1/api/positions/{id}:
+ * /api/position/v1/positions/{id}:
  *   delete:
  *     summary: Delete a Position by ID
  *     tags: [Position]
@@ -252,7 +252,7 @@
 
 /**
  * @swagger
- * /v1/api/positions:
+ * /api/position/v1/positions:
  *   get:
  *     summary: Get all Positions
  *     tags: [Position]
