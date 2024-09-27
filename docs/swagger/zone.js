@@ -14,11 +14,26 @@
  *             type: object
  *             required:
  *               - name
+ *               - latitude
+ *               - longitude
+ *               - radius
  *             properties:
  *               name:
  *                 type: string
  *                 description: The name of the zone
  *                 example: "North Zone"
+ *               latitude:
+ *                 type: number
+ *                 description: The latitude of the zone center
+ *                 example: 40.7128
+ *               longitude:
+ *                 type: number
+ *                 description: The longitude of the zone center
+ *                 example: -74.0060
+ *               radius:
+ *                 type: number
+ *                 description: The radius of the zone in meters
+ *                 example: 500
  *     responses:
  *       201:
  *         description: Zone created successfully
@@ -42,6 +57,15 @@
  *                     name:
  *                       type: string
  *                       example: "North Zone"
+ *                     latitude:
+ *                       type: number
+ *                       example: 40.7128
+ *                     longitude:
+ *                       type: number
+ *                       example: -74.0060
+ *                     radius:
+ *                       type: number
+ *                       example: 500
  */
 
 /**
@@ -80,6 +104,15 @@
  *                     name:
  *                       type: string
  *                       example: "North Zone"
+ *                     latitude:
+ *                       type: number
+ *                       example: 40.7128
+ *                     longitude:
+ *                       type: number
+ *                       example: -74.0060
+ *                     radius:
+ *                       type: number
+ *                       example: 500
  */
 
 /**
@@ -106,6 +139,18 @@
  *                 type: string
  *                 description: The name of the zone
  *                 example: "Updated North Zone"
+ *               latitude:
+ *                 type: number
+ *                 description: The latitude of the zone center
+ *                 example: 40.7128
+ *               longitude:
+ *                 type: number
+ *                 description: The longitude of the zone center
+ *                 example: -74.0060
+ *               radius:
+ *                 type: number
+ *                 description: The radius of the zone in meters
+ *                 example: 500
  *     responses:
  *       200:
  *         description: Zone updated successfully
@@ -129,6 +174,15 @@
  *                     name:
  *                       type: string
  *                       example: "Updated North Zone"
+ *                     latitude:
+ *                       type: number
+ *                       example: 40.7128
+ *                     longitude:
+ *                       type: number
+ *                       example: -74.0060
+ *                     radius:
+ *                       type: number
+ *                       example: 500
  */
 
 /**
@@ -207,6 +261,15 @@
  *                       name:
  *                         type: string
  *                         example: "North Zone"
+ *                       latitude:
+ *                         type: number
+ *                         example: 40.7128
+ *                       longitude:
+ *                         type: number
+ *                         example: -74.0060
+ *                       radius:
+ *                         type: number
+ *                         example: 500
  */
 
 /**
@@ -240,6 +303,15 @@
  *                       name:
  *                         type: string
  *                         example: "North Zone"
+ *                       latitude:
+ *                         type: number
+ *                         example: 40.7128
+ *                       longitude:
+ *                         type: number
+ *                         example: -74.0060
+ *                       radius:
+ *                         type: number
+ *                         example: 500
  *       404:
  *         description: No Zones found
  *         content:
