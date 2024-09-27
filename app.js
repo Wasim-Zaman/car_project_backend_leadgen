@@ -55,7 +55,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/zone', zoneRoutes);
 app.use('/api/vendor', vendorRoutes);
-app.use('/api/position', positionRoutes);
+app.use('/api/positions', positionRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res, next) => {
