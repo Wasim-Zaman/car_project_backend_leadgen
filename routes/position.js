@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const positionController = require('../controllers/positionController');
+const positionController = require('../controllers/position');
 
 // Create a new position
 router.post('/positions', positionController.createPosition);

@@ -1,4 +1,4 @@
-const Position = require('../models/positionModel');
+const Position = require('../models/position');
 
 exports.createPosition = async (req, res, next) => {
   try {
