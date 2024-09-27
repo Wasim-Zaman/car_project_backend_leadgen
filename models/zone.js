@@ -7,7 +7,7 @@ class Zone {
   static async findById(id) {
     try {
       return await prisma.zone.findUnique({
-        where: { id: id },
+        where: { id },
       });
     } catch (error) {
       console.error('Error finding Zone by id:', error);
@@ -22,6 +22,9 @@ class Zone {
       return await prisma.zone.create({
         data: {
           name: data.name,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          radius: data.radius,
         },
       });
     } catch (error) {
@@ -35,9 +38,12 @@ class Zone {
     try {
       console.log(`Updating Zone with ID ${id} and data: ${JSON.stringify(data)}`);
       return await prisma.zone.update({
-        where: { id: id },
+        where: { id },
         data: {
           name: data.name,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          radius: data.radius,
         },
       });
     } catch (error) {
@@ -51,7 +57,7 @@ class Zone {
     try {
       console.log(`Deleting Zone with ID ${id}`);
       return await prisma.zone.delete({
-        where: { id: id },
+        where: { id },
       });
     } catch (error) {
       console.error('Error deleting Zone by id:', error);

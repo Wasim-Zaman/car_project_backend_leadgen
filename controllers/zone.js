@@ -5,9 +5,14 @@ const response = require('../utils/response');
 // Create a new Zone
 exports.createZone = async (req, res, next) => {
   try {
-    const { name } = req.body;
+    const { name, latitude, longitude, radius } = req.body;
 
-    const newZone = await Zone.create({ name });
+    // Validate input
+    if (!name || !latitude || !longitude || !radius) {
+      throw new CustomError('All fields are required', 400);
+    }
+
+    const newZone = await Zone.create({ name, latitude, longitude, radius });
 
     res.status(201).json(response(201, true, 'Zone created successfully', newZone));
   } catch (error) {
@@ -35,13 +40,20 @@ exports.getZoneById = async (req, res, next) => {
 // Update a Zone by ID
 exports.updateZoneById = async (req, res, next) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { name, latitude, longitude, radius } = req.body;
 
   try {
     const updateData = {};
     if (name) updateData.name = name;
+    if (latitude) updateData.latitude = latitude;
+    if (longitude) updateData.longitude = longitude;
+    if (radius) updateData.radius = radius;
 
     const updatedZone = await Zone.updateById(id, updateData);
+
+    if (!updatedZone) {
+      throw new CustomError('Zone not found', 404);
+    }
 
     res.status(200).json(response(200, true, 'Zone updated successfully', updatedZone));
   } catch (error) {
@@ -98,7 +110,7 @@ exports.getAllZones = async (req, res, next) => {
 
     res.status(200).json(response(200, true, 'Zones retrieved successfully', zones));
   } catch (error) {
-    console.log(`Error in getZones: ${error.message}`);
+    console.log(`Error in getAllZones: ${error.message}`);
     next(error);
   }
 };

@@ -22,9 +22,14 @@ model Admin {
 }
 
 model Zone {
-  id   String    @id @default(uuid())
-  name String
+  id        String   @id @default(uuid())  // Unique identifier for the zone
+  name      String                            // Name of the zone
+  latitude  Float                             // Latitude of the zone's center
+  longitude Float                             // Longitude of the zone's center
+  radius    Float                             // Radius of the zone in meters
+  createdAt DateTime @default(now())          // Timestamp for when the zone is created
 }
+
 
 model Banner {
   id        Int      @id @default(autoincrement())
