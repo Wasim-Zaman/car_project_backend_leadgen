@@ -121,6 +121,8 @@
  *   patch:
  *     summary: Update a Zone by ID
  *     tags: [Zone]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -191,6 +193,8 @@
  *   delete:
  *     summary: Delete a Zone by ID
  *     tags: [Zone]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

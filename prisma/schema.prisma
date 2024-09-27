@@ -23,11 +23,39 @@ model Admin {
 
 model Zone {
   id        String   @id @default(uuid())  // Unique identifier for the zone
-  name      String                            // Name of the zone
-  latitude  Float                             // Latitude of the zone's center
-  longitude Float                             // Longitude of the zone's center
-  radius    Float                             // Radius of the zone in meters
-  createdAt DateTime @default(now())          // Timestamp for when the zone is created
+  name      String                         // Name of the zone
+  latitude  Float                          // Latitude of the zone's center
+  longitude Float                          // Longitude of the zone's center
+  radius    Float                          // Radius of the zone in meters
+  createdAt DateTime @default(now())       // Timestamp for when the zone is created
+  vendors   Vendor[]                       // Relation to Vendor (but we won't use this directly)
+}
+
+model Vendor {
+  id              String   @id @default(uuid())
+  firstName       String
+  lastName        String
+  phone           String   @unique
+  email           String   @unique
+  password        String
+  businessName    String?   
+  storeLogo       String?  
+  storeCover      String?  
+  address         String?   
+  moduleType      String?   
+  vatTax          String?  
+  minDeliveryTime String? 
+  maxDeliveryTime String? 
+  deliveryUnit    String?
+  businessPlan    String?
+
+
+  // Foreign key to Zone
+  zoneId          String   // Foreign key for Zone
+  zone            Zone     @relation(fields: [zoneId], references: [id]) // Relation to Zone
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 

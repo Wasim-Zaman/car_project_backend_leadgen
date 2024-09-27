@@ -1,0 +1,247 @@
+const bcrypt = require('bcryptjs');
+const Vendor = require('../models/vendor');
+const CustomError = require('../utils/error');
+const response = require('../utils/response');
+const fileHelper = require('../utils/fileUtil');
+
+// Register a new vendor with optional logo and cover image upload
+exports.registerVendor = async (req, res, next) => {
+  try {
+    const {
+      firstName,
+      lastName,
+      phone,
+      email,
+      password,
+      businessName,
+      address,
+      vatTax,
+      minDeliveryTime,
+      maxDeliveryTime,
+      deliveryUnit,
+      businessPlan,
+      moduleType,
+      zoneId,
+    } = req.body;
+
+    // Validate input fields
+    if (!firstName || !lastName || !phone || !email || !password || !zoneId) {
+      throw new CustomError('All required fields must be provided', 400);
+    }
+
+    // Check if the vendor already exists
+    const existingVendor = await Vendor.findByPhone(phone);
+    if (existingVendor) {
+      throw new CustomError('Vendor with this phone number already exists', 400);
+    }
+
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Store logo and cover files if provided
+    const storeLogo = req.files && req.files.logo ? req.files.logo[0].path : null;
+    const storeCover = req.files && req.files.cover ? req.files.cover[0].path : null;
+
+    // Create a new vendor
+    const newVendor = await Vendor.create({
+      firstName,
+      lastName,
+      phone,
+      email,
+      password: hashedPassword,
+      businessName,
+      storeLogo,
+      storeCover,
+      address,
+      vatTax,
+      minDeliveryTime,
+      maxDeliveryTime,
+      deliveryUnit,
+      businessPlan,
+      moduleType,
+      zoneId,
+    });
+
+    res.status(201).json(response(201, true, 'Vendor registered successfully', newVendor));
+  } catch (error) {
+    console.error('Error in registerVendor:', error.message);
+    // Delete uploaded files if there's an error
+    if (req.files) {
+      deleteUploadedFiles(req.files);
+    }
+    next(error);
+  }
+};
+
+// Vendor login
+exports.loginVendor = async (req, res, next) => {
+  try {
+    const { phone, password } = req.body;
+
+    // Validate input fields
+    if (!phone || !password) {
+      throw new CustomError('Phone number and password are required', 400);
+    }
+
+    // Find the vendor by phone number
+    const vendor = await Vendor.findByPhone(phone);
+    if (!vendor) {
+      throw new CustomError('Vendor not found', 404);
+    }
+
+    // Check if the password is correct
+    const isPasswordValid = await bcrypt.compare(password, vendor.password);
+    if (!isPasswordValid) {
+      throw new CustomError('Invalid password', 401);
+    }
+
+    // Respond with the vendor's details (excluding password)
+    const { password: _, ...vendorData } = vendor;
+    res.status(200).json(response(200, true, 'Login successful', vendorData));
+  } catch (error) {
+    console.error('Error in loginVendor:', error.message);
+    next(error);
+  }
+};
+
+// Update vendor details (with logo and cover image upload)
+exports.updateVendor = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const {
+      firstName,
+      lastName,
+      phone,
+      email,
+      businessName,
+      address,
+      vatTax,
+      minDeliveryTime,
+      maxDeliveryTime,
+      deliveryUnit,
+      businessPlan,
+      moduleType,
+      zoneId,
+    } = req.body;
+
+    // Find the vendor by ID
+    const vendor = await Vendor.findById(id);
+    if (!vendor) {
+      throw new CustomError('Vendor not found', 404);
+    }
+
+    // Store logo and cover files if provided
+    let storeLogo = vendor.storeLogo;
+    let storeCover = vendor.storeCover;
+
+    if (req.files) {
+      if (req.files.logo) {
+        // Delete old logo if a new one is uploaded
+        if (vendor.storeLogo) {
+          await fileHelper.deleteFile(vendor.storeLogo);
+        }
+        storeLogo = req.files.logo[0].path;
+      }
+
+      if (req.files.cover) {
+        // Delete old cover if a new one is uploaded
+        if (vendor.storeCover) {
+          await fileHelper.deleteFile(vendor.storeCover);
+        }
+        storeCover = req.files.cover[0].path;
+      }
+    }
+
+    // Update vendor details
+    const updatedVendor = await Vendor.updateById(id, {
+      firstName,
+      lastName,
+      phone,
+      email,
+      businessName,
+      storeLogo,
+      storeCover,
+      address,
+      vatTax,
+      minDeliveryTime,
+      maxDeliveryTime,
+      deliveryUnit,
+      businessPlan,
+      moduleType,
+      zoneId,
+    });
+
+    res.status(200).json(response(200, true, 'Vendor updated successfully', updatedVendor));
+  } catch (error) {
+    console.error('Error in updateVendor:', error.message);
+    // Delete uploaded files if there's an error
+    if (req.files) {
+      deleteUploadedFiles(req.files);
+    }
+    next(error);
+  }
+};
+
+// Get all vendors (Admin only)
+exports.getVendors = async (req, res, next) => {
+  try {
+    const vendors = await Vendor.getAll();
+    res.status(200).json(response(200, true, 'Vendors retrieved successfully', vendors));
+  } catch (error) {
+    console.error('Error in getVendors:', error.message);
+    next(error);
+  }
+};
+
+// Get a single vendor by ID
+exports.getVendorById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const vendor = await Vendor.findById(id);
+    if (!vendor) {
+      throw new CustomError('Vendor not found', 404);
+    }
+    res.status(200).json(response(200, true, 'Vendor retrieved successfully', vendor));
+  } catch (error) {
+    console.error('Error in getVendorById:', error.message);
+    next(error);
+  }
+};
+
+// Delete a vendor by ID (Admin only)
+exports.deleteVendor = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    // Find the vendor by ID
+    const vendor = await Vendor.findById(id);
+    if (!vendor) {
+      throw new CustomError('Vendor not found', 404);
+    }
+
+    // Delete logo and cover files if they exist
+    if (vendor.storeLogo) {
+      await fileHelper.deleteFile(vendor.storeLogo);
+    }
+    if (vendor.storeCover) {
+      await fileHelper.deleteFile(vendor.storeCover);
+    }
+
+    await Vendor.deleteById(id);
+
+    res.status(200).json(response(200, true, 'Vendor deleted successfully'));
+  } catch (error) {
+    console.error('Error in deleteVendor:', error.message);
+    next(error);
+  }
+};
+
+// Helper function to delete uploaded files if there's an error
+function deleteUploadedFiles(files) {
+  if (files.logo) {
+    fileHelper.deleteFile(files.logo[0].path);
+  }
+  if (files.cover) {
+    fileHelper.deleteFile(files.cover[0].path);
+  }
+}
