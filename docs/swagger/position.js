@@ -156,6 +156,45 @@
 
 /**
  * @swagger
+ * /api/position/v1/positions/all:
+ *   get:
+ *     summary: Get all Positions without pagination
+ *     tags: [Position]
+ *     responses:
+ *       200:
+ *         description: All Positions retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: All Positions retrieved successfully
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         example: "12345"
+ *                       index:
+ *                         type: integer
+ *                         example: 1
+ *                       amount:
+ *                         type: number
+ *                         example: 150.50
+ *                       tax:
+ *                         type: number
+ *                         example: 15.5
+ */
+
+/**
+ * @swagger
  * /api/position/v1/positions/{id}:
  *   put:
  *     summary: Update a Position by ID
@@ -248,43 +287,4 @@
  *                 message:
  *                   type: string
  *                   example: Position deleted successfully
- */
-
-/**
- * @swagger
- * /api/position/v1/positions:
- *   get:
- *     summary: Get all Positions
- *     tags: [Position]
- *     responses:
- *       200:
- *         description: Positions retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Positions retrieved successfully
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                         example: "12345"
- *                       index:
- *                         type: integer
- *                         example: 1
- *                       amount:
- *                         type: number
- *                         example: 150.50
- *                       tax:
- *                         type: number
- *                         example: 15.5
  */

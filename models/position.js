@@ -32,7 +32,7 @@ class Position {
   }
 
   // Get all positions (with optional pagination)
-  static async getAllPositions(page = 1, limit = 10) {
+  static async getPositions(page = 1, limit = 10) {
     try {
       const skip = (page - 1) * limit;
       const positions = await prisma.position.findMany({
@@ -50,6 +50,17 @@ class Position {
           totalItems: total,
         },
       };
+    } catch (error) {
+      console.error('Error fetching positions:', error);
+      throw new Error('Could not fetch positions');
+    }
+  }
+
+  // Get All positions
+  static async getAllPositions() {
+    try {
+      const positions = await prisma.position.findMany();
+      return positions;
     } catch (error) {
       console.error('Error fetching positions:', error);
       throw new Error('Could not fetch positions');
