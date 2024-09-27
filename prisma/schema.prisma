@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -22,14 +16,14 @@ model Admin {
 }
 
 model Zone {
-  id        String   @id @default(uuid())  // Unique identifier for the zone
-  name      String                         // Name of the zone
-  latitude  Float                          // Latitude of the zone's center
-  longitude Float                          // Longitude of the zone's center
-  radius    Float                          // Radius of the zone in meters
-  createdAt DateTime @default(now())       // Timestamp for when the zone is created
-  vendors   Vendor[]                       // Relation to Vendor (but we won't use this directly)
+  id             String          @id @default(uuid())
+  name           String
+  latitude       Float
+  longitude      Float
+  radius         Float
+  createdAt      DateTime        @default(now())
   advertisements Advertisement[]
+  vendors        Vendor[]
 }
 
 model Vendor {
@@ -39,58 +33,51 @@ model Vendor {
   phone           String   @unique
   email           String   @unique
   password        String
-  businessName    String?   
-  storeLogo       String?  
-  storeCover      String?  
-  address         String?   
-  moduleType      String?   
-  vatTax          String?  
-  minDeliveryTime String? 
-  maxDeliveryTime String? 
-  deliveryUnit    String?
-  businessPlan    String?
-
-
-  // Foreign key to Zone
-  zoneId          String   // Foreign key for Zone
-  zone            Zone     @relation(fields: [zoneId], references: [id]) // Relation to Zone
-  
+  storeLogo       String?
+  storeCover      String?
+  address         String?
+  moduleType      String?
+  vatTax          String?
+  zoneId          String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  businessPlan    String?
+  deliveryUnit    String?
+  maxDeliveryTime String?
+  minDeliveryTime String?
+  businessName    String?
+  zone            Zone     @relation(fields: [zoneId], references: [id])
+
+  @@index([zoneId], map: "Vendor_zoneId_fkey")
 }
 
 model Position {
-  id      String  @id @default(uuid())
-  index   Int
-  amount  Float
-  tax     Float
+  id             String          @id @default(uuid())
+  index          Int
+  amount         Float
+  tax            Float
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   advertisements Advertisement[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Advertisement {
-  id                String   @id @default(uuid())    // Unique identifier for the advertisement
-  campaignName      String                            // Name of the campaign
-  moduleType        String                            // Type of the module (e.g., Home Banner, Side Banner)
-  image             String                            // URL or path to the advertisement image
-  publishDate       DateTime                          // Date and time when the advertisement is published
-  unpublishDate     DateTime                          // Date and time when the advertisement is unpublished
-  
-  // Foreign keys and relationships
-  positionId        String                            // Foreign key for Position
-  position          Position  @relation(fields: [positionId], references: [id]) // Relation to Position model
-  
-  zoneId            String                            // Foreign key for Zone
-  zone              Zone      @relation(fields: [zoneId], references: [id])     // Relation to Zone model
+  id            String   @id @default(uuid())
+  campaignName  String
+  moduleType    String
+  image         String
+  publishDate   DateTime
+  unpublishDate DateTime
+  positionId    String
+  zoneId        String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  position      Position @relation(fields: [positionId], references: [id])
+  zone          Zone     @relation(fields: [zoneId], references: [id])
 
-  createdAt         DateTime  @default(now())          // Timestamp for when the advertisement is created
-  updatedAt         DateTime  @updatedAt              // Timestamp for when the advertisement is last updated
+  @@index([positionId], map: "Advertisement_positionId_fkey")
+  @@index([zoneId], map: "Advertisement_zoneId_fkey")
 }
-
-
-
 
 model Banner {
   id        Int      @id @default(autoincrement())
@@ -102,12 +89,11 @@ model Banner {
 
 model City {
   id        Int      @id @default(autoincrement())
-  name     String?
+  name      String?
   status    Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  cars      Car[]    // This will create a relation to the Car model
+  cars      Car[]
 }
 
 model Brand {
@@ -117,20 +103,18 @@ model Brand {
   status    Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  cars      Car[]    // This will create a relation to the Car model
+  cars      Car[]
 }
 
 model CarType {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   title     String?
   image     String?
   status    Int?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  cars      Car[]    // This will create a relation to the Car model
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cars      Car[]
 }
-
 
 model FAQ {
   id        Int      @id @default(autoincrement())
@@ -148,70 +132,62 @@ model Facility {
   status    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Minimal opposite field required by Prisma
-  cars Car[] @relation("CarFacilities")
+  cars      Car[]    @relation("CarFacilities")
 }
 
 model Coupon {
-  id                   Int      @id @default(autoincrement())
-  image                String?  // This is optional, to store the file path or URL of the coupon image
-  expiryDate           DateTime // The expiry date of the coupon
-  code                 String   // The coupon code
-  title                String   // The title of the coupon
-  subtitle             String?  // The subtitle of the coupon, optional
-  status               Int   // The status of the coupon
-  minOrderAmount       Float?   // The minimum order amount for the coupon to be applicable, optional
-  value                Float    // The value/discount of the coupon
-  description          String?  // The description of the coupon, optional
-
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id             Int      @id @default(autoincrement())
+  image          String?
+  expiryDate     DateTime
+  code           String
+  title          String
+  subtitle       String?
+  status         Int
+  minOrderAmount Float?
+  value          Float
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model Car {
-  id                     Int     @id @default(autoincrement())
-  name                   String
-  number                 String
+  id                     Int        @id @default(autoincrement())
   image                  String
   status                 Int
-  rating                 Float?
-  totalSeat              Int?
-  hasAC                  Boolean
-  driverName             String?
-  driverMobile           String?
-  gearSystem             String?
-  rentPriceWithoutDriver Float?
-  rentPriceWithDriver    Float?
-  engineHP               Float?
-  priceType              String?
-  fuelType               String?
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
+  brandId                Int
+  carTypeId              Int
+  cityId                 Int
   description            String?
-  pickupAddress          String?
+  driverMobile           String?
+  driverName             String?
+  engineHP               Float?
+  fuelType               String?
+  gearSystem             String?
+  hasAC                  Boolean
   latitude               Float?
   longitude              Float?
-  totalDrivenKM          Float?
   minimumHoursRequired   Int?
+  name                   String
+  number                 String
+  pickupAddress          String?
+  priceType              String?
+  rating                 Float?
+  rentPriceWithDriver    Float?
+  rentPriceWithoutDriver Float?
+  totalDrivenKM          Float?
+  totalSeat              Int?
   carOwner               String?
+  bookings               Booking[]  @relation("CarToBooking")
+  brand                  Brand      @relation(fields: [brandId], references: [id])
+  carType                CarType    @relation(fields: [carTypeId], references: [id])
+  city                   City       @relation(fields: [cityId], references: [id])
+  facilities             Facility[] @relation("CarFacilities")
 
-  carTypeId Int
-  brandId   Int
-  cityId    Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  carType    CarType    @relation(fields: [carTypeId], references: [id])
-  brand      Brand      @relation(fields: [brandId], references: [id])
-  city       City       @relation(fields: [cityId], references: [id])
-  facilities Facility[] @relation("CarFacilities")
-
-  bookings   Booking[]  @relation("CarToBooking")
-
-
-  @@index([carTypeId], name: "carTypeId")
-  @@index([brandId], name: "brandId")
-  @@index([cityId], name: "cityId")
+  @@index([carTypeId], map: "carTypeId")
+  @@index([brandId], map: "brandId")
+  @@index([cityId], map: "cityId")
 }
 
 model Gallery {
@@ -219,10 +195,9 @@ model Gallery {
   image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  carId     Int      // Foreign key to Car
+  carId     Int
 
-  // No @relation attribute needed here
-  @@map("gallery")  // Optional: Use if the actual table name differs
+  @@map("gallery")
 }
 
 model Page {
@@ -235,79 +210,76 @@ model Page {
 }
 
 model Booking {
-  id             Int      @id @default(autoincrement())
-  carId          Int
-  customerId     Int
-  pickupDate     DateTime
-  pickupTime     String
-  dropDate       DateTime
-  dropTime       String
-  pickupOTP      String
-  status         Int   
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  carId      Int
+  customerId Int
+  pickupDate DateTime
+  pickupTime String
+  dropDate   DateTime
+  dropTime   String
+  pickupOTP  String
+  status     Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  car        Car      @relation("CarToBooking", fields: [carId], references: [id])
+  customer   Customer @relation(fields: [customerId], references: [id])
 
-  // Explicit relation name matching the minimal reciprocal relation in Car
-  car            Car      @relation(fields: [carId], references: [id], name: "CarToBooking")
-  customer       Customer @relation(fields: [customerId], references: [id])
-
-  @@index([carId], name: "carId")
-  @@index([customerId], name: "customerId")
+  @@index([carId], map: "carId")
+  @@index([customerId], map: "customerId")
 }
 
 model Customer {
-  id        Int      @id @default(autoincrement())
-  name      String
-  mobile    String
-  bookings  Booking[]
+  id       Int       @id @default(autoincrement())
+  name     String
+  mobile   String
+  bookings Booking[]
 }
 
 model User {
-  id            String   @id @default(cuid())
-  name          String
-  email         String   @unique
-  mobile        String   @unique
-  status        Int  @default(1)
-  gender        String?
-  password      String
-  referralCode  String? 
-  image         String?
-  age           Int?
-  lat           Float?
-  long          Float?
-  address       String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  mobile       String   @unique
+  status       Int      @default(1)
+  gender       String?
+  password     String
+  referralCode String?
+  image        String?
+  age          Int?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  lat          Float?
+  long         Float?
+  address      String?
 }
 
 model OTP {
-  id          String   @id @default(cuid())
-  otp         String
-  mobile      String   @unique
-  createdAt   DateTime @default(now())
-  expiresAt   DateTime
+  id        String   @id @default(cuid())
+  otp       String
+  mobile    String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
 }
 
 model News {
-    id          String      @id @default(cuid())
-    title       String?
-    description String?
-    media       String?
-    status      Int         @default(1)
-    thumbnail   String?
-    newsViews   NewsView[]
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
+  id          String     @id @default(cuid())
+  title       String?
+  description String?
+  media       String?
+  status      Int        @default(1)
+  thumbnail   String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  newsViews   NewsView[]
 }
 
 model NewsView {
-    id        String   @id @default(cuid())
-    userId    String
-    newsId    String
-    news      News     @relation(fields: [newsId], references: [id])
-    createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  newsId    String
+  createdAt DateTime @default(now())
+  news      News     @relation(fields: [newsId], references: [id])
 
-    @@unique([userId, newsId]) // Ensure a user can only view a news item once
+  @@unique([userId, newsId])
+  @@index([newsId], map: "NewsView_newsId_fkey")
 }
-
-
