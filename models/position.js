@@ -2,6 +2,21 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 class Position {
+  // Get a position by ID (this is the missing method you need)
+  static async findById(id) {
+    try {
+      const position = await prisma.position.findUnique({
+        where: { id },
+      });
+      if (!position) {
+        throw new Error('Position not found');
+      }
+      return position;
+    } catch (error) {
+      console.error('Error fetching position by ID:', error);
+      throw new Error('Could not fetch position');
+    }
+  }
   // Create a new position
   static async createPosition(data) {
     try {

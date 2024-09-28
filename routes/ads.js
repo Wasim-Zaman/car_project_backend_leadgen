@@ -1,7 +1,9 @@
 const express = require('express');
-const router = express.Router();
+
 const advertisementController = require('../controllers/ads');
-const { uploadSingle } = require('../utils/multermate');
+const { uploadSingle } = require('multermate');
+
+const router = express.Router();
 
 // Create an advertisement with an image upload
 router.post(
@@ -11,10 +13,7 @@ router.post(
 );
 
 // Get all advertisements with pagination
-router.get('/v1/advertisements', advertisementController.getAdvertisements);
-
-// Get an advertisement by ID
-router.get('/v1/advertisements/:id', advertisementController.getAdvertisementById);
+router.get('/v1/advertisements', advertisementController.getAllAdvertisements);
 
 // Update an advertisement with an image upload
 router.put(

@@ -109,22 +109,9 @@ class Advertisement {
   // Get all advertisements with pagination
   static async getAll(page, limit) {
     try {
-      const ads = await prisma.advertisement.findMany({
-        skip: (page - 1) * limit,
-        take: limit,
-      });
+      const ads = await prisma.advertisement.findMany();
 
-      const totalAds = await prisma.advertisement.count(); // For pagination
-
-      return {
-        data: ads,
-        pagination: {
-          total: totalAds,
-          currentPage: page,
-          pageSize: limit,
-          totalPages: Math.ceil(totalAds / limit),
-        },
-      };
+      return ads;
     } catch (error) {
       console.error('Error fetching advertisements:', error);
       throw new Error('Could not fetch advertisements');

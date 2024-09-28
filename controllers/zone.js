@@ -104,7 +104,7 @@ exports.getAllZones = async (req, res, next) => {
   try {
     const zones = await Zone.getAll();
 
-    if (!zones.data.length) {
+    if (!zones.length) {
       throw new CustomError('No Zones found', 404);
     }
 
