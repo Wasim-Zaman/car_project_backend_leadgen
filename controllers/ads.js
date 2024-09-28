@@ -1,5 +1,6 @@
 const moment = require('moment');
 
+const { scheduleAdDeletion, stopAdDeletion } = require('../config/schedular');
 const Advertisement = require('../models/ads');
 const Position = require('../models/position');
 const Zone = require('../models/zone');
@@ -12,7 +13,6 @@ exports.getAllAdvertisements = async (req, res, next) => {
   try {
     // Fetch advertisements with pagination
     const ads = await Advertisement.getAll();
-
     res.status(200).json(response(200, true, 'Advertisements retrieved successfully', ads));
   } catch (error) {
     console.error('Error in getAdvertisements:', error.message);
@@ -67,6 +67,9 @@ exports.createAdvertisement = async (req, res, next) => {
       positionId,
       zoneId,
     });
+
+    // Schedule automatic deletion based on unpublishDate
+    scheduleAdDeletion(newAd); // Schedule ad deletion when its unpublishDate is reached
 
     res.status(201).json(response(201, true, 'Advertisement created successfully', newAd));
   } catch (error) {
@@ -132,6 +135,10 @@ exports.updateAdvertisement = async (req, res, next) => {
       zoneId,
     });
 
+    // Stop any previously scheduled deletion and schedule a new one
+    stopAdDeletion(id); // Stop old scheduled deletion
+    scheduleAdDeletion(updatedAd); // Schedule new deletion for updated ad
+
     res.status(200).json(response(200, true, 'Advertisement updated successfully', updatedAd));
   } catch (error) {
     console.error('Error in updateAdvertisement:', error.message);
@@ -175,6 +182,9 @@ exports.deleteAdvertisement = async (req, res, next) => {
     }
 
     await Advertisement.deleteById(id);
+
+    // Stop any scheduled deletion
+    stopAdDeletion(id);
 
     res.status(200).json(response(200, true, 'Advertisement deleted successfully'));
   } catch (error) {

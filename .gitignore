@@ -4,3 +4,6 @@
 /images/
 /prisma/migrations/
 /serviceAccountKey.json
+
+# Images
+uploads/
