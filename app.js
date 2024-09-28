@@ -7,7 +7,6 @@ const cors = require('cors');
 require('dotenv').config();
 
 const CustomError = require('./utils/error');
-require('./config/cron-job');
 
 // * ADMIN SECTION
 const swaggerSpec = require('./config/swagger');

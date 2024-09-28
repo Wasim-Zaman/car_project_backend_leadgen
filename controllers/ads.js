@@ -1,10 +1,13 @@
+const moment = require('moment');
+
 const Advertisement = require('../models/ads');
+const Position = require('../models/position');
+const Zone = require('../models/zone');
 const CustomError = require('../utils/error');
 const response = require('../utils/response');
 const fileHelper = require('../utils/file');
-const moment = require('moment'); // For handling date comparison
 
-// Create an advertisement with image upload
+// Create an advertisement with image upload and relationships with Position and Zone
 exports.createAdvertisement = async (req, res, next) => {
   try {
     const { campaignName, moduleType, publishDate, unpublishDate, positionId, zoneId } = req.body;
@@ -18,15 +21,28 @@ exports.createAdvertisement = async (req, res, next) => {
       throw new CustomError('All required fields must be provided', 400);
     }
 
-    // Check if another advertisement exists in the same position and module and hasn't expired
+    // Ensure position and zone exist
+    const position = await Position.findById(positionId);
+    if (!position) {
+      if (req.file) await fileHelper.deleteFile(req.file.path);
+      throw new CustomError('Position not found', 404);
+    }
+
+    const zone = await Zone.findById(zoneId);
+    if (!zone) {
+      if (req.file) await fileHelper.deleteFile(req.file.path);
+      throw new CustomError('Zone not found', 404);
+    }
+
+    // Check if another active advertisement exists in the same position and module
     const existingAd = await Advertisement.findActiveAdByPositionAndModule(positionId, moduleType);
     if (existingAd) {
-      // If there's an existing ad, delete uploaded image (if exists)
+      // If there's an active ad, delete uploaded image (if exists)
       if (req.file) {
         await fileHelper.deleteFile(req.file.path);
       }
       throw new CustomError(
-        `An active advertisement already exists at position ${existingAd.positionId} in module ${existingAd.moduleType}.`,
+        `An active advertisement already exists at position ${positionId} in module ${moduleType}.`,
         400
       );
     }
@@ -56,39 +72,7 @@ exports.createAdvertisement = async (req, res, next) => {
   }
 };
 
-// Get a single advertisement by ID
-exports.getAdvertisementById = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const ad = await Advertisement.findById(id);
-
-    if (!ad) {
-      throw new CustomError('Advertisement not found', 404);
-    }
-
-    res.status(200).json(response(200, true, 'Advertisement retrieved successfully', ad));
-  } catch (error) {
-    console.error('Error in getAdvertisementById:', error.message);
-    next(error);
-  }
-};
-
-// Get all advertisements with pagination
-exports.getAdvertisements = async (req, res, next) => {
-  try {
-    const { page = 1, limit = 10 } = req.query;
-    const ads = await Advertisement.getAll(Number(page), Number(limit));
-
-    res
-      .status(200)
-      .json(response(200, true, 'Advertisements retrieved successfully', ads.data, { pagination: ads.pagination }));
-  } catch (error) {
-    console.error('Error in getAdvertisements:', error.message);
-    next(error);
-  }
-};
-
-// Update an advertisement with image upload
+// Update an advertisement
 exports.updateAdvertisement = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -97,37 +81,43 @@ exports.updateAdvertisement = async (req, res, next) => {
     // Find the advertisement by ID
     const ad = await Advertisement.findById(id);
     if (!ad) {
-      if (req.file) {
-        // If advertisement is not found, delete uploaded image (if exists)
-        await fileHelper.deleteFile(req.file.path);
-      }
+      if (req.file) await fileHelper.deleteFile(req.file.path);
       throw new CustomError('Advertisement not found', 404);
     }
 
-    // Check if another advertisement exists in the same position and module (except the current ad)
+    // Ensure the position and zone exist
+    const position = await Position.findById(positionId);
+    if (!position) {
+      if (req.file) await fileHelper.deleteFile(req.file.path);
+      throw new CustomError('Position not found', 404);
+    }
+
+    const zone = await Zone.findById(zoneId);
+    if (!zone) {
+      if (req.file) await fileHelper.deleteFile(req.file.path);
+      throw new CustomError('Zone not found', 404);
+    }
+
+    // Check if another active advertisement exists in the same position and module
     const existingAd = await Advertisement.findActiveAdByPositionAndModule(positionId, moduleType);
     if (existingAd && existingAd.id !== id) {
-      // If an existing ad is found, delete the newly uploaded image (if exists)
-      if (req.file) {
-        await fileHelper.deleteFile(req.file.path);
-      }
+      if (req.file) await fileHelper.deleteFile(req.file.path);
       throw new CustomError(
-        `An active advertisement already exists at position ${existingAd.positionId} in module ${existingAd.moduleType}.`,
+        `An active advertisement already exists at position ${positionId} in module ${moduleType}.`,
         400
       );
     }
 
-    // Handle the image upload: if a new image is uploaded, delete the old one
+    // Handle the image upload
     let image = ad.image;
     if (req.file) {
       if (ad.image) {
-        // Delete the previous image file if it exists
-        await fileHelper.deleteFile(ad.image);
+        await fileHelper.deleteFile(ad.image); // Delete the old image
       }
-      image = req.file.path; // Store the new image path
+      image = req.file.path; // Store the new image
     }
 
-    // Update advertisement details
+    // Update the advertisement
     const updatedAd = await Advertisement.updateById(id, {
       campaignName,
       moduleType,
@@ -141,7 +131,7 @@ exports.updateAdvertisement = async (req, res, next) => {
     res.status(200).json(response(200, true, 'Advertisement updated successfully', updatedAd));
   } catch (error) {
     console.error('Error in updateAdvertisement:', error.message);
-    // If an error occurs and an image was uploaded, delete the image
+    // If an error occurs, ensure the uploaded image is deleted
     if (req.file) {
       await fileHelper.deleteFile(req.file.path);
     }
@@ -149,43 +139,17 @@ exports.updateAdvertisement = async (req, res, next) => {
   }
 };
 
-// Delete an advertisement by ID
-exports.deleteAdvertisement = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-
-    // Find the advertisement by ID
-    const ad = await Advertisement.findById(id);
-    if (!ad) {
-      throw new CustomError('Advertisement not found', 404);
-    }
-
-    // Delete the image file if it exists
-    if (ad.image) {
-      await fileHelper.deleteFile(ad.image);
-    }
-
-    await Advertisement.deleteById(id);
-    res.status(200).json(response(200, true, 'Advertisement deleted successfully'));
-  } catch (error) {
-    console.error('Error in deleteAdvertisement:', error.message);
-    next(error);
-  }
-};
-
-// Function to automatically delete expired advertisements
+// Automatically delete expired advertisements based on publish and unpublish dates
 exports.deleteExpiredAdvertisements = async () => {
   try {
-    const now = moment().toDate(); // Get the current date and time
+    const now = moment().toDate(); // Get the current date
     const expiredAds = await Advertisement.findExpiredAdvertisements(now);
 
     for (const ad of expiredAds) {
-      // Delete the image if it exists
       if (ad.image) {
-        await fileHelper.deleteFile(ad.image);
+        await fileHelper.deleteFile(ad.image); // Delete the image file
       }
-      // Delete the advertisement from the database
-      await Advertisement.deleteById(ad.id);
+      await Advertisement.deleteById(ad.id); // Delete the advertisement from the database
       console.log(`Deleted expired advertisement: ${ad.id}`);
     }
   } catch (error) {

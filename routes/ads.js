@@ -26,4 +26,7 @@ router.put(
 // Delete an advertisement by ID
 router.delete('/v1/advertisements/:id', advertisementController.deleteAdvertisement);
 
+// Automatically delete expired advertisements (this can be scheduled as a cron job)
+router.delete('/v1/advertisements/expired', advertisementController.deleteExpiredAdvertisements);
+
 module.exports = router;
