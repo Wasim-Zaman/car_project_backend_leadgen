@@ -1,5 +1,6 @@
 const express = require('express');
 const { uploadSingle, uploadMultiple } = require('multermate');
+
 const controller = require('../controllers/vendor');
 const isAuth = require('../middleware/is-auth');
 const isAdmin = require('../middleware/is-admin-auth');

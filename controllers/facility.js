@@ -1,7 +1,7 @@
 const Facility = require('../models/facility');
 const CustomError = require('../utils/error');
 const generateResponse = require('../utils/response');
-const fileHelper = require('../utils/fileUtil');
+const fileHelper = require('../utils/file');
 
 exports.getFacilities = async (req, res, next) => {
   const page = req.query.page ? parseInt(req.query.page, 10) : 1;

@@ -2,7 +2,7 @@ const News = require('../models/news');
 const NewsView = require('../models/newsView');
 const CustomError = require('../utils/error');
 const response = require('../utils/response');
-const fileHelper = require('../utils/fileUtil');
+const fileHelper = require('../utils/file');
 
 // Get paginated list of News
 exports.getNews = async (req, res, next) => {

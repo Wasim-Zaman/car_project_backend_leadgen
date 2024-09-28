@@ -1,8 +1,9 @@
-const bcrypt = require('bcryptjs');
 const Vendor = require('../models/vendor');
 const CustomError = require('../utils/error');
 const response = require('../utils/response');
-const fileHelper = require('../utils/fileUtil');
+const fileHelper = require('../utils/file');
+const Bcrypt = require('../utils/bcrypt');
+const JWT = require('../utils/jwt');
 
 // Register a new vendor with optional logo and cover image upload
 exports.registerVendor = async (req, res, next) => {
@@ -36,7 +37,7 @@ exports.registerVendor = async (req, res, next) => {
     }
 
     // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await Bcrypt.createPassword(password);
 
     // Store logo and cover files if provided
     const storeLogo = req.files && req.files.logo ? req.files.logo[0].path : null;
@@ -78,7 +79,6 @@ exports.loginVendor = async (req, res, next) => {
   try {
     const { phone, password } = req.body;
 
-    // Validate input fields
     if (!phone || !password) {
       throw new CustomError('Phone number and password are required', 400);
     }
@@ -90,14 +90,23 @@ exports.loginVendor = async (req, res, next) => {
     }
 
     // Check if the password is correct
-    const isPasswordValid = await bcrypt.compare(password, vendor.password);
+    const isPasswordValid = await Bcrypt.comparePassword(password, vendor.password);
     if (!isPasswordValid) {
       throw new CustomError('Invalid password', 401);
     }
 
-    // Respond with the vendor's details (excluding password)
+    // Generate JWT token
+    const token = JWT.createToken({ id: vendor.id, phone: vendor.phone });
+
+    // Exclude password from the response
     const { password: _, ...vendorData } = vendor;
-    res.status(200).json(response(200, true, 'Login successful', vendorData));
+
+    res.status(200).json(
+      response(200, true, 'Login successful', {
+        vendor: vendorData,
+        token,
+      })
+    );
   } catch (error) {
     console.error('Error in loginVendor:', error.message);
     next(error);

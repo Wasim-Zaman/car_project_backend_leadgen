@@ -7,8 +7,8 @@ const { sendSMS } = require('../config/twilio');
 const response = require('../utils/response');
 const CustomError = require('../utils/error');
 const Bcrypt = require('../utils/bcrypt');
-const jwtUtil = require('../utils/jwtUtil');
-const fileHelper = require('../utils/fileUtil');
+const jwtUtil = require('../utils/jwt');
+const fileHelper = require('../utils/file');
 
 // Define Joi validation schema
 const userRegistrationSchema = Joi.object({
