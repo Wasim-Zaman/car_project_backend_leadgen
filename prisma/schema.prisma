@@ -287,7 +287,27 @@ model NewsView {
 
 
 model Tax {
-    id          String  @id @default(uuid())
-    type        String? @unique
-    tax         Float? 
+    id                  String  @id @default(uuid())
+    type                String? @unique
+    tax                 Float? 
+    createdAt           DateTime? @default(now())
+    updatedAt           DateTime? @updatedAt
+}
+
+model Service {
+  id                String   @id @default(uuid())
+  serviceName       String
+  serviceType       String
+  serviceImages     Json     // Stores multiple images as a JSON array
+  serviceDescription String?
+  includingServices Json     // Stores the list of included services as a JSON array
+  excludingServices Json     // Stores the list of excluded services as a JSON array
+  termsAndConditions String?
+  servicePrice      Float
+
+  // Add vendorId to link each service with a vendor
+  vendorId          String   // Foreign key to link with Vendor
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
