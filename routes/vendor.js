@@ -11,8 +11,8 @@ router.post(
   '/v1/vendors/register',
   uploadMultiple({
     fields: [
-      { name: 'logo', maxCount: 1 },
-      { name: 'cover', maxCount: 1 },
+      { name: 'storeLogo', maxCount: 1 },
+      { name: 'storeCover', maxCount: 1 },
     ],
   }),
   controller.registerVendor

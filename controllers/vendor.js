@@ -16,8 +16,8 @@ const registerVendorSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
   businessName: Joi.string().optional(),
-  storeLogo: Joi.any().optional(), // For file uploads
-  storeCover: Joi.any().optional(), // For file uploads
+  storeLogo: Joi.any().optional(),
+  storeCover: Joi.any().optional(),
   address: Joi.string().optional(),
   moduleType: Joi.string().optional(),
   vatTax: Joi.string().optional(),
@@ -41,8 +41,8 @@ const updateVendorSchema = Joi.object({
   phone: Joi.string().optional(),
   email: Joi.string().email().optional(),
   businessName: Joi.string().optional(),
-  storeLogo: Joi.any().optional(), // For file uploads
-  storeCover: Joi.any().optional(), // For file uploads
+  storeLogo: Joi.any().optional(),
+  storeCover: Joi.any().optional(),
   address: Joi.string().optional(),
   moduleType: Joi.string().optional(),
   vatTax: Joi.string().optional(),
@@ -90,8 +90,8 @@ exports.registerVendor = async (req, res, next) => {
     const hashedPassword = await Bcrypt.createPassword(password);
 
     // Store logo and cover files if provided
-    const storeLogo = req.files && req.files.logo ? req.files.logo[0].path : null;
-    const storeCover = req.files && req.files.cover ? req.files.cover[0].path : null;
+    const storeLogo = req.files && req.files.storeLogo ? req.files.storeLogo[0].path : null;
+    const storeCover = req.files && req.files.storeCover ? req.files.storeCover[0].path : null;
 
     // Create a new vendor
     const newVendor = await Vendor.create({
