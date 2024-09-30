@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const Vendor = require('../models/vendor');
 const CustomError = require('../utils/error');
 const response = require('../utils/response');
@@ -5,9 +6,63 @@ const fileHelper = require('../utils/file');
 const Bcrypt = require('../utils/bcrypt');
 const JWT = require('../utils/jwt');
 
+// Validation Schemas
+
+// Schema for registering a vendor
+const registerVendorSchema = Joi.object({
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  phone: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+  businessName: Joi.string().optional(),
+  storeLogo: Joi.any().optional(), // For file uploads
+  storeCover: Joi.any().optional(), // For file uploads
+  address: Joi.string().optional(),
+  moduleType: Joi.string().optional(),
+  vatTax: Joi.string().optional(),
+  zoneId: Joi.string().required(),
+  businessPlan: Joi.string().optional(),
+  deliveryUnit: Joi.string().optional(),
+  maxDeliveryTime: Joi.string().optional(),
+  minDeliveryTime: Joi.string().optional(),
+});
+
+// Schema for vendor login
+const loginVendorSchema = Joi.object({
+  phone: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
+// Schema for updating a vendor
+const updateVendorSchema = Joi.object({
+  firstName: Joi.string().optional(),
+  lastName: Joi.string().optional(),
+  phone: Joi.string().optional(),
+  email: Joi.string().email().optional(),
+  businessName: Joi.string().optional(),
+  storeLogo: Joi.any().optional(), // For file uploads
+  storeCover: Joi.any().optional(), // For file uploads
+  address: Joi.string().optional(),
+  moduleType: Joi.string().optional(),
+  vatTax: Joi.string().optional(),
+  zoneId: Joi.string().optional(),
+  businessPlan: Joi.string().optional(),
+  deliveryUnit: Joi.string().optional(),
+  maxDeliveryTime: Joi.string().optional(),
+  minDeliveryTime: Joi.string().optional(),
+});
+
 // Register a new vendor with optional logo and cover image upload
 exports.registerVendor = async (req, res, next) => {
   try {
+    // Validate input using Joi
+    const { error, value } = registerVendorSchema.validate(req.body);
+
+    if (error) {
+      throw new CustomError(error.details[0].message, 400);
+    }
+
     const {
       firstName,
       lastName,
@@ -23,12 +78,7 @@ exports.registerVendor = async (req, res, next) => {
       businessPlan,
       moduleType,
       zoneId,
-    } = req.body;
-
-    // Validate input fields
-    if (!firstName || !lastName || !phone || !email || !password || !zoneId) {
-      throw new CustomError('All required fields must be provided', 400);
-    }
+    } = value;
 
     // Check if the vendor already exists
     const existingVendor = await Vendor.findByPhone(phone);
@@ -77,11 +127,14 @@ exports.registerVendor = async (req, res, next) => {
 // Vendor login
 exports.loginVendor = async (req, res, next) => {
   try {
-    const { phone, password } = req.body;
+    // Validate input using Joi
+    const { error, value } = loginVendorSchema.validate(req.body);
 
-    if (!phone || !password) {
-      throw new CustomError('Phone number and password are required', 400);
+    if (error) {
+      throw new CustomError(error.details[0].message, 400);
     }
+
+    const { phone, password } = value;
 
     // Find the vendor by phone number
     const vendor = await Vendor.findByPhone(phone);
@@ -116,6 +169,13 @@ exports.loginVendor = async (req, res, next) => {
 // Update vendor details (with logo and cover image upload)
 exports.updateVendor = async (req, res, next) => {
   try {
+    // Validate input using Joi
+    const { error, value } = updateVendorSchema.validate(req.body);
+
+    if (error) {
+      throw new CustomError(error.details[0].message, 400);
+    }
+
     const { id } = req.params;
     const {
       firstName,
@@ -131,7 +191,7 @@ exports.updateVendor = async (req, res, next) => {
       businessPlan,
       moduleType,
       zoneId,
-    } = req.body;
+    } = value;
 
     // Find the vendor by ID
     const vendor = await Vendor.findById(id);
