@@ -1,11 +1,31 @@
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *       description: |
+ *         Enter your **Bearer token** to authorize. Example: `Bearer your_token_here`
+ */
+
+/**
+ * @swagger
  * /api/tax/v1/createTax:
  *   post:
  *     summary: Create a new tax
  *     tags: [Tax]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: Bearer token for authentication
+ *         schema:
+ *           type: string
+ *           example: "Bearer your_token_here"
  *     requestBody:
  *       required: true
  *       content:
@@ -60,6 +80,14 @@
  *     tags: [Tax]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: Bearer token for authentication
+ *         schema:
+ *           type: string
+ *           example: "Bearer your_token_here"
  *     responses:
  *       200:
  *         description: Taxes fetched successfully
@@ -99,6 +127,13 @@
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: Bearer token for authentication
+ *         schema:
+ *           type: string
+ *           example: "Bearer your_token_here"
  *       - in: path
  *         name: id
  *         schema:
@@ -155,6 +190,13 @@
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: Bearer token for authentication
+ *         schema:
+ *           type: string
+ *           example: "Bearer your_token_here"
  *       - in: path
  *         name: id
  *         schema:
@@ -213,6 +255,13 @@
  *     security:
  *       - bearerAuth: []
  *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         description: Bearer token for authentication
+ *         schema:
+ *           type: string
+ *           example: "Bearer your_token_here"
  *       - in: path
  *         name: id
  *         schema:
