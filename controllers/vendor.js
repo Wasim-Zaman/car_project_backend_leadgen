@@ -142,6 +142,11 @@ exports.loginVendor = async (req, res, next) => {
       throw new CustomError('Vendor not found', 404);
     }
 
+    // check if vendor is  approved by admin side or not
+    if (vendor.status == 0 || vendor.status == null) {
+      throw new CustomError('Vendor is not approved yet by the admin side.', 401);
+    }
+
     // Check if the password is correct
     const isPasswordValid = await Bcrypt.comparePassword(password, vendor.password);
     if (!isPasswordValid) {
