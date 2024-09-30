@@ -27,6 +27,7 @@ const bookingRoutes = require('./routes/booking');
 const zoneRoutes = require('./routes/zone');
 const vendorRoutes = require('./routes/vendor');
 const positionRoutes = require('./routes/position');
+const taxRoutes = require('./routes/tax');
 
 // * USER SECTION
 const userRoutes = require('./routes/user');
@@ -60,6 +61,7 @@ app.use('/api/zone', zoneRoutes);
 app.use('/api/vendor', vendorRoutes);
 app.use('/api/position', positionRoutes);
 app.use('/api/ads', adsRoutes);
+app.use('/api/tax', taxRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res, next) => {

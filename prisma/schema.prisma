@@ -284,3 +284,10 @@ model NewsView {
   @@unique([userId, newsId])
   @@index([newsId], map: "NewsView_newsId_fkey")
 }
+
+
+model Tax {
+    id          String  @id @default(uuid())
+    type        String? @unique
+    tax         Float? 
+}
