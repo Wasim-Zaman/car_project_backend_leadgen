@@ -102,10 +102,11 @@ exports.getServiceById = async (req, res, next) => {
   }
 };
 
-// Create Service
-exports.createService = async (req, res, next) => {
+// Update Service
+exports.updateService = async (req, res, next) => {
   const transaction = await prisma.$transaction();
   try {
+    const { id } = req.params;
     const {
       serviceName,
       serviceType,
@@ -114,17 +115,27 @@ exports.createService = async (req, res, next) => {
       excludingServices,
       termsAndConditions,
       servicePrice,
-      vendorId,
     } = req.body;
 
-    const vendorExists = await prisma.vendor.findUnique({ where: { id: vendorId } });
-    if (!vendorExists) {
-      throw new CustomError('Vendor not found', 404);
+    const existingService = await prisma.service.findUnique({ where: { id } });
+    if (!existingService) {
+      throw new CustomError('Service not found', 404);
     }
 
-    const serviceImages = req.files && req.files.serviceImages ? req.files.serviceImages.map((file) => file.path) : [];
+    const serviceImages =
+      req.files && req.files.serviceImages
+        ? req.files.serviceImages.map((file) => file.path)
+        : existingService.serviceImages;
 
-    const newService = await prisma.service.create({
+    // Await deletion of old images
+    if (req.files && req.files.serviceImages) {
+      for (const filePath of existingService.serviceImages) {
+        await fileHelper.deleteFile(filePath);
+      }
+    }
+
+    const updatedService = await prisma.service.update({
+      where: { id },
       data: {
         serviceName,
         serviceType,
@@ -133,17 +144,16 @@ exports.createService = async (req, res, next) => {
         excludingServices,
         termsAndConditions,
         servicePrice,
-        vendorId,
         serviceImages,
       },
     });
 
     await transaction.commit();
-    res.status(201).json(response(201, true, 'Service created successfully', newService));
+    res.status(200).json(response(200, true, 'Service updated successfully', updatedService));
   } catch (error) {
     await transaction.rollback();
 
-    // Await deletion of uploaded files in case of an error
+    // Await deletion of newly uploaded images in case of an error
     if (req.files && req.files.serviceImages) {
       for (const file of req.files.serviceImages) {
         await fileHelper.deleteFile(file.path);
