@@ -154,7 +154,7 @@ exports.loginVendor = async (req, res, next) => {
     }
 
     // Generate JWT token
-    const token = JWT.createToken({ id: vendor.id, phone: vendor.phone });
+    const token = JWT.createToken(vendor);
 
     // Exclude password from the response
     const { password: _, ...vendorData } = vendor;
