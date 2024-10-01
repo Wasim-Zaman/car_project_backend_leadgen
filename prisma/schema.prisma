@@ -336,18 +336,17 @@ enum DiscountType {
 }
 
 model CarWashCart {
-  id            Int              @id @default(autoincrement())
+  id            String              @id @default(uuid())
   userId        String
-  cartItems     CarWashCartItem[] // Relationship to CartItems (specific to car wash)
+  cartItems     CarWashCartItem[]
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
 }
 
 model CarWashCartItem {
-  id               Int              @id @default(autoincrement())
-  carWashCartId    Int
-  carWashServiceId String           // Foreign key to CarWashService
-  quantity         Int              // Quantity of the car wash service in the cart
+  id               String              @id @default(uuid())
+  carWashCartId    String
+  carWashServiceId String           
+  quantity         Int              
   carWashCart      CarWashCart      @relation(fields: [carWashCartId], references: [id])
 }
-
