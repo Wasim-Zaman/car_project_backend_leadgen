@@ -295,7 +295,7 @@ model Tax {
     updatedAt           DateTime? @updatedAt
 }
 
-model Service {
+model carWashService {
   id                String   @id @default(uuid())
   serviceName       String
   serviceType       String

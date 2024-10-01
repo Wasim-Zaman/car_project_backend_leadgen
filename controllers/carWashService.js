@@ -27,7 +27,7 @@ exports.createService = async (req, res, next) => {
 
     const serviceImages = req.files && req.files.serviceImages ? req.files.serviceImages.map((file) => file.path) : [];
 
-    const newService = await prisma.service.create({
+    const newService = await prisma.carWashService.create({
       data: {
         serviceName,
         serviceType,
@@ -69,13 +69,13 @@ exports.getServices = async (req, res, next) => {
         }
       : {};
 
-    const services = await prisma.service.findMany({
+    const services = await prisma.carWashService.findMany({
       where,
       skip: parseInt(skip),
       take: parseInt(limit),
     });
 
-    const totalServices = await prisma.service.count({ where });
+    const totalServices = await prisma.carWashService.count({ where });
 
     res.status(200).json(response(200, true, 'Services fetched successfully', { services, totalServices }));
   } catch (error) {
@@ -87,7 +87,7 @@ exports.getServices = async (req, res, next) => {
 exports.getServiceById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const service = await prisma.service.findUnique({ where: { id } });
+    const service = await prisma.carWashService.findUnique({ where: { id } });
 
     if (!service) {
       throw new CustomError('Service not found', 404);
@@ -114,7 +114,7 @@ exports.updateService = async (req, res, next) => {
       servicePrice,
     } = req.body;
 
-    const existingService = await prisma.service.findUnique({ where: { id } });
+    const existingService = await prisma.carWashService.findUnique({ where: { id } });
     if (!existingService) {
       throw new CustomError('Service not found', 404);
     }
@@ -131,7 +131,7 @@ exports.updateService = async (req, res, next) => {
       }
     }
 
-    const updatedService = await prisma.service.update({
+    const updatedService = await prisma.carWashService.update({
       where: { id },
       data: {
         serviceName,
@@ -166,7 +166,7 @@ exports.deleteService = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const existingService = await prisma.service.findUnique({ where: { id } });
+    const existingService = await prisma.carWashService.findUnique({ where: { id } });
     if (!existingService) {
       throw new CustomError('Service not found', 404);
     }
@@ -176,7 +176,7 @@ exports.deleteService = async (req, res, next) => {
       existingService.serviceImages.forEach((file) => fileHelper.deleteFile(file));
     }
 
-    await prisma.service.delete({ where: { id } });
+    await prisma.carWashService.delete({ where: { id } });
     res.status(200).json(response(200, true, 'Service deleted successfully'));
   } catch (error) {
     next(error);
@@ -196,13 +196,13 @@ exports.getServicesByVendor = async (req, res, next) => {
       throw new CustomError('Vendor not found', 404);
     }
 
-    const services = await prisma.service.findMany({
+    const services = await prisma.carWashService.findMany({
       where: { vendorId },
       skip: parseInt(skip),
       take: parseInt(limit),
     });
 
-    const totalServices = await prisma.service.count({ where: { vendorId } });
+    const totalServices = await prisma.carWashService.count({ where: { vendorId } });
 
     res.status(200).json(response(200, true, 'Services fetched successfully', { services, totalServices }));
   } catch (error) {
@@ -220,7 +220,7 @@ exports.getServiceCountForVendor = async (req, res, next) => {
       throw new CustomError('Vendor not found', 404);
     }
 
-    const serviceCount = await prisma.service.count({ where: { vendorId } });
+    const serviceCount = await prisma.carWashService.count({ where: { vendorId } });
 
     res.status(200).json(response(200, true, 'Service count fetched successfully', { serviceCount }));
   } catch (error) {
