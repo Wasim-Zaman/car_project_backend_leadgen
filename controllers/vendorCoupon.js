@@ -207,3 +207,20 @@ exports.applyCouponByUser = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.deleteVendorCoupon = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const coupon = await prisma.vendorCoupon.findUnique({ where: { id: parseInt(id) } });
+    if (!coupon) {
+      throw new CustomError('Coupon not found', 404);
+    }
+
+    await prisma.vendorCoupon.delete({ where: { id: parseInt(id) } });
+
+    res.status(200).json(response(200, true, 'Coupon deleted successfully'));
+  } catch (error) {
+    next(error);
+  }
+};
