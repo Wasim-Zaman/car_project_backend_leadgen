@@ -2,7 +2,7 @@ const express = require('express');
 const { uploadSingle, uploadMultiple } = require('multermate');
 
 const controller = require('../controllers/vendor');
-const isAuth = require('../middleware/is-auth');
+const isVendor = require('../middleware/isVendor');
 const isAdmin = require('../middleware/is-admin-auth');
 
 const router = express.Router();
@@ -22,7 +22,7 @@ router.post('/v1/vendors/login', controller.loginVendor);
 
 router.put(
   '/v1/vendors/:id',
-  isAuth,
+  isVendor,
   uploadMultiple({
     fields: [
       { name: 'logo', maxCount: 1 },
@@ -31,6 +31,8 @@ router.put(
   }),
   controller.updateVendor
 );
+
+router.patch('/v1/status/:id', isAdmin, controller.updateStatus);
 
 router.get('/v1/vendors', isAdmin, controller.getVendors);
 

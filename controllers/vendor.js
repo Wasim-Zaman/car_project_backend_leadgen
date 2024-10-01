@@ -256,6 +256,28 @@ exports.updateVendor = async (req, res, next) => {
   }
 };
 
+// Update vendor status (Admin only)
+exports.updateStatus = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Find the vendor by ID
+    const vendor = await Vendor.findById(id);
+    if (!vendor) {
+      throw new CustomError('Vendor not found', 404);
+    }
+
+    // Update vendor status
+    const updatedVendor = await Vendor.updateById(id, { status });
+
+    res.status(200).json(response(200, true, 'Vendor status updated successfully', updatedVendor));
+  } catch (error) {
+    console.error('Error in updateStatus:', error.message);
+    next(error);
+  }
+};
+
 // Get all vendors (Admin only)
 exports.getVendors = async (req, res, next) => {
   try {

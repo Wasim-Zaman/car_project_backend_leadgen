@@ -12,7 +12,7 @@
 
 /**
  * @swagger
- * /api/service/v1/services:
+ * /api/carWashService/v1/services:
  *   post:
  *     summary: Create a new service
  *     tags: [Services]
@@ -70,7 +70,7 @@
 
 /**
  * @swagger
- * /api/service/v1/services:
+ * /api/carWashService/v1/services:
  *   get:
  *     summary: Get all services with optional search and pagination
  *     tags: [Services]
@@ -120,7 +120,7 @@
 
 /**
  * @swagger
- * /api/service/v1/services/{id}:
+ * /api/carWashService/v1/services/{id}:
  *   get:
  *     summary: Get a service by ID
  *     tags: [Services]
@@ -156,7 +156,7 @@
 
 /**
  * @swagger
- * /api/service/v1/services/{id}:
+ * /api/carWashService/v1/services/{id}:
  *   put:
  *     summary: Update a service
  *     tags: [Services]
@@ -218,7 +218,7 @@
 
 /**
  * @swagger
- * /api/service/v1/services/{id}:
+ * /api/carWashService/v1/services/{id}:
  *   delete:
  *     summary: Delete a service
  *     tags: [Services]
@@ -252,7 +252,7 @@
 
 /**
  * @swagger
- * /api/service/v1/services/vendor/{vendorId}:
+ * /api/carWashService/v1/services/vendor/{vendorId}:
  *   get:
  *     summary: Get paginated services for a specific vendor
  *     tags: [Services]
@@ -305,7 +305,7 @@
 
 /**
  * @swagger
- * /api/service/v1/services/vendor/{vendorId}/count:
+ * /api/carWashService/v1/services/vendor/{vendorId}/count:
  *   get:
  *     summary: Get services count for a specific vendor
  *     tags: [Services]
