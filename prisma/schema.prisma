@@ -46,7 +46,7 @@ model Vendor {
   maxDeliveryTime String?
   minDeliveryTime String?
   businessName    String?
-  status          Int?      @default(0)
+  status          Int?      @default(1)
   zone            Zone     @relation(fields: [zoneId], references: [id])
 
   @@index([zoneId], map: "Vendor_zoneId_fkey")
