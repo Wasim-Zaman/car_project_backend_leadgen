@@ -448,6 +448,30 @@
 
 /**
  * @swagger
+ * /api/vendor/v1/vendors/me:
+ *   get:
+ *     summary: Get vendor by token
+ *     tags: [Vendor]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Vendor got successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Vendor got successfully
+ */
+
+/**
+ * @swagger
  * /api/vendor/v1/vendors/status/{id}:
  *   put:
  *     summary: Update vendor status (Admin only)
