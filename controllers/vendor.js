@@ -278,6 +278,21 @@ exports.updateStatus = async (req, res, next) => {
   }
 };
 
+// Get the current vendor profile
+exports.getMe = async (req, res, next) => {
+  try {
+    const vendor = await Vendor.findById(req.vendor.id);
+    if (!vendor) {
+      throw new CustomError('Vendor not found', 404);
+    }
+
+    res.status(200).json(response(200, true, 'Vendor retrieved successfully', vendor));
+  } catch (error) {
+    console.error('Error in getMe:', error.message);
+    next(error);
+  }
+};
+
 // Get all vendors (Admin only)
 exports.getVendors = async (req, res, next) => {
   try {

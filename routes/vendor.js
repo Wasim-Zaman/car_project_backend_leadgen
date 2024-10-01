@@ -32,7 +32,9 @@ router.put(
   controller.updateVendor
 );
 
-router.patch('/v1/status/:id', isAdmin, controller.updateStatus);
+router.patch('/v1/vendors/status/:id', isAdmin, controller.updateStatus);
+
+router.get('/v1/vendors/me', isVendor, controller.getMe);
 
 router.get('/v1/vendors', isAdmin, controller.getVendors);
 
