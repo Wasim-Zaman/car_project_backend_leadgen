@@ -65,7 +65,7 @@ app.use('/api/position', positionRoutes);
 app.use('/api/ads', adsRoutes);
 app.use('/api/tax', taxRoutes);
 app.use('/api/carWashService', serviceRoutes);
-app.use('/api/vendorCoupons', vendorCouponRoutes);
+app.use('/api/vendorCoupon', vendorCouponRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res, next) => {

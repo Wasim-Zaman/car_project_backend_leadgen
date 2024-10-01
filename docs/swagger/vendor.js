@@ -445,3 +445,45 @@
  *                   type: string
  *                   example: Vendor deleted successfully
  */
+
+/**
+ * @swagger
+ * /api/vendor/v1/vendors/status/{id}:
+ *   put:
+ *     summary: Update vendor status (Admin only)
+ *     tags: [Vendor]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the vendor whose status is being updated
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 description: The new status of the vendor (e.g., "active", "suspended", etc.)
+ *                 example: "active"
+ *     responses:
+ *       200:
+ *         description: Vendor status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Vendor status updated successfully
+ */

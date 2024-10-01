@@ -6,7 +6,7 @@ const isAdmin = require('../middleware/is-admin-auth');
 const router = express.Router();
 
 // Create a new coupon
-router.post('/v1/coupons', isVendor, controller.createVendorCoupon);
+router.post('/v1/coupons', controller.createVendorCoupon);
 
 // Get all coupons (with pagination and optional search)
 router.get('/v1/coupons', controller.getVendorCoupons);

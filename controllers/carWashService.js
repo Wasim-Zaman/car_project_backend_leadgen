@@ -65,10 +65,7 @@ exports.getServices = async (req, res, next) => {
     const skip = (page - 1) * limit;
     const where = search
       ? {
-          OR: [
-            { serviceName: { contains: search, mode: 'insensitive' } },
-            { serviceType: { contains: search, mode: 'insensitive' } },
-          ],
+          OR: [{ serviceName: { contains: search } }, { serviceType: { contains: search } }],
         }
       : {};
 

@@ -4,6 +4,8 @@ const { PrismaClient } = require('@prisma/client');
 const response = require('../utils/response');
 const CustomError = require('../utils/error');
 
+const prisma = new PrismaClient(); // Ensure PrismaClient is initialized
+
 // Schema for creating a vendor coupon
 const createVendorCouponSchema = Joi.object({
   title: Joi.string().required(),
@@ -39,6 +41,7 @@ const fetchVendorCouponsSchema = Joi.object({
   search: Joi.string().optional(),
 });
 
+// Create a new vendor coupon
 exports.createVendorCoupon = async (req, res, next) => {
   try {
     // Validate input using Joi
@@ -68,6 +71,7 @@ exports.createVendorCoupon = async (req, res, next) => {
       throw new CustomError('Coupon code already exists', 400);
     }
 
+    // Prisma handles ISO 8601 date strings natively
     const newCoupon = await prisma.vendorCoupon.create({
       data: {
         title,
@@ -76,8 +80,8 @@ exports.createVendorCoupon = async (req, res, next) => {
         limitPerUser,
         discountType,
         discountValue,
-        startDate,
-        endDate,
+        startDate: new Date(startDate), // Parse ISO date string to Date object
+        endDate: endDate ? new Date(endDate) : null, // Optional end date
         maxDiscount,
         minOrderAmount,
       },
@@ -89,6 +93,7 @@ exports.createVendorCoupon = async (req, res, next) => {
   }
 };
 
+// Update a vendor coupon by ID
 exports.updateVendorCoupon = async (req, res, next) => {
   try {
     // Validate input using Joi
@@ -110,6 +115,8 @@ exports.updateVendorCoupon = async (req, res, next) => {
       where: { id: parseInt(id) },
       data: {
         ...value,
+        startDate: value.startDate ? new Date(value.startDate) : undefined, // Parse ISO string if present
+        endDate: value.endDate ? new Date(value.endDate) : undefined, // Parse ISO string if present
       },
     });
 
@@ -119,6 +126,7 @@ exports.updateVendorCoupon = async (req, res, next) => {
   }
 };
 
+// Get all vendor coupons (with pagination and optional search)
 exports.getVendorCoupons = async (req, res, next) => {
   try {
     // Validate query parameters using Joi
@@ -134,10 +142,7 @@ exports.getVendorCoupons = async (req, res, next) => {
     const skip = (page - 1) * limit;
     const where = search
       ? {
-          OR: [
-            { title: { contains: search, mode: 'insensitive' } },
-            { code: { contains: search, mode: 'insensitive' } },
-          ],
+          OR: [{ title: { contains: search } }, { code: { contains: search } }],
         }
       : {};
 
@@ -155,6 +160,7 @@ exports.getVendorCoupons = async (req, res, next) => {
   }
 };
 
+// Apply a coupon by user
 exports.applyCouponByUser = async (req, res, next) => {
   try {
     const { code } = req.body;
@@ -168,7 +174,7 @@ exports.applyCouponByUser = async (req, res, next) => {
 
     // Check if the coupon is still valid
     const currentDate = new Date();
-    if (currentDate < coupon.startDate || (coupon.endDate && currentDate > coupon.endDate)) {
+    if (currentDate < new Date(coupon.startDate) || (coupon.endDate && currentDate > new Date(coupon.endDate))) {
       throw new CustomError('Coupon is expired', 400);
     }
 
@@ -208,6 +214,7 @@ exports.applyCouponByUser = async (req, res, next) => {
   }
 };
 
+// Delete a vendor coupon by ID
 exports.deleteVendorCoupon = async (req, res, next) => {
   try {
     const { id } = req.params;
