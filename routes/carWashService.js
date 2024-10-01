@@ -40,4 +40,8 @@ router.put(
 // Delete a service by ID
 router.delete('/v1/services/:id', isAdmin, controller.deleteService);
 
+router.get('/v1/services/vendor/:vendorId', controller.getServicesByVendor);
+
+router.get('/v1/services/vendor/count', isVendor, controller.getServiceCountForVendor);
+
 module.exports = router;

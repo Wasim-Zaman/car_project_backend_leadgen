@@ -305,7 +305,7 @@
 
 /**
  * @swagger
- * /api/carWashService/v1/services/vendor/{vendorId}/count:
+ * /api/carWashService/v1/services/vendor/count:
  *   get:
  *     summary: Get services count for a specific vendor
  *     tags: [Car Wash Service]

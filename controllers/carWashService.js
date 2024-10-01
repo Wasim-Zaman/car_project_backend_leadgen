@@ -213,9 +213,7 @@ exports.getServicesByVendor = async (req, res, next) => {
 // Get services count for a specific vendor
 exports.getServiceCountForVendor = async (req, res, next) => {
   try {
-    const { vendorId } = req.params;
-
-    const vendorExists = await prisma.vendor.findUnique({ where: { id: vendorId } });
+    const vendorExists = await prisma.vendor.findUnique({ where: { id: req.vendor.id } });
     if (!vendorExists) {
       throw new CustomError('Vendor not found', 404);
     }
