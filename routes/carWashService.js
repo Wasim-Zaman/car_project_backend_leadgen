@@ -1,7 +1,7 @@
 const express = require('express');
 const { uploadMultiple } = require('multermate');
 
-const controller = require('../controllers/service');
+const controller = require('../controllers/carWashService');
 const isVendor = require('../middleware/is-auth');
 const isAdmin = require('../middleware/is-admin-auth');
 
