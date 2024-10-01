@@ -37,8 +37,6 @@ module.exports = (req, res, next) => {
 
   req.vendor = decodedToken;
 
-  console.log(req.vendor);
-
   if (req.vendor.status == 0 || req.vendor.status == null) {
     throw new CustomError('Your account is not active. Please contact the admin.', 401);
   }
