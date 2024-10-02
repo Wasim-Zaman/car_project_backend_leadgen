@@ -93,6 +93,7 @@ class Vendor {
               { lastName: { contains: query } },
               { storeName: { contains: query } },
               { phone: { contains: query } },
+              { moduleType: { contains: query } },
             ],
           }
         : {};

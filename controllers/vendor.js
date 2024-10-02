@@ -304,6 +304,39 @@ exports.getVendors = async (req, res, next) => {
   }
 };
 
+// Get vendors by moduleType with pagination
+exports.getVendorsByModule = async (req, res, next) => {
+  try {
+    const { moduleType } = req.query;
+    const page = parseInt(req.query.page, 10) || 1; // Default to page 1
+    const limit = parseInt(req.query.limit, 10) || 10; // Default to 10 results per page
+
+    if (!moduleType) {
+      throw new CustomError('Module type is required', 400);
+    }
+
+    // Fetch vendors by moduleType with pagination
+    const vendors = await Vendor.get(page, limit, moduleType);
+
+    // Get the total count of vendors with this moduleType (for pagination)
+    const totalVendors = await Vendor.countDocuments({ moduleType });
+
+    const totalPages = Math.ceil(totalVendors / limit);
+
+    res.status(200).json(
+      response(200, true, 'Vendors retrieved successfully', {
+        vendors,
+        currentPage: page,
+        totalPages,
+        totalVendors,
+      })
+    );
+  } catch (error) {
+    console.error('Error in getVendorsByModule:', error.message);
+    next(error);
+  }
+};
+
 // Get a single vendor by ID
 exports.getVendorById = async (req, res, next) => {
   try {
