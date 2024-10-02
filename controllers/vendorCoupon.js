@@ -85,7 +85,7 @@ exports.createVendorCoupon = async (req, res, next) => {
         endDate: endDate ? new Date(endDate) : null, // Optional end date
         maxDiscount,
         minOrderAmount,
-        vendorId: req.vendor.id,
+        vendor: req.vendor.id,
       },
     });
 

@@ -351,8 +351,8 @@ model carWashBusiness {
     garageClosingTime   DateTime?
     vendor              String?
     files               Json?
-    createdAt          DateTime  @default(now())
-    updatedAt             DateTime  @updatedAt
+    createdAt           DateTime  @default(now())
+    updatedAt           DateTime  @updatedAt
 }
 
 model CarWashCart {

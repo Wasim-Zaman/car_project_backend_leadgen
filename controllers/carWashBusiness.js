@@ -45,18 +45,26 @@ const updateCarWashBusinessSchema = Joi.object({
 
 // Create Car Wash Business
 exports.createCarWashBusiness = async (req, res, next) => {
+  console.log('Starting createCarWashBusiness API'); // Debugging statement
+
   // Start a transaction
   const transaction = await prisma.$transaction();
   try {
+    console.log('Transaction started'); // Debugging statement
+
     // Validate input data using Joi
     const { error, value } = createCarWashBusinessSchema.validate(req.body, { abortEarly: false });
     if (error) {
       const errorMessage = error.details.map((detail) => detail.message).join(', ');
+      console.error('Validation error:', errorMessage); // Debugging statement
       throw new CustomError(errorMessage, 400);
     }
 
+    console.log('Input data validated:', value); // Debugging statement
+
     // Collect file paths
     const files = req.files && req.files.files ? req.files.files.map((file) => file.path) : [];
+    console.log('Files collected:', files); // Debugging statement
 
     // Optionally, you can perform additional validation on the files if needed
 
@@ -70,15 +78,22 @@ exports.createCarWashBusiness = async (req, res, next) => {
       },
     });
 
+    console.log('New car wash business created:', newCarWashBusiness); // Debugging statement
+
     await transaction.commit();
+    console.log('Transaction committed'); // Debugging statement
+
     res.status(201).json(response(201, true, 'Car wash business created successfully', newCarWashBusiness));
   } catch (error) {
+    console.error('Error occurred:', error); // Debugging statement
     await transaction.rollback();
+    console.log('Transaction rolled back'); // Debugging statement
 
     // Delete uploaded files in case of an error
     if (req.files && req.files.files) {
       for (const file of req.files.files) {
         await fileHelper.deleteFile(file.path);
+        console.log('Deleted file:', file.path); // Debugging statement
       }
     }
 
