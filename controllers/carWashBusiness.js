@@ -212,7 +212,12 @@ exports.getCarWashBusinessById = async (req, res, next) => {
 // Get Car Wash Business by vendor
 exports.getCarWashBusinessByVendor = async (req, res, next) => {
   try {
-    const carWashBusiness = await prisma.carWashBusiness.findUnique({ where: { vendor: req.vendor.id } });
+    const vendorId = req.vendor.id ?? req.params.vendorId;
+
+    const carWashBusiness = await prisma.carWashBusiness.findFirst({
+      where: { vendorId: vendorId },
+    });
+
     if (!carWashBusiness) {
       throw new CustomError('Car wash business not found', 404);
     }
