@@ -336,6 +336,25 @@ enum DiscountType {
   PERCENTAGE
 }
 
+model carWashBusiness {
+    id                  String   @id @default(uuid())
+    name                String
+    servicePrice        Float?
+    availableCarCity    String?
+    currentLocation     String?
+    garageLat           Float?
+    garageLong          Float?
+    garageServiceType   String?
+    aboutUs             String?
+    garageAddress       String?
+    garageOpeningTime   DateTime?
+    garageClosingTime   DateTime?
+    vendor              String?
+    files               Json?
+    createdAt          DateTime  @default(now())
+    updatedAt             DateTime  @updatedAt
+}
+
 model CarWashCart {
   id            String              @id @default(uuid())
   userId        String

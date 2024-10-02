@@ -6,15 +6,11 @@
  *       type: http
  *       scheme: bearer
  *       bearerFormat: JWT
+ *       description: |
+ *         Enter your **Bearer token** to authorize. Example: `Bearer your_token_here`
  *   schemas:
  *     VendorCoupon:
  *       type: object
- *       required:
- *         - title
- *         - code
- *         - discountType
- *         - discountValue
- *         - startDate
  *       properties:
  *         id:
  *           type: integer
@@ -52,6 +48,12 @@
  *         minOrderAmount:
  *           type: number
  *           description: Minimum order amount required to use the coupon (optional)
+ *       required:
+ *         - title
+ *         - code
+ *         - discountType
+ *         - discountValue
+ *         - startDate
  *       example:
  *         id: 1
  *         title: "New Year Sale"
@@ -65,7 +67,7 @@
  * @swagger
  * tags:
  *   - name: VendorCoupon
- *     description: API for managing vendor coupons
+ *     description: API endpoints for managing vendor coupons
  */
 
 /**
@@ -81,7 +83,37 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/VendorCoupon'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               code:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               limitPerUser:
+ *                 type: integer
+ *               discountType:
+ *                 type: string
+ *                 enum: [FLAT, PERCENTAGE]
+ *               discountValue:
+ *                 type: number
+ *               startDate:
+ *                 type: string
+ *                 format: date-time
+ *               endDate:
+ *                 type: string
+ *                 format: date-time
+ *               maxDiscount:
+ *                 type: number
+ *               minOrderAmount:
+ *                 type: number
+ *             required:
+ *               - title
+ *               - code
+ *               - discountType
+ *               - discountValue
+ *               - startDate
  *     responses:
  *       201:
  *         description: Coupon created successfully
@@ -92,37 +124,44 @@
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Coupon created successfully
  *                 data:
  *                   $ref: '#/components/schemas/VendorCoupon'
+ *       400:
+ *         description: Bad request (validation error)
+ *       401:
+ *         description: Unauthorized (token missing or invalid)
+ *       500:
+ *         description: Internal server error
  */
 
 /**
  * @swagger
  * /api/vendorCoupon/v1/coupons:
  *   get:
- *     summary: Get all coupons (with optional search and pagination)
+ *     summary: Get all coupons with optional search and pagination
  *     tags: [VendorCoupon]
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
+ *           default: 1
  *         description: Page number for pagination
- *         example: 1
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
+ *           default: 10
  *         description: Number of coupons per page
- *         example: 10
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
  *         description: Search query for coupon title or code
- *         example: "NY2024"
  *     responses:
  *       200:
  *         description: Coupons retrieved successfully
@@ -133,8 +172,10 @@
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Coupons retrieved successfully
  *                 data:
  *                   type: object
  *                   properties:
@@ -144,7 +185,8 @@
  *                         $ref: '#/components/schemas/VendorCoupon'
  *                     totalCoupons:
  *                       type: integer
- *                       example: 50
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -165,8 +207,10 @@
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Vendor coupons retrieved successfully
  *                 data:
  *                   type: object
  *                   properties:
@@ -176,7 +220,10 @@
  *                         $ref: '#/components/schemas/VendorCoupon'
  *                     totalCoupons:
  *                       type: integer
- *                       example: 10
+ *       401:
+ *         description: Unauthorized (token missing or invalid)
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -202,8 +249,10 @@
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Coupons retrieved successfully
  *                 data:
  *                   type: object
  *                   properties:
@@ -213,7 +262,10 @@
  *                         $ref: '#/components/schemas/VendorCoupon'
  *                     totalCoupons:
  *                       type: integer
- *                       example: 10
+ *       404:
+ *         description: Vendor not found
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -240,33 +292,27 @@
  *             properties:
  *               title:
  *                 type: string
- *                 description: Updated title of the coupon
- *                 example: "Updated New Year Sale"
  *               code:
  *                 type: string
- *                 description: Updated coupon code
- *                 example: "NY2024_UPDATED"
+ *               type:
+ *                 type: string
+ *               limitPerUser:
+ *                 type: integer
  *               discountType:
  *                 type: string
  *                 enum: [FLAT, PERCENTAGE]
- *                 description: Type of discount (flat or percentage)
  *               discountValue:
  *                 type: number
- *                 description: Updated discount value
  *               startDate:
  *                 type: string
  *                 format: date-time
- *                 description: Updated start date in ISO format
  *               endDate:
  *                 type: string
  *                 format: date-time
- *                 description: Updated end date in ISO format
  *               maxDiscount:
  *                 type: number
- *                 description: Maximum discount amount (optional)
  *               minOrderAmount:
  *                 type: number
- *                 description: Minimum order amount required (optional)
  *     responses:
  *       200:
  *         description: Coupon updated successfully
@@ -277,10 +323,20 @@
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Coupon updated successfully
  *                 data:
  *                   $ref: '#/components/schemas/VendorCoupon'
+ *       400:
+ *         description: Invalid input data or ID format
+ *       401:
+ *         description: Unauthorized (token missing or invalid)
+ *       404:
+ *         description: Coupon not found
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -303,7 +359,6 @@
  *               code:
  *                 type: string
  *                 description: The coupon code to apply
- *                 example: "NY2024"
  *     responses:
  *       200:
  *         description: Coupon applied successfully
@@ -314,8 +369,16 @@
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Coupon applied successfully
+ *       400:
+ *         description: Invalid coupon code or conditions not met
+ *       401:
+ *         description: Unauthorized (token missing or invalid)
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -343,6 +406,16 @@
  *               properties:
  *                 success:
  *                   type: boolean
+ *                   example: true
  *                 message:
  *                   type: string
+ *                   example: Coupon deleted successfully
+ *       400:
+ *         description: Invalid ID format
+ *       401:
+ *         description: Unauthorized (token missing or invalid)
+ *       404:
+ *         description: Coupon not found
+ *       500:
+ *         description: Internal server error
  */

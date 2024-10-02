@@ -2,7 +2,7 @@ const express = require('express');
 const { uploadMultiple } = require('multermate');
 
 const controller = require('../controllers/carWashService');
-const isVendor = require('../middleware/is-auth');
+const isVendor = require('../middleware/isVendor');
 const isAdmin = require('../middleware/is-admin-auth');
 
 const router = express.Router();

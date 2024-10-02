@@ -35,6 +35,7 @@ const userRoutes = require('./routes/user');
 const newsRoutes = require('./routes/news');
 const adsRoutes = require('./routes/ads');
 const vendorCouponRoutes = require('./routes/vendorCoupon');
+const carWashBusinessRoutes = require('./routes/carWashBusiness');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -66,6 +67,7 @@ app.use('/api/ads', adsRoutes);
 app.use('/api/tax', taxRoutes);
 app.use('/api/carWashService', serviceRoutes);
 app.use('/api/vendorCoupon', vendorCouponRoutes);
+app.use('/api/carWashBusiness', carWashBusinessRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res, next) => {
