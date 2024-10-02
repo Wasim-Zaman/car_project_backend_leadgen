@@ -12,7 +12,7 @@ router.post('/v1/coupons', isVendor, controller.createVendorCoupon);
 // Get all coupons (with pagination and optional search)
 router.get('/v1/coupons', controller.getAllCoupons);
 
-router.get('/v1/vendor/coupons', controller.getVendorCoupons);
+router.get('/v1/vendor/coupons', isVendor, controller.getVendorCoupons);
 
 router.get('/v1/vendor/coupons/:vendorId', controller.getVendorCoupons);
 

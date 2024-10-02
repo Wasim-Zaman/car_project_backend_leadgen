@@ -176,12 +176,18 @@ exports.getVendorCoupons = async (req, res, next) => {
     const { page = 1, limit = 10, search } = value;
 
     const skip = (page - 1) * limit;
+    const vendorId = req.vendor.id ?? req.params.vendorId;
+
     const where = search
       ? {
-          OR: [{ title: { contains: search } }, { code: { contains: search } }],
-          vendorId: req.vendor.id ?? req.params.vendorId,
+          AND: [
+            { vendor: vendorId },
+            {
+              OR: [{ title: { contains: search } }, { code: { contains: search } }],
+            },
+          ],
         }
-      : {};
+      : { vendor: vendorId };
 
     const coupons = await prisma.vendorCoupon.findMany({
       where,
