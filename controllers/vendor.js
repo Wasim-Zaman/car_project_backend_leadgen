@@ -294,6 +294,16 @@ exports.getMe = async (req, res, next) => {
 };
 
 // Get all vendors (Admin only)
+exports.getAllVendors = async (req, res, next) => {
+  try {
+    const vendors = await Vendor.getAll();
+    res.status(200).json(response(200, true, 'Vendors retrieved successfully', vendors));
+  } catch (error) {
+    console.error('Error in getVendors:', error.message);
+    next(error);
+  }
+};
+
 exports.getVendors = async (req, res, next) => {
   try {
     const vendors = await Vendor.getAll();
@@ -318,19 +328,7 @@ exports.getVendorsByModule = async (req, res, next) => {
     // Fetch vendors by moduleType with pagination
     const vendors = await Vendor.get(page, limit, moduleType);
 
-    // Get the total count of vendors with this moduleType (for pagination)
-    const totalVendors = await Vendor.countDocuments({ moduleType });
-
-    const totalPages = Math.ceil(totalVendors / limit);
-
-    res.status(200).json(
-      response(200, true, 'Vendors retrieved successfully', {
-        vendors,
-        currentPage: page,
-        totalPages,
-        totalVendors,
-      })
-    );
+    res.status(200).json(response(200, true, 'Vendors retrieved successfully', vendors));
   } catch (error) {
     console.error('Error in getVendorsByModule:', error.message);
     next(error);

@@ -34,11 +34,11 @@ router.put(
 
 router.patch('/v1/vendors/status/:id', isAdmin, controller.updateStatus);
 
-router.get('/v1/vendors', isAdmin, controller.getVendors);
+router.get('/v1/vendors', controller.getAllVendors);
 
 router.get('/v1/vendors/me', isVendor, controller.getMe);
 
-router.get('/v1/vendors/module', isVendor, controller.getVendorsByModule);
+router.get('/v1/vendors/module', controller.getVendorsByModule);
 
 router.get('/v1/vendors/:id', controller.getVendorById);
 

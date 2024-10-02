@@ -456,7 +456,7 @@
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Vendor got successfully
+ *         description: Vendor retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -467,7 +467,83 @@
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Vendor got successfully
+ *                   example: Vendor retrieved successfully
+ */
+
+/**
+ * @swagger
+ * /api/vendor/v1/vendors/module:
+ *   get:
+ *     summary: Get vendors by moduleType with pagination
+ *     tags: [Vendor]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: moduleType
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The module type of the vendors
+ *         example: "Retail"
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number for pagination
+ *         example: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Number of vendors per page
+ *         example: 10
+ *     responses:
+ *       200:
+ *         description: Vendors retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Vendors retrieved successfully
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     vendors:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                             example: "vendor123"
+ *                           firstName:
+ *                             type: string
+ *                             example: John
+ *                           lastName:
+ *                             type: string
+ *                             example: Doe
+ *                           phone:
+ *                             type: string
+ *                             example: "+1234567890"
+ *                           email:
+ *                             type: string
+ *                             example: "john.doe@example.com"
+ *                     currentPage:
+ *                       type: integer
+ *                       example: 1
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 5
+ *                     totalVendors:
+ *                       type: integer
+ *                       example: 50
  */
 
 /**
