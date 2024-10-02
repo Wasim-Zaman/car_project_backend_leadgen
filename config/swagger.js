@@ -51,6 +51,7 @@ var options = {
     path.join(__dirname, '../docs/swagger/carWashService.js'),
     path.join(__dirname, '../docs/swagger/vendorCoupon.js'),
     path.join(__dirname, '../docs/swagger/carWashBusiness.js'),
+    path.join(__dirname, '../docs/swagger/carWashCart.js'),
     // add more paths...
   ],
 };
