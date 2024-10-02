@@ -326,6 +326,7 @@ model vendorCoupon {
   maxDiscount       Float?
   minOrderAmount    Float?
   users             Json?
+  vendor            String?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 }

@@ -18,6 +18,7 @@ const createVendorCouponSchema = Joi.object({
   endDate: Joi.date().optional(),
   maxDiscount: Joi.number().positive().optional(),
   minOrderAmount: Joi.number().positive().optional(),
+  vendor: Joi.string().optional(),
 });
 
 // Schema for updating a vendor coupon
@@ -84,6 +85,7 @@ exports.createVendorCoupon = async (req, res, next) => {
         endDate: endDate ? new Date(endDate) : null, // Optional end date
         maxDiscount,
         minOrderAmount,
+        vendorId: req.vendor.id,
       },
     });
 
@@ -127,6 +129,40 @@ exports.updateVendorCoupon = async (req, res, next) => {
 };
 
 // Get all vendor coupons (with pagination and optional search)
+exports.getAllCoupons = async (req, res, next) => {
+  try {
+    // Validate query parameters using Joi
+    const { error, value } = fetchVendorCouponsSchema.validate(req.query, { abortEarly: false });
+
+    if (error) {
+      const errorMessage = error.details.map((detail) => detail.message).join(', ');
+      throw new CustomError(errorMessage, 400);
+    }
+
+    const { page = 1, limit = 10, search } = value;
+
+    const skip = (page - 1) * limit;
+    const where = search
+      ? {
+          OR: [{ title: { contains: search } }, { code: { contains: search } }],
+        }
+      : {};
+
+    const coupons = await prisma.vendorCoupon.findMany({
+      where,
+      skip: parseInt(skip),
+      take: parseInt(limit),
+    });
+
+    const totalCoupons = await prisma.vendorCoupon.count({ where });
+
+    res.status(200).json(response(200, true, 'Coupons fetched successfully', { coupons, totalCoupons }));
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get All Vendor coupons
 exports.getVendorCoupons = async (req, res, next) => {
   try {
     // Validate query parameters using Joi
@@ -143,6 +179,7 @@ exports.getVendorCoupons = async (req, res, next) => {
     const where = search
       ? {
           OR: [{ title: { contains: search } }, { code: { contains: search } }],
+          vendorId: req.vendor.id ?? req.params.vendorId,
         }
       : {};
 
