@@ -12,9 +12,7 @@ router.post(
   '/v1/services',
   isVendor,
   uploadMultiple({
-    fields: [
-      { name: 'serviceImages', maxCount: 5 }, // Allow up to 5 images for the service
-    ],
+    fields: [{ name: 'serviceImages', maxCount: 5 }],
   }),
   controller.createService
 );
@@ -30,9 +28,7 @@ router.put(
   '/v1/services/:id',
   isVendor,
   uploadMultiple({
-    fields: [
-      { name: 'serviceImages', maxCount: 5 }, // Allow up to 5 new images to be uploaded
-    ],
+    fields: [{ name: 'serviceImages', maxCount: 5 }],
   }),
   controller.updateService
 );
