@@ -359,8 +359,9 @@ model CarWashCart {
   id            String              @id @default(uuid())
   userId        String
   cartItems     CarWashCartItem[]
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  booking       CarWashBooking?     
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
 }
 
 model CarWashCartItem {
@@ -369,4 +370,23 @@ model CarWashCartItem {
   carWashServiceId String           
   quantity         Int              
   carWashCart      CarWashCart      @relation(fields: [carWashCartId], references: [id])
+}
+
+model CarWashBooking {
+  id              String    @id @default(uuid())  
+  date            DateTime
+  startTime       String    // Store time as HH:mm format
+  endTime         String    // Store time as HH:mm format
+  carWashCart     CarWashCart @relation(fields: [carWashCartId], references: [id])
+  carWashCartId   String    @unique      
+  visitingCharges Decimal   @db.Decimal(10, 2)
+  amount          Decimal   @db.Decimal(10, 2)
+  tax             Decimal   @db.Decimal(10, 2)
+  booked          Boolean   @default(false)
+  userId          String
+  vendor          String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([userId])
 }
