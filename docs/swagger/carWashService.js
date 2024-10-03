@@ -38,12 +38,12 @@
  *                 type: array
  *                 items:
  *                   type: string
- *                 description: List of included services
+ *                 description: List of included services (JSON or comma-separated string)
  *               excludingServices:
  *                 type: array
  *                 items:
  *                   type: string
- *                 description: List of excluded services
+ *                 description: List of excluded services (JSON or comma-separated string)
  *               termsAndConditions:
  *                 type: string
  *                 description: Terms and conditions for the service
@@ -204,12 +204,12 @@
  *                 type: array
  *                 items:
  *                   type: string
- *                 description: Updated included services
+ *                 description: Updated included services (JSON or comma-separated string)
  *               excludingServices:
  *                 type: array
  *                 items:
  *                   type: string
- *                 description: Updated excluded services
+ *                 description: Updated excluded services (JSON or comma-separated string)
  *               termsAndConditions:
  *                 type: string
  *                 description: Updated terms and conditions
