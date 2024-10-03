@@ -11,11 +11,11 @@ const createServiceSchema = Joi.object({
   serviceName: Joi.string().required(),
   serviceType: Joi.string().required(),
   serviceDescription: Joi.string().optional(),
-  includingServices: Joi.array().items(Joi.string()).required(),
-  excludingServices: Joi.array().items(Joi.string()).required(),
+  includingServices: Joi.array().items(Joi.string()).optional(),
+  excludingServices: Joi.array().items(Joi.string()).optional(),
   termsAndConditions: Joi.string().optional(),
   servicePrice: Joi.number().positive().required(),
-  vendorId: Joi.string().required(),
+  serviceImages: Joi.array().items(Joi.string()).optional(),
 });
 
 const updateServiceSchema = Joi.object({
@@ -30,14 +30,44 @@ const updateServiceSchema = Joi.object({
 
 // Create Service
 exports.createService = async (req, res, next) => {
-  const transaction = await prisma.$transaction();
   try {
+    console.log('Starting createService function');
+
+    // Helper function to parse string or JSON to array
+    const parseToArray = (input) => {
+      if (Array.isArray(input)) return input;
+      if (typeof input === 'string') {
+        try {
+          const parsed = JSON.parse(input);
+          return Array.isArray(parsed) ? parsed : [input];
+        } catch (e) {
+          // If JSON parsing fails, split by comma
+          return input.split(',').map((item) => item.trim());
+        }
+      }
+      return [];
+    };
+
+    console.log('Parsing request body');
+    // Parse inputs to arrays
+    const parsedBody = {
+      ...req.body,
+      includingServices: parseToArray(req.body.includingServices),
+      excludingServices: parseToArray(req.body.excludingServices),
+      serviceImages: req.files && req.files.serviceImages ? req.files.serviceImages.map((file) => file.path) : [],
+    };
+
+    console.log('Parsed body:', parsedBody);
+
+    console.log('Validating input');
     // Validate input
-    const { error, value } = createServiceSchema.validate(req.body, { abortEarly: false });
+    const { error, value } = createServiceSchema.validate(parsedBody, { abortEarly: false });
     if (error) {
       const errorMessage = error.details.map((detail) => detail.message).join(', ');
       throw new CustomError(errorMessage, 400);
     }
+
+    console.log('Input validated successfully');
 
     const {
       serviceName,
@@ -47,26 +77,27 @@ exports.createService = async (req, res, next) => {
       excludingServices,
       termsAndConditions,
       servicePrice,
-      vendorId,
+      serviceImages,
     } = value;
 
+    const vendorId = req.vendor.id;
+
+    console.log('Checking if vendor exists');
     // Check if vendor exists
     const vendorExists = await prisma.vendor.findUnique({ where: { id: vendorId } });
     if (!vendorExists) {
       throw new CustomError('Vendor not found', 404);
     }
 
-    // Handle images
-    const serviceImages = req.files && req.files.serviceImages ? req.files.serviceImages.map((file) => file.path) : [];
-
+    console.log('Vendor found, creating new service');
     // Create new service
     const newService = await prisma.carWashService.create({
       data: {
         serviceName,
         serviceType,
         serviceDescription,
-        includingServices: JSON.stringify(includingServices), // Store as JSON array
-        excludingServices: JSON.stringify(excludingServices), // Store as JSON array
+        includingServices,
+        excludingServices,
         termsAndConditions,
         servicePrice,
         vendorId,
@@ -74,10 +105,11 @@ exports.createService = async (req, res, next) => {
       },
     });
 
-    await transaction.commit();
+    console.log('New service created successfully');
+
     res.status(201).json(response(201, true, 'Service created successfully', newService));
   } catch (error) {
-    await transaction.rollback();
+    console.error('Error in createService:', error);
 
     // Delete uploaded files in case of error
     if (req.files && req.files.serviceImages) {
@@ -134,7 +166,6 @@ exports.getServiceById = async (req, res, next) => {
 
 // Update Service
 exports.updateService = async (req, res, next) => {
-  const transaction = await prisma.$transaction();
   try {
     const { id } = req.params;
 
@@ -172,11 +203,8 @@ exports.updateService = async (req, res, next) => {
       },
     });
 
-    await transaction.commit();
     res.status(200).json(response(200, true, 'Service updated successfully', updatedService));
   } catch (error) {
-    await transaction.rollback();
-
     // Delete newly uploaded files in case of error
     if (req.files && req.files.serviceImages) {
       for (const file of req.files.serviceImages) {
@@ -200,7 +228,9 @@ exports.deleteService = async (req, res, next) => {
 
     // Delete associated files (images) before deleting the service
     if (existingService.serviceImages) {
-      existingService.serviceImages.forEach((file) => fileHelper.deleteFile(file));
+      for (const file of existingService.serviceImages) {
+        await fileHelper.deleteFile(file);
+      }
     }
 
     await prisma.carWashService.delete({ where: { id } });

@@ -30,7 +30,7 @@
  *                 description: Name of the service
  *               serviceType:
  *                 type: string
- *                 description: Type of the service
+ *                 description: Type of the service (e.g., exterior, interior)
  *               serviceDescription:
  *                 type: string
  *                 description: Detailed description of the service
@@ -50,15 +50,12 @@
  *               servicePrice:
  *                 type: number
  *                 description: Price of the service
- *               vendorId:
- *                 type: string
- *                 description: Vendor ID associated with the service
  *               serviceImages:
  *                 type: array
  *                 items:
  *                   type: string
  *                   format: binary
- *                 description: Images for the service
+ *                 description: Array of image files for the service
  *     responses:
  *       201:
  *         description: Service created successfully
@@ -106,7 +103,7 @@
  *         name: search
  *         schema:
  *           type: string
- *         description: Search keyword for filtering services
+ *         description: Search keyword for filtering services by name or type
  *     responses:
  *       200:
  *         description: Services fetched successfully
@@ -196,27 +193,35 @@
  *             properties:
  *               serviceName:
  *                 type: string
+ *                 description: Updated name of the service
  *               serviceType:
  *                 type: string
+ *                 description: Updated type of the service
  *               serviceDescription:
  *                 type: string
+ *                 description: Updated description of the service
  *               includingServices:
  *                 type: array
  *                 items:
  *                   type: string
+ *                 description: Updated included services
  *               excludingServices:
  *                 type: array
  *                 items:
  *                   type: string
+ *                 description: Updated excluded services
  *               termsAndConditions:
  *                 type: string
+ *                 description: Updated terms and conditions
  *               servicePrice:
  *                 type: number
+ *                 description: Updated price of the service
  *               serviceImages:
  *                 type: array
  *                 items:
  *                   type: string
  *                   format: binary
+ *                 description: Updated array of image files for the service
  *     responses:
  *       200:
  *         description: Service updated successfully
