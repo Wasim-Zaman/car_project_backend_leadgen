@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const { PrismaClient } = require('@prisma/client');
 const response = require('../utils/response');
 const CustomError = require('../utils/error');
@@ -5,10 +6,39 @@ const fileHelper = require('../utils/file'); // Helper for deleting files
 
 const prisma = new PrismaClient();
 
+// Joi schema for service creation and update
+const createServiceSchema = Joi.object({
+  serviceName: Joi.string().required(),
+  serviceType: Joi.string().required(),
+  serviceDescription: Joi.string().optional(),
+  includingServices: Joi.array().items(Joi.string()).required(),
+  excludingServices: Joi.array().items(Joi.string()).required(),
+  termsAndConditions: Joi.string().optional(),
+  servicePrice: Joi.number().positive().required(),
+  vendorId: Joi.string().required(),
+});
+
+const updateServiceSchema = Joi.object({
+  serviceName: Joi.string().optional(),
+  serviceType: Joi.string().optional(),
+  serviceDescription: Joi.string().optional(),
+  includingServices: Joi.array().items(Joi.string()).optional(),
+  excludingServices: Joi.array().items(Joi.string()).optional(),
+  termsAndConditions: Joi.string().optional(),
+  servicePrice: Joi.number().positive().optional(),
+});
+
 // Create Service
 exports.createService = async (req, res, next) => {
   const transaction = await prisma.$transaction();
   try {
+    // Validate input
+    const { error, value } = createServiceSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errorMessage = error.details.map((detail) => detail.message).join(', ');
+      throw new CustomError(errorMessage, 400);
+    }
+
     const {
       serviceName,
       serviceType,
@@ -18,22 +48,25 @@ exports.createService = async (req, res, next) => {
       termsAndConditions,
       servicePrice,
       vendorId,
-    } = req.body;
+    } = value;
 
+    // Check if vendor exists
     const vendorExists = await prisma.vendor.findUnique({ where: { id: vendorId } });
     if (!vendorExists) {
       throw new CustomError('Vendor not found', 404);
     }
 
+    // Handle images
     const serviceImages = req.files && req.files.serviceImages ? req.files.serviceImages.map((file) => file.path) : [];
 
+    // Create new service
     const newService = await prisma.carWashService.create({
       data: {
         serviceName,
         serviceType,
         serviceDescription,
-        includingServices,
-        excludingServices,
+        includingServices: JSON.stringify(includingServices), // Store as JSON array
+        excludingServices: JSON.stringify(excludingServices), // Store as JSON array
         termsAndConditions,
         servicePrice,
         vendorId,
@@ -46,7 +79,7 @@ exports.createService = async (req, res, next) => {
   } catch (error) {
     await transaction.rollback();
 
-    // Await deletion of uploaded files in case of an error
+    // Delete uploaded files in case of error
     if (req.files && req.files.serviceImages) {
       for (const file of req.files.serviceImages) {
         await fileHelper.deleteFile(file.path);
@@ -57,7 +90,7 @@ exports.createService = async (req, res, next) => {
   }
 };
 
-// Get All Services (with optional partial search & pagination)
+// Get All Services (with optional search and pagination)
 exports.getServices = async (req, res, next) => {
   try {
     const { page = 1, limit = 10, search } = req.query;
@@ -104,15 +137,13 @@ exports.updateService = async (req, res, next) => {
   const transaction = await prisma.$transaction();
   try {
     const { id } = req.params;
-    const {
-      serviceName,
-      serviceType,
-      serviceDescription,
-      includingServices,
-      excludingServices,
-      termsAndConditions,
-      servicePrice,
-    } = req.body;
+
+    // Validate input
+    const { error, value } = updateServiceSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errorMessage = error.details.map((detail) => detail.message).join(', ');
+      throw new CustomError(errorMessage, 400);
+    }
 
     const existingService = await prisma.carWashService.findUnique({ where: { id } });
     if (!existingService) {
@@ -124,7 +155,7 @@ exports.updateService = async (req, res, next) => {
         ? req.files.serviceImages.map((file) => file.path)
         : existingService.serviceImages;
 
-    // Await deletion of old images
+    // Delete old images if new ones are uploaded
     if (req.files && req.files.serviceImages) {
       for (const filePath of existingService.serviceImages) {
         await fileHelper.deleteFile(filePath);
@@ -134,13 +165,9 @@ exports.updateService = async (req, res, next) => {
     const updatedService = await prisma.carWashService.update({
       where: { id },
       data: {
-        serviceName,
-        serviceType,
-        serviceDescription,
-        includingServices,
-        excludingServices,
-        termsAndConditions,
-        servicePrice,
+        ...value,
+        includingServices: value.includingServices ? JSON.stringify(value.includingServices) : undefined,
+        excludingServices: value.excludingServices ? JSON.stringify(value.excludingServices) : undefined,
         serviceImages,
       },
     });
@@ -150,7 +177,7 @@ exports.updateService = async (req, res, next) => {
   } catch (error) {
     await transaction.rollback();
 
-    // Await deletion of newly uploaded images in case of an error
+    // Delete newly uploaded files in case of error
     if (req.files && req.files.serviceImages) {
       for (const file of req.files.serviceImages) {
         await fileHelper.deleteFile(file.path);
@@ -218,7 +245,7 @@ exports.getServiceCountForVendor = async (req, res, next) => {
       throw new CustomError('Vendor not found', 404);
     }
 
-    const serviceCount = await prisma.carWashService.count({ where: { vendorId } });
+    const serviceCount = await prisma.carWashService.count({ where: { vendorId: req.vendor.id } });
 
     res.status(200).json(response(200, true, 'Service count fetched successfully', { serviceCount }));
   } catch (error) {

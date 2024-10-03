@@ -27,25 +27,38 @@
  *             properties:
  *               serviceName:
  *                 type: string
+ *                 description: Name of the service
  *               serviceType:
  *                 type: string
+ *                 description: Type of the service
  *               serviceDescription:
  *                 type: string
+ *                 description: Detailed description of the service
  *               includingServices:
- *                 type: string
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: List of included services
  *               excludingServices:
- *                 type: string
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: List of excluded services
  *               termsAndConditions:
  *                 type: string
+ *                 description: Terms and conditions for the service
  *               servicePrice:
  *                 type: number
+ *                 description: Price of the service
  *               vendorId:
  *                 type: string
+ *                 description: Vendor ID associated with the service
  *               serviceImages:
  *                 type: array
  *                 items:
  *                   type: string
  *                   format: binary
+ *                 description: Images for the service
  *     responses:
  *       201:
  *         description: Service created successfully
@@ -82,15 +95,18 @@
  *         schema:
  *           type: integer
  *           default: 1
+ *         description: Page number for pagination
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 10
+ *         description: Number of services to retrieve per page
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
+ *         description: Search keyword for filtering services
  *     responses:
  *       200:
  *         description: Services fetched successfully
@@ -114,6 +130,7 @@
  *                         type: object
  *                     totalServices:
  *                       type: integer
+ *                       example: 100
  *       500:
  *         description: Internal server error
  */
@@ -132,6 +149,7 @@
  *         required: true
  *         schema:
  *           type: string
+ *         description: ID of the service to retrieve
  *     responses:
  *       200:
  *         description: Service fetched successfully
@@ -168,6 +186,7 @@
  *         required: true
  *         schema:
  *           type: string
+ *         description: ID of the service to update
  *     requestBody:
  *       required: true
  *       content:
@@ -182,9 +201,13 @@
  *               serviceDescription:
  *                 type: string
  *               includingServices:
- *                 type: string
+ *                 type: array
+ *                 items:
+ *                   type: string
  *               excludingServices:
- *                 type: string
+ *                 type: array
+ *                 items:
+ *                   type: string
  *               termsAndConditions:
  *                 type: string
  *               servicePrice:
@@ -230,6 +253,7 @@
  *         required: true
  *         schema:
  *           type: string
+ *         description: ID of the service to delete
  *     responses:
  *       200:
  *         description: Service deleted successfully
@@ -264,16 +288,19 @@
  *         required: true
  *         schema:
  *           type: string
+ *         description: Vendor ID to fetch services for
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
  *           default: 1
+ *         description: Page number for pagination
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 10
+ *         description: Number of services to retrieve per page
  *     responses:
  *       200:
  *         description: Services fetched successfully
@@ -297,6 +324,7 @@
  *                         type: object
  *                     totalServices:
  *                       type: integer
+ *                       example: 100
  *       404:
  *         description: Vendor not found
  *       500:
@@ -317,6 +345,7 @@
  *         required: true
  *         schema:
  *           type: string
+ *         description: Vendor ID to fetch service count for
  *     responses:
  *       200:
  *         description: Service count fetched successfully
