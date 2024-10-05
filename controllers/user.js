@@ -101,8 +101,8 @@ exports.registerUserV2 = async (req, res, next) => {
       mobile,
       password: hashedPassword,
       referralCode,
-      lat,
-      long,
+      lat: Number(lat),
+      long: Number(long),
       address,
     });
 
