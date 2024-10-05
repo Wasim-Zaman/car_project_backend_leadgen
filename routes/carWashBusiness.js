@@ -26,7 +26,7 @@ router.get('/v1/businesses', controller.getAllCarWashBusinesses);
 router.get('/v1/businesses/vendor', isVendor, controller.getCarWashBusinessByVendor);
 
 // Get car wash business by vendor (vendor only)
-router.get('/v1/businesses/:vendorId', controller.getCarWashBusinessByVendorId);
+router.get('/v1/businesses/vendor/:vendorId', controller.getCarWashBusinessByVendorId);
 
 // Get a single car wash business by ID (public access)
 router.get('/v1/businesses/:id', controller.getCarWashBusinessById);
