@@ -189,6 +189,24 @@ exports.getCarWashBusinessByVendor = async (req, res, next) => {
   }
 };
 
+exports.getCarWashBusinessByVendorId = async (req, res, next) => {
+  try {
+    const { vendorId } = req.params;
+
+    const carWashBusiness = await prisma.carWashBusiness.findFirst({
+      where: { vendorId },
+    });
+
+    if (!carWashBusiness) {
+      throw new CustomError('Car wash business not found', 404);
+    }
+
+    res.status(200).json(response(200, true, 'Car wash business fetched successfully', carWashBusiness));
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.deleteCarWashBusiness = async (req, res, next) => {
   try {
     const { id } = req.params;

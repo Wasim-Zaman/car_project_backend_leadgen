@@ -137,6 +137,12 @@
  *                         type: object
  *                     totalCarWashBusinesses:
  *                       type: integer
+ *                     page:
+ *                       type: integer
+ *                     limit:
+ *                       type: integer
+ *       400:
+ *         description: Bad request (invalid query parameters)
  *       500:
  *         description: Internal server error
  */
@@ -153,6 +159,7 @@
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: The ID of the car wash business
  *     responses:
  *       200:
@@ -170,6 +177,8 @@
  *                   example: Car wash business fetched successfully
  *                 data:
  *                   type: object
+ *       400:
+ *         description: Invalid ID format
  *       404:
  *         description: Car wash business not found
  *       500:
@@ -210,6 +219,41 @@
 
 /**
  * @swagger
+ * /api/carWashBusiness/v1/businesses/vendor/{vendorId}:
+ *   get:
+ *     summary: Get car wash business by vendor ID
+ *     tags: [Car Wash Business]
+ *     parameters:
+ *       - in: path
+ *         name: vendorId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the vendor
+ *     responses:
+ *       200:
+ *         description: Car wash business fetched successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Car wash business fetched successfully
+ *                 data:
+ *                   type: object
+ *       404:
+ *         description: Car wash business not found
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
  * /api/carWashBusiness/v1/businesses/{id}:
  *   put:
  *     summary: Update a car wash business by ID
@@ -222,6 +266,7 @@
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: The ID of the car wash business
  *     requestBody:
  *       required: true
@@ -299,6 +344,7 @@
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: The ID of the car wash business
  *     responses:
  *       200:
@@ -318,8 +364,6 @@
  *         description: Invalid ID format
  *       401:
  *         description: Unauthorized (token missing or invalid)
- *       403:
- *         description: Forbidden (not authorized to delete)
  *       404:
  *         description: Car wash business not found
  *       500:

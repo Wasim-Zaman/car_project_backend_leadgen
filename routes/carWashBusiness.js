@@ -22,11 +22,14 @@ router.post(
 // Get all car wash businesses (public access)
 router.get('/v1/businesses', controller.getAllCarWashBusinesses);
 
-// Get a single car wash business by ID (public access)
-router.get('/v1/businesses/:id', controller.getCarWashBusinessById);
-
 // Get car wash business by vendor (vendor only)
 router.get('/v1/businesses/vendor', isVendor, controller.getCarWashBusinessByVendor);
+
+// Get car wash business by vendor (vendor only)
+router.get('/v1/businesses/:vendorId', controller.getCarWashBusinessByVendorId);
+
+// Get a single car wash business by ID (public access)
+router.get('/v1/businesses/:id', controller.getCarWashBusinessById);
 
 // Update a car wash business by ID with multiple images (vendor only)
 router.put(
