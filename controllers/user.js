@@ -86,6 +86,12 @@ exports.verifyOTP = async (req, res, next) => {
 
 exports.registerUserV2 = async (req, res, next) => {
   try {
+    // Validate request body using the Joi schema
+    const { error } = userRegistrationSchema.validate(req.body);
+    if (error) {
+      throw new CustomError(error.details[0].message, 400);
+    }
+
     const { name, email, mobile, lat, long, password, referralCode, address } = req.body;
     const hashedPassword = await Bcrypt.createPassword(password);
 
