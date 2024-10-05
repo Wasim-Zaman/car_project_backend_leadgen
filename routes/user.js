@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/v1/register', registerUserValidator, validate, controller.registerUser);
 
 router.post('/v1/verify-otp', registerUserValidator, verifyOTPValidator, validate, controller.verifyOTP);
+
 router.post('/v2/register', controller.registerUserV2);
 
 router.post('/v1/login', loginUserValidator, controller.login);
